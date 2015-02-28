@@ -30,6 +30,7 @@
         }
     </script>
     <script src="animatedImage.js"></script>
+    <script src="level.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
     
@@ -43,13 +44,15 @@
 
             window.addEventListener("load", function () {
                 initGame();
+                //var lev = new Level();
+                //lev.createNewLevel();
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.addEventListener("load", function(e) {
                     var player = new Ship();
                     player.img.initAnimatedImage(tmp, 6, 30);
-                    player.x = 0;
-                    player.y = 0;
+                    player.x = 50;
+                    player.y = 200;
                     window.app.actors.push(player);
                     window.setInterval(main, 1000/30);
                 });

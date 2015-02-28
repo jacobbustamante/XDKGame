@@ -1,13 +1,12 @@
 function Ship() {
-    this.x = 0;
-    this.y = 0;
+    this.x = 50;
+    this.y = 50;
     this.vx = 0;
     this.vy = 0;
-    this.isPlayer = 0;
+    this.isPlayer = true;
     
-    this.theta = 275;
+    this.theta = 55;
     this.speed = 2;
-    this.velocity = 0;
     
     this.health=100;
     
@@ -29,15 +28,15 @@ function Ship() {
     
     function _update() {
         
-        if(isPlayer){
+        if(this.isPlayer){
         this.getVelocity();
         this.updatePosition();
         }
     }
     
     function _draw(){
-        this.tx();
-        this.img.drawAnimatedImage(app.ctx, 0, 0);
+        //this.tx();
+        this.img.drawAnimatedImage(app.ctx, this.x, this.y);
     }
     
     function _shoot(){
@@ -49,8 +48,8 @@ function Ship() {
 
     function _getVelocity(){
         
-        this.vx=speed*Math.cos(this.theta*Math.PI/180);
-        this.vy=speed*Math.sin(this.theta*Math.PI/180);
+        this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
+        this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
               
     }
     

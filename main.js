@@ -3,6 +3,7 @@ function main() {
         var len = app.actors.length;
         for (var i = 0; i < len; ++i) {
             app.actors[i].update();
+            console.log(app.actors[i]);
         }
 
         app.removeKilled();
