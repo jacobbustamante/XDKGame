@@ -6,8 +6,8 @@
 <body>
     <script>
         canvas = document.createElement("canvas");
-        canvas.width = screen.availWidth;
-        canvas.height = screen.availHeight;
+        canvas.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        canvas.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         canvas.id = "game-canvas";
         document.body.appendChild(canvas);
         
