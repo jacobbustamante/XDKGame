@@ -8,7 +8,7 @@ function AnimatedImage()
     
     this.initAnimatedImage = function(image, frameCount, fps) {
         if (frameCount <= 0) throw "framecount can not be <= 0";
-        if (fps <= 0) throw "fps can not be <= 0"
+        if (fps <= 0) throw "fps can not be <= 0";
 
         console.log(image);
         console.log(image.width);

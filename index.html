@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 
     <script src="animatedImage.js"></script>
+    <script src="level.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
     
@@ -21,7 +22,6 @@
                 
                 var canvas = document.getElementById(app.CANVAS_ID);
                 var ctx = canvas.getContext("2d");
-                
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.onload = function(e) {
