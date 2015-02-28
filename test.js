@@ -10,6 +10,7 @@ window.addEventListener("load", function() {
     
     // Testing a key press or mouse click
     player_ship_img.src = "asset/ShipPlaceHolderPlaceHolder.png";
+    bullet_img.src = "asset/TestGif.gif";
     document.addEventListener("keydown", moveShip);
     app.canvas.addEventListener("mousedown", placeShip);
 });
@@ -42,6 +43,8 @@ function paintGreen() {
 // Testing a mouse click or key press
 var player_ship_img = new Image();
 var player_ship = {x:0, y:0};
+var bullet_img = new Image();
+var bullet = {x:0, y:0};
 
 function placeShip(e) {
     var ctx = app.ctx;
@@ -49,6 +52,8 @@ function placeShip(e) {
     ctx.drawImage(player_ship_img, e.x - (player_ship_img.width / 2), e.y - (player_ship_img.height / 2));
     player_ship.x = e.x - (player_ship_img.width / 2);
     player_ship.y = e.y - (player_ship_img.height / 2);
+    bullet.x = player_ship.x;
+    bullet.y = player_ship.y + 45;
 }
 
 function moveShip(e) {
@@ -73,5 +78,6 @@ function moveShip(e) {
     }
     
     ctx.drawImage(player_ship_img, player_ship.x, player_ship.y);
+    ctx.drawImage(bullet_img, bullet.x, bullet.y);
 }
 
