@@ -4,6 +4,8 @@
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     <script src="test.js"></script>
+    <script src="main.js"></script>
+    
     <script>
         function initGame() {
             var _ctx;
@@ -74,7 +76,7 @@
                             var len = _actors.length;
                             var newLength = len - _removed.length;
                             for (var next = _removed.pop(); next; next = _removed.pop()) {
-                                for (var i = 0, ; i < len; ++i) {
+                                for (var i = 0; i < len; ++i) {
                                     if (_actors[i] === next) {
                                         _actors[i] = null;
                                     }
@@ -145,8 +147,8 @@
             window.addEventListener("re", resetCanvas);
             resetCanvas();
         }
-
-        window.addEventListener("DOMContentLoaded", initGame);
+        initGame();
+        //window.addEventListener("DOMContentLoaded", );
     </script>
 
 </head>
