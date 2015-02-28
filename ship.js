@@ -1,9 +1,13 @@
 function Ship() {
     this.x = 0;
     this.y = 0;
+    this.vx = 0;
+    this.vy = 0;
+    
     this.theta = 0;
     this.speed = 0;
-
+    this.velocity = 0;
+    
     this.health=100;
     
     var _tx = tx.bind(this);
@@ -38,9 +42,18 @@ function Ship() {
         bullet.speed += this.speed;
     }
 
+    function _getVelocity(){
+        
+        this.vx=speed*Math.cos(this.theta*Math.PI/180);
+        this.vy=speed*Math.sin(this.theta*Math.PI/180);
+              
+    }
+    
     this.update = _update.bind(this);
     this.render = _draw.bind(this);
     this.shoot = _shoot.bind(this);
+    this.getVelocity = _getVelocity.bind(this);
+    
 }
 
 function tx() {
