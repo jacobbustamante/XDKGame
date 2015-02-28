@@ -4,11 +4,35 @@
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
 
-    <script src="intelxdk.js" type="text/javascript"></script>
+    <script>
+        if (!Function.prototype.bind) {
+            Function.prototype.bind = function (oThis) {
+            if (typeof this !== "function") {
+                // closest thing possible to the ECMAScript 5 internal IsCallable function
+                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+            }
+
+            var aArgs = Array.prototype.slice.call(arguments, 1), 
+            fToBind = this, 
+            fNOP = function () {},
+            fBound = function () {
+            return fToBind.apply(this instanceof fNOP && oThis
+                 ? this
+                 : oThis,
+                aArgs.concat(Array.prototype.slice.call(arguments)));
+            };
+
+                fNOP.prototype = this.prototype;
+                fBound.prototype = new fNOP();
+
+                return fBound;
+            };
+        }
+    </script>
     <script src="animatedImage.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
-    <script src="test.js"></script>
+    
     <script src="main.js"></script>
     <script src="camera.js"></script>
     <script src="init.js"></script>
@@ -16,7 +40,24 @@
 </head>
     <body>
         <script>
-            initGame();
+
+            window.addEventListener("load", function () {
+                initGame();
+                var tmp = new Image();
+                tmp.src = "asset/PowerShip.png";
+                tmp.addEventListener("load", function(e) {
+                    var player = new Ship();
+                    player.img.initAnimatedImage(tmp, 6, 30);
+                    player.x = 0;
+                    player.y = 0;
+                    window.app.actors.push(player);
+                    window.setInterval(main, 1000/30);
+                });
+
+
+                //window.requestAnimationFrame(main);
+                
+            });
         </script>
     </body>
 </html>

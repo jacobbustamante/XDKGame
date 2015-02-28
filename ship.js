@@ -16,19 +16,19 @@ function Ship() {
     });
     
     Object.defineProperty(this, "img", {
-        value: new AnimatedImage();,
+        value: new AnimatedImage(),
         writable: false,
         enumerable: true,
         configurable: false
     });
     
     function _update() {
-
+        
     }
     
     function _draw(){
         this.tx();
-        app.ctx.drawImage(img, 0, 0);
+        this.img.drawAnimatedImage(app.ctx, 0, 0);
     }
     
     function _shoot(){
@@ -39,7 +39,7 @@ function Ship() {
     }
 
     this.update = _update.bind(this);
-    this.draw = _draw.bind(this);
+    this.render = _draw.bind(this);
     this.shoot = _shoot.bind(this);
 }
 
