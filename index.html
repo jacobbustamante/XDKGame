@@ -49,6 +49,13 @@
                     configurable: false
                 });
                 
+                Object.defineProperty(this, "actors", {
+                    value: [] ,
+                    writable: true,
+                    enumerable: true,
+                    configurable: false
+                });
+                
                 var context = {
                     get: function() { return _ctx; },
                     enumerable: true,
@@ -94,6 +101,7 @@
 
             window.app = new App();
             window.addEventListener("resize", resetCanvas);
+            window.addEventListener("re", resetCanvas);
             resetCanvas();
         }
 
