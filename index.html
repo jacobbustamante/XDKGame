@@ -44,15 +44,16 @@
 
             window.addEventListener("load", function () {
                 initGame();
-                //var lev = new Level();
-                //lev.createNewLevel();
+                var lev = new Level();
+                lev.createNewLevel();
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.addEventListener("load", function(e) {
                     var player = new Ship();
                     player.img.initAnimatedImage(tmp, 6, 30);
+                    player.isPlayer = true;
                     player.x = 50;
-                    player.y = 200;
+                    player.y = 400;
                     window.app.actors.push(player);
                     window.setInterval(main, 1000/30);
                 });
