@@ -3,9 +3,10 @@ function Ship() {
     this.y = 0;
     this.vx = 0;
     this.vy = 0;
+    this.isPlayer = 0;
     
-    this.theta = 0;
-    this.speed = 0;
+    this.theta = 275;
+    this.speed = 2;
     this.velocity = 0;
     
     this.health=100;
@@ -28,6 +29,10 @@ function Ship() {
     
     function _update() {
         
+        if(isPlayer){
+        this.getVelocity();
+        this.updatePosition();
+        }
     }
     
     function _draw(){
@@ -49,10 +54,22 @@ function Ship() {
               
     }
     
+    function _updatePosition(time){
+        if(!time){
+        this.x+=this.vx*2;
+        this.y+=this.vy*2;
+        }
+        else{
+        this.x+=this.vx*time;
+        this.y+=this.vy*time;
+        }
+    }
+    
     this.update = _update.bind(this);
     this.render = _draw.bind(this);
     this.shoot = _shoot.bind(this);
     this.getVelocity = _getVelocity.bind(this);
+    this.updatePosition = _updatePosition.bind(this);
     
 }
 
