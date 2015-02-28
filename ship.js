@@ -3,7 +3,7 @@ function Ship() {
     this.y = 50;
     this.vx = 0;
     this.vy = 0;
-    this.isPlayer = true;
+    this.isPlayer = false;
     
     this.theta = 55;
     this.speed = 2;
