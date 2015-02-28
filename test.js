@@ -1,7 +1,7 @@
 // use the load event for init code
 // the app global variable will be set before this event fires
 window.addEventListener("load", function() {
-    paintGreen();
+    //paintGreen();
 
     document.body.addEventListener("touchstart", onTap);
     document.body.addEventListener("touchmove", noAction);
@@ -54,7 +54,7 @@ function placeShip(e) {
 function moveShip(e) {
     var ctx = app.ctx;
     
-    paintGreen();
+    //paintGreen();
     switch(e.which) {
         case 87: // w
             player_ship.y -= 25;
