@@ -10,9 +10,13 @@ window.addEventListener("load", function() {
     
     // Testing a key press or mouse click
     player_ship_img.src = "asset/ShipPlaceHolderPlaceHolder.png";
-    bullet_img.src = "asset/TestGif.gif";
+    bullet_img.src = "asset/ShipPlaceHolderPlaceHolder.png";
+    power_ship_img.src = "asset/PowerShip.png";
+    power_ship_img.onload = function() {
+        power_ship_animated.initAnimatedImage(power_ship_img, 6, 1);
+    }
     document.addEventListener("keydown", moveShip);
-    app.canvas.addEventListener("mousedown", placeShip);
+    //app.canvas.addEventListener("mousedown", placeShip);
 });
 
 function noAction(e) {
@@ -45,13 +49,16 @@ var player_ship_img = new Image();
 var player_ship = {x:0, y:0};
 var bullet_img = new Image();
 var bullet = {x:0, y:0};
+var power_ship_img = new Image();
+var power_ship = {x:0, y:0};
+var power_ship_animated = new AnimatedImage();
 
 function placeShip(e) {
     var ctx = app.ctx;
 
-    ctx.drawImage(player_ship_img, e.x - (player_ship_img.width / 2), e.y - (player_ship_img.height / 2));
-    player_ship.x = e.x - (player_ship_img.width / 2);
-    player_ship.y = e.y - (player_ship_img.height / 2);
+    ctx.drawImage(power_ship_img, e.x - (player_ship_img.width / 2), e.y - (player_ship_img.height / 2));
+    power_ship.x = e.x - (power_ship_img.width / 2);
+    power_ship.y = e.y - (power_ship_img.height / 2);
     bullet.x = player_ship.x;
     bullet.y = player_ship.y + 45;
 }
@@ -62,16 +69,16 @@ function moveShip(e) {
     //paintGreen();
     switch(e.which) {
         case 87: // w
-            player_ship.y -= 25;
+            power_ship.y -= 25;
             break;
         case 83: // s
-            player_ship.y += 25;
+            power_ship.y += 25;
             break;
         case 65: // a
-            player_ship.x -= 25;
+            power_ship.x -= 25;
             break;
         case 68: // d
-            player_ship.x += 25;
+            power_ship.x += 25;
             break;
         default:
             break;
@@ -79,7 +86,8 @@ function moveShip(e) {
     
     
     //ctx.drawImage(player_ship_img, player_ship.x, player_ship.y);
-    ctx.drawImage(player_ship_img, 0,0, player_ship_img.width, player_ship_img.height, player_ship.x, player_ship.y,player_ship_img.width * 2, player_ship_img.height*2);
-    ctx.drawImage(bullet_img, bullet.x, bullet.y);
+    //ctx.drawImage(power_ship_img, 0,0, power_ship_img.width, power_ship_img.height, power_ship.x, power_ship.y,power_ship_img.width * 1, power_ship_img.height * 1);
+    power_ship_animated.drawAnimatedImage(ctx, power_ship.x, power_ship.y);
+    //ctx.drawImage(bullet_img, bullet.x, bullet.y);
 }
 
