@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
     player_ship_img.src = "asset/ShipPlaceHolderPlaceHolder.png";
     bullet_img.src = "asset/TestGif.gif";
     document.addEventListener("keydown", moveShip);
-    app.canvas.addEventListener("mousedown", placeShip);
+    //app.canvas.addEventListener("mousedown", placeShip);
 });
 
 function noAction(e) {
