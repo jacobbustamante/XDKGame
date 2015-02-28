@@ -3,6 +3,7 @@ function Ship() {
     this.y = 0;
     this.theta = 0;
     this.speed = 0;
+
     this.health=100;
     
     var _tx = tx.bind(this);
@@ -19,7 +20,7 @@ function Ship() {
         writable: false,
         enumerable: true,
         configurable: false
-    }); 
+    });
     
     function _update() {
 
@@ -29,13 +30,17 @@ function Ship() {
         this.tx();
         app.ctx.drawImage(img, 0, 0);
     }
-
+    
     function _shoot(){
-
+        var bullet = new Bullet();
+        bullet.x = this.x;
+        bullet.y = this.y;
+        bullet.speed += this.speed;
     }
 
-    this.update = _update.bind(this);    
-    this.draw = _draw.bind(this);   
+    this.update = _update.bind(this);
+    this.draw = _draw.bind(this);
+    this.shoot = _shoot.bind(this);
 }
 
 function tx() {
