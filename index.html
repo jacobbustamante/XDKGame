@@ -4,31 +4,6 @@
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
 
-    <script>
-        if (!Function.prototype.bind) {
-            Function.prototype.bind = function (oThis) {
-            if (typeof this !== "function") {
-                // closest thing possible to the ECMAScript 5 internal IsCallable function
-                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-            }
-
-            var aArgs = Array.prototype.slice.call(arguments, 1), 
-            fToBind = this, 
-            fNOP = function () {},
-            fBound = function () {
-            return fToBind.apply(this instanceof fNOP && oThis
-                 ? this
-                 : oThis,
-                aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-                fNOP.prototype = this.prototype;
-                fBound.prototype = new fNOP();
-
-                return fBound;
-            };
-        }
-    </script>
     <script src="animatedImage.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
@@ -39,25 +14,34 @@
 
 </head>
     <body>
+        
         <script>
-
-            window.addEventListener("load", function () {
-                initGame();
+            initGame();
+            function start() {
+                
+                var canvas = document.getElementById(app.CANVAS_ID);
+                var ctx = canvas.getContext("2d");
+                
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
-                tmp.addEventListener("load", function(e) {
+                tmp.onload = function(e) {
                     var player = new Ship();
                     player.img.initAnimatedImage(tmp, 6, 30);
-                    player.x = 0;
-                    player.y = 0;
+                    player.x = 60;
+                    player.y = 80;
                     window.app.actors.push(player);
-                    window.setInterval(main, 1000/30);
-                });
-
-
+                    //main();
+                    window.setInterval(main, 100);
+                };
+                
                 //window.requestAnimationFrame(main);
                 
-            });
+            }
+            
+            window.addEventListener("pageshow", start);
+            //window.addEventListener("load", start);
+            
         </script>
+
     </body>
 </html>

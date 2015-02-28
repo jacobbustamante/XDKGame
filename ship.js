@@ -45,8 +45,8 @@ function Ship() {
 
 function tx() {
     var g = app.ctx;
-    g.resetTransform();
+    g.setTransform(1, 0, 0, 1, this.x, this.y);
     g.rotate((Math.PI/180)*this.theta);
-    g.translate(this.x, this.y);
+    //g.translate(this.x, this.y);
     g.transform(1, 0, 0, 1, app.camera.x, app.camera.y);
 }
