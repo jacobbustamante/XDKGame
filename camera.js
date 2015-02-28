@@ -28,7 +28,3 @@ function Camera() {
     
 
 }
-
-window.addEventListener("load", function() {
-    app.camera = new Camera();
-});
