@@ -77,7 +77,9 @@ function moveShip(e) {
             break;
     }
     
-    ctx.drawImage(player_ship_img, player_ship.x, player_ship.y);
+    
+    //ctx.drawImage(player_ship_img, player_ship.x, player_ship.y);
+    ctx.drawImage(player_ship_img, 0,0, player_ship_img.width, player_ship_img.height, player_ship.x, player_ship.y,player_ship_img.width * 2, player_ship_img.height*2);
     ctx.drawImage(bullet_img, bullet.x, bullet.y);
 }
 
