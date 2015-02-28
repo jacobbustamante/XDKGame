@@ -18,8 +18,7 @@
         
         <script>
             initGame();
-            function start() {
-                
+            function start() {       
                 var canvas = document.getElementById(app.CANVAS_ID);
                 var ctx = canvas.getContext("2d");
                 var tmp = new Image();
@@ -31,14 +30,11 @@
                     player.y = 80;
                     window.app.actors.push(player);
                     //main();
-                    window.setInterval(main, 100);
+                    window.setInterval(main, 1000/30);
                 };
                 
-                //window.requestAnimationFrame(main);
-                
             }
-            
-            window.addEventListener("pageshow", start);
+            start();
             //window.addEventListener("load", start);
             
         </script>
