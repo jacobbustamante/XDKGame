@@ -1,19 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
-</head>
-<body>
+    <script src="test.js"></script>
     <script>
-        canvas = document.createElement("canvas");
-        canvas.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        canvas.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        canvas.id = "game-canvas";
-        document.body.appendChild(canvas);
-        
-        
-        
-        
+        function initGame() {
+            var _ctx;
+
+            function resetGraphicsContexts() {
+                _ctx.fillStyle = "#000000";
+                _ctx.font = "20px sans-serif";
+                _ctx.globalAlpha = 1;
+                _ctx.globalCompositeOperation = "source-over";
+                _ctx.imageSmoothingEnabled = true;
+                _ctx.lineCap = "butt";
+                _ctx.lineDashOffset = 0;
+                _ctx.lineJoin = "miter";
+                _ctx.lineWidth = 1;
+                _ctx.miterLimit = 10;
+                _ctx.shadowBlur = 0;
+                _ctx.shadowColor = "rgba(0, 0, 0, 0)";
+                _ctx.shadowOffsetX = 0;
+                _ctx.shadowOffsetY = 0;
+                _ctx.strokeStyle = "#000000";
+                _ctx.textAlign = "start";
+                _ctx.textBaseline = "alphabetic";
+            }
+
+            function App() {
+                Object.defineProperty(this, "CANVAS_ID", {
+                    value: "game-canvas",
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                });
+                
+                Object.defineProperty(this, "canvas", {
+                    get: function() { return document.getElementById(app.CANVAS_ID); },
+                    enumerable: true,
+                    configurable: false
+                });
+                
+                Object.defineProperty(this, "GAME_NAME", {
+                    value: window.document.head.firstElementChild.firstChild,
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                });
+                
+                var context = {
+                    get: function() { return _ctx; },
+                    enumerable: true,
+                    configurable: false
+                };
+                
+                Object.defineProperty(this, "ctx", context);
+                Object.defineProperty(this, "context", context);
+                Object.defineProperty(this, "graphics", context);
+                
+                Object.defineProperty(this, "resetGraphics", {
+                    value: resetGraphicsContexts,
+                    enumerable: true,
+                    writable: false,
+                    configurable: false
+                });
+            }
+
+            function getWindowDimension(dim) {
+                dim = dim.charAt(0).toUpperCase() + dim.slice(1).toLowerCase();
+                var tmp = document.documentElement["client" + dim];
+                return Math.max(tmp , window["inner"+dim] || 0);
+            }
+
+            function resetCanvas() {
+                var canvas = document.getElementById(app.CANVAS_ID);
+                if (canvas) {
+                    canvas.parentNode.removeChild(canvas);
+                }
+
+                canvas = document.createElement("canvas");
+                canvas.id = app.CANVAS_ID;
+                canvas.width = getWindowDimension("width");
+                canvas.height = getWindowDimension("height");
+                canvas.style.position = "absolute";
+                canvas.style.top = "0";
+                canvas.style.left = "0";
+
+                document.body.appendChild(canvas);
+                _ctx = canvas.getContext("2d");
+                resetGraphicsContexts();
+            }
+
+            window.app = new App();
+            window.addEventListener("resize", resetCanvas);
+            resetCanvas();
+        }
+
+        window.addEventListener("DOMContentLoaded", initGame);
     </script>
-</body>
+
+</head>
+<body></body>
 </html>
