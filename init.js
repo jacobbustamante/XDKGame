@@ -144,6 +144,5 @@ function initGame() {
     window.app = new App();
     window.addEventListener("resize", resetCanvas);
     //window.resetCanvas = resetCanvas;
-    //intel.xdk.device.setRotateOrientation("landscape");
     resetCanvas();
 }

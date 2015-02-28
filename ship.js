@@ -1,9 +1,14 @@
 function Ship() {
     this.x = 0;
     this.y = 0;
-    this.theta = 0;
-    this.speed = 0;
-
+    this.vx = 0;
+    this.vy = 0;
+    this.isPlayer = 0;
+    
+    this.theta = 275;
+    this.speed = 2;
+    this.velocity = 0;
+    
     this.health=100;
     
     var _tx = tx.bind(this);
@@ -16,19 +21,23 @@ function Ship() {
     });
     
     Object.defineProperty(this, "img", {
-        value: new AnimatedImage();,
+        value: new AnimatedImage(),
         writable: false,
         enumerable: true,
         configurable: false
     });
     
     function _update() {
-
+        
+        if(isPlayer){
+        this.getVelocity();
+        this.updatePosition();
+        }
     }
     
     function _draw(){
         this.tx();
-        app.ctx.drawImage(img, 0, 0);
+        this.img.drawAnimatedImage(app.ctx, 0, 0);
     }
     
     function _shoot(){
@@ -38,9 +47,30 @@ function Ship() {
         bullet.speed += this.speed;
     }
 
+    function _getVelocity(){
+        
+        this.vx=speed*Math.cos(this.theta*Math.PI/180);
+        this.vy=speed*Math.sin(this.theta*Math.PI/180);
+              
+    }
+    
+    function _updatePosition(time){
+        if(!time){
+        this.x+=this.vx*2;
+        this.y+=this.vy*2;
+        }
+        else{
+        this.x+=this.vx*time;
+        this.y+=this.vy*time;
+        }
+    }
+    
     this.update = _update.bind(this);
-    this.draw = _draw.bind(this);
+    this.render = _draw.bind(this);
     this.shoot = _shoot.bind(this);
+    this.getVelocity = _getVelocity.bind(this);
+    this.updatePosition = _updatePosition.bind(this);
+    
 }
 
 function tx() {
