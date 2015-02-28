@@ -3,9 +3,13 @@
 <head>
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
+
     <script src="animatedImage.js"></script>
+    <script src="bullet.js"></script>
+    <script src="ship.js"></script>
     <script src="test.js"></script>
     <script src="main.js"></script>
+    <script src="camera.js"></script>
     
     <script>
         function initGame() {
@@ -31,6 +35,7 @@
                 _ctx.strokeStyle = "#000000";
                 _ctx.textAlign = "start";
                 _ctx.textBaseline = "alphabetic";
+                _ctx.resetTransform();
             }
 
             function App() {
@@ -116,6 +121,13 @@
                     writable: false,
                     configurable: false
                 });
+                
+                Object.defineProperty(this, "camera", {
+                    value: new Camera(),
+                    enumerable: true,
+                    writable: false,
+                    configurable: false
+                });
             }
 
             function getWindowDimension(dim) {
@@ -148,10 +160,12 @@
             window.addEventListener("re", resetCanvas);
             resetCanvas();
         }
-        
-        //window.addEventListener("DOMContentLoaded", );
     </script>
 
 </head>
-    <body><script>initGame();</script></body>
+    <body>
+        <script>
+            initGame();
+        </script>
+    </body>
 </html>
