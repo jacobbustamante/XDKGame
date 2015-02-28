@@ -7,6 +7,8 @@
     <script>
         function initGame() {
             var _ctx;
+            var _removed = [];
+            var _actors = [];
 
             function resetGraphicsContexts() {
                 _ctx.fillStyle = "#000000";
@@ -50,11 +52,50 @@
                 });
                 
                 Object.defineProperty(this, "actors", {
-                    value: [] ,
-                    writable: true,
+                    get: function() { return _actors; },
                     enumerable: true,
                     configurable: false
                 });
+                
+                Object.defineProperty(this, "kill", {
+                    value: function(actor) {
+                        if (actor) {
+                            _removed.push(actor);
+                        }
+                    },
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                });
+                
+                Object.defineProperty(this, "removeKilled", {
+                    value: function() {
+                        if (_removed.length) {
+                            var len = _actors.length;
+                            var newLength = len - _removed.length;
+                            for (var next = _removed.pop(); next; next = _removed.pop()) {
+                                for (var i = 0, ; i < len; ++i) {
+                                    if (_actors[i] === next) {
+                                        _actors[i] = null;
+                                    }
+                                }
+                            }
+
+                            var n = 0;
+                            var tmp = new Array(newLength);
+                            for (var i = 0; i < len; ++i) {
+                                if (_actors[i]) {
+                                    tmp[n++] = _actors[i];
+                                }
+                            }
+
+                            _actors = tmp;
+                        }
+                    },
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                }); 
                 
                 var context = {
                     get: function() { return _ctx; },
