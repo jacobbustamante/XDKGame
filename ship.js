@@ -5,6 +5,7 @@ function Ship() {
     this.vy = 0;
     this.isPlayer = false;
     
+    //
     this.theta = 55;
     this.speed = 0;
     
