@@ -1,27 +1,28 @@
 function Level() {
-    
-    this.ship= [ship0,ship1,ship2,ship3,ship4];
-    
-    ship0.x=50;
-    ship0.y=0;
-    ship1.x=100;
-    ship1.y=50;
-    ship2.x=150;
-    ship2.y=100;
-    ship3.x=200;
-    ship3.y=150;
-    ship4.x=250;
-    ship4.y=200;
-    ship5.x=300;
-    ship5.y=250;
+    //this.ships = [new Ship(), new Ship(),new Ship(),new Ship(),new Ship(),new Ship()];
+    this.ships = [];
     
 function _createNewLevel() {
+    window.app.actors = [];
     
-    var i;
-    for(i=1;i<this.ship.length;i++)
-    {
-        this.ship[i].draw();       
-    }
+    var ships = [];
+    
+    var ship_img = new Image();
+    ship_img.src = "asset/PlasmaShip.png";
+    ship_img.addEventListener("load", function(e) {
+        for (var i = 0; i < 6; i++)
+        {
+            ships.push(new Ship());
+            ships[i].img.initAnimatedImage(ship_img, 8, 60);
+            ships[i].x = Math.floor((Math.random() * 300) + 1);
+            ships[i].y = Math.floor((Math.random() * 300) + 1);
+        }
+        
+        for(var i=1;i<ships.length;i++)
+        {
+            window.app.actors.push(ships[i]);
+        }
+    });
     
 }
         

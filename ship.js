@@ -1,13 +1,12 @@
 function Ship() {
-    this.x = 0;
-    this.y = 0;
+    this.x = 50;
+    this.y = 50;
     this.vx = 0;
     this.vy = 0;
-    this.isPlayer = 0;
+    this.isPlayer = false;
     
-    this.theta = 275;
-    this.speed = 2;
-    this.velocity = 0;
+    this.theta = 55;
+    this.speed = 0;
     
     this.health=100;
     
@@ -27,30 +26,48 @@ function Ship() {
         configurable: false
     });
     
+    Object.defineProperty(this, "bullet_img", {
+        value: new Image(),
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
     function _update() {
         
-        if(isPlayer){
-        this.getVelocity();
-        this.updatePosition();
+        if(this.isPlayer){
+            this.getVelocity();
+            this.updatePosition();
+            this.shoot();
+        }
+        else
+        {
+            this.getVelocity();
+            this.updatePosition();
         }
     }
     
     function _draw(){
-        this.tx();
-        this.img.drawAnimatedImage(app.ctx, 0, 0);
+        //this.tx();
+        this.img.drawAnimatedImage(app.ctx, this.x, this.y);
     }
     
     function _shoot(){
+        
         var bullet = new Bullet();
+        bullet.img.initAnimatedImage(this.bullet_img, 3, 60);
         bullet.x = this.x;
         bullet.y = this.y;
-        bullet.speed += this.speed;
+        //bullet.speed += this.speed;
+        bullet.speed += 5;
+        console.log(bullet);
+        window.app.actors.push(bullet);
     }
 
     function _getVelocity(){
         
-        this.vx=speed*Math.cos(this.theta*Math.PI/180);
-        this.vy=speed*Math.sin(this.theta*Math.PI/180);
+        this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
+        this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
               
     }
     
@@ -75,8 +92,8 @@ function Ship() {
 
 function tx() {
     var g = app.ctx;
-    g.resetTransform();
+    g.setTransform(1, 0, 0, 1, this.x, this.y);
     g.rotate((Math.PI/180)*this.theta);
-    g.translate(this.x, this.y);
+    //g.translate(this.x, this.y);
     g.transform(1, 0, 0, 1, app.camera.x, app.camera.y);
 }

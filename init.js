@@ -21,7 +21,7 @@ function initGame() {
         _ctx.strokeStyle = "#000000";
         _ctx.textAlign = "start";
         _ctx.textBaseline = "alphabetic";
-        _ctx.resetTransform();
+        _ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
 
     function App() {
@@ -127,14 +127,28 @@ function initGame() {
         if (canvas) {
             canvas.parentNode.removeChild(canvas);
         }
+        var iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 
+        console.log("ios? ",iOS)
         canvas = document.createElement("canvas");
         canvas.id = app.CANVAS_ID;
-        canvas.width = getWindowDimension("width");
-        canvas.height = getWindowDimension("height");
+        if (iOS) {
+            var w = getWindowDimension("width");
+            var h = getWindowDimension("height");
+            canvas.width = (w);
+            canvas.height = (h);
+        }
+        else {
+            canvas.width = getWindowDimension("width");
+            canvas.height = getWindowDimension("height");
+        }
         canvas.style.position = "absolute";
         canvas.style.top = "0";
         canvas.style.left = "0";
+        if (iOS) {
+            canvas.style.width = w;
+            canvas.style.height = h;
+        }
 
         document.body.appendChild(canvas);
         _ctx = canvas.getContext("2d");
@@ -143,6 +157,5 @@ function initGame() {
 
     window.app = new App();
     window.addEventListener("resize", resetCanvas);
-    //window.resetCanvas = resetCanvas;
     resetCanvas();
 }

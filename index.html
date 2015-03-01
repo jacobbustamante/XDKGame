@@ -4,32 +4,8 @@
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
 
-    <script>
-        if (!Function.prototype.bind) {
-            Function.prototype.bind = function (oThis) {
-            if (typeof this !== "function") {
-                // closest thing possible to the ECMAScript 5 internal IsCallable function
-                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-            }
-
-            var aArgs = Array.prototype.slice.call(arguments, 1), 
-            fToBind = this, 
-            fNOP = function () {},
-            fBound = function () {
-            return fToBind.apply(this instanceof fNOP && oThis
-                 ? this
-                 : oThis,
-                aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-                fNOP.prototype = this.prototype;
-                fBound.prototype = new fNOP();
-
-                return fBound;
-            };
-        }
-    </script>
     <script src="animatedImage.js"></script>
+    <script src="level.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
     
@@ -39,25 +15,37 @@
 
 </head>
     <body>
+        
         <script>
 
-            window.addEventListener("load", function () {
-                initGame();
+            initGame();
+            function start() {       
+                var canvas = document.getElementById(app.CANVAS_ID);
+                var ctx = canvas.getContext("2d");
+
+                var lev = new Level();
+                lev.createNewLevel();
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
-                tmp.addEventListener("load", function(e) {
+                var tmp_bullet = new Image();
+                tmp_bullet.src = "asset/PlasmaShot.png";
+                tmp_bullet.onload = function(e) {
                     var player = new Ship();
                     player.img.initAnimatedImage(tmp, 6, 30);
-                    player.x = 0;
-                    player.y = 0;
+                    player.bullet_img = tmp_bullet;
+                    player.isPlayer = true;
+                    player.x = 50;
+                    player.y = 400;
                     window.app.actors.push(player);
+                    //main();
                     window.setInterval(main, 1000/30);
-                });
-
-
-                //window.requestAnimationFrame(main);
+                };
                 
-            });
+            }
+            start();
+            //window.addEventListener("load", start);
+            
         </script>
+
     </body>
 </html>
