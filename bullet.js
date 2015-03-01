@@ -1,4 +1,4 @@
-function Bullet() {
+function Bullet(type) {
 
     this.isBullet=true;
     this.fromPlayer=false;
@@ -11,6 +11,21 @@ function Bullet() {
 
     this.theta = 90;
     this.speed = 0;
+    this.type = type;
+    var attack = 0;
+    if(type == 1) {
+         attack = 20;  
+    }
+    if(type == 2) {
+         attack = 5;  
+    }
+    if(type == 3) {
+         attack = 15;  
+    }
+    if(type == 4) {
+         attack = 30;  
+    }
+    this.attack = attack;
     
     var _tx = tx.bind(this);
     
