@@ -6,7 +6,7 @@ function initBulletConstructors() {
 }
 
 function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
-    AnimatedImage.call(this);
+    SpaceObject.call(this, originShip.x, originShip.y);
     
     this.initAnimatedImage(spriteSheet, 3, 60);
     this.attack = attack;
@@ -33,41 +33,10 @@ function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
         enumerable: true,
         configurable: false
     });
-    
-
-    
-    this.x = 0;
-    this.y = 0;
-    this.vx = 0;
-    this.vy = 0;
-
-
-    this.theta = 90;
-    this.speed = 0;
-    this.type = type;
-    var attack = 0;
 
     
     function _draw() {
         this.drawSprite(this.x, this.y);
-    }
-
-    function _getVelocity(){
-        
-        this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
-        this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
-              
-    }
-    
-    function _updatePosition(time){
-        if(time == 0){
-        this.x+=this.vx*2;
-        this.y+=this.vy*2;
-        }
-        else{
-        this.x+=this.vx*time;
-        this.y+=this.vy*time;
-        }
     }
     
     this.update = _update.bind(this);
@@ -76,3 +45,12 @@ function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
     this.updatePosition = _updatePosition.bind(this);
     
 }
+
+function BulletPrototype(){}
+
+Object.defineProperty(BulletPrototype.prototype, "DEFAULT_DENSITY", {
+    value: 5,
+    writable: true,
+    enumerable: true,
+    configurable: false
+});

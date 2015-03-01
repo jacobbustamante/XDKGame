@@ -1,29 +1,44 @@
 function PlasmaShip(x, y) {
-    this.init(x,y);
-    this.initAnimatedImage(app.cache["asset/PlasmaShip.png"], 8, 10);
-    this.circleShape(26);
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    
+    var fixtureDef = new b2FixtureDef();
+    fixtureDef.set_shape(makeCircleShape(6.5, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
 }
 
 function PowerShip(x, y) {
-    this.init(x,y);
+    this.init("POWER_SHIP", x, y);
     this.initAnimatedImage(app.cache["asset/PowerShip.png"], 6, 10);
-    this.circleShape(20);
+    this.circleShape(5);
 }
 
 function SpreadShip(x, y) {
-    this.init(x,y);
+    this.init("SPREAD_SHIP", x, y);
     this.initAnimatedImage(app.cache["asset/SpreadShip.png"], 6, 10);
-    this.circleShape(29);
+    this.circleShape(7.25);
 }
 
 function WaveShip() {
-    this.init(x,y);
+    this.init("WAVE_SHIP", x, y);
     this.initAnimatedImage(app.cache["asset/WaveShip.png"], 8, 10);
-    this.circleShape(30);
+    this.circleShape(7.5);
 }
 
 function initShipPrototypes() {
-    PlasmaShip.prototype = new ShipPrototype("Plasma Ship", 50, PlasmaShot);
+    PlasmaShip.prototype = new ShipPrototype({
+        typeName: "PLASMA_SHIP",
+        hp: 50,
+        bullet: PlasmaShot,
+        sprite: app.cache["asset/PlasmaShip.png"],
+        frameCount: 8,
+        framesPerSecond: 10
+    });
     PowerShip.prototype = new ShipPrototype("Power Ship", 100, PowerShot);
     SpreadShip.prototype = new ShipPrototype("Spread Ship", 70, SpreadShot);
     WaveShip.prototype = new ShipPrototype("Wave Ship", 60, WaveShot);
@@ -37,88 +52,19 @@ function updatePlayerShip() {
     
 }
 
-function SpaceObject(x, y) {
-    AnimatedImage.call(this);
-    var DEFAULT_DENSITY = 5;
-    
-    var _boxShape = (function(w, h, d) {
-        if (d === undefined) {
-            d = DEFAULT_DENSITY;
-        }
-        var shape = new b2PolygonShape();
-        shape.SetAsBox(w, h);
-        this.body.CreateFixture(shape, d);
-    }).bind(this);
-    
-    var _circleShape = (function(r, d) {
-        if (d === undefined) {
-            d = DEFAULT_DENSITY;
-        }
-        var shape = new b2CircleShape();
-        shape.set_m_radius(r);
-        this.body.CreateFixture(shape, d);
-    }).bind(this);
-    
-    var _draw = (function() {
-        this.drawSprite(this.x, this.y);
-    }).bind(this);
-    
-    if (x === undefined) {
-        x = 0;
-    }    
-    if (y === undefined) {
-        y = 0;
-    }
-    var bodyDef = new Box2D.b2BodyDef();
-    bodyDef.set_type(Box2D.b2_dynamicBody);
-    bodyDef.set_position(new b2Vec2(x, y));
-    
-    Object.defineProperty(this, "body", {
-        value: app.world.CreateBody(bodyDef),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "boxShape", {
-        value: _boxShape,
-        writable: false,
-        enumerable: false,
-        configurable: false    
-    });
-    
-    Object.defineProperty(this, "circleShape", {
-        value: _circleShape,
-        writable: false,
-        enumerable: false,
-        configurable: false    
-    });
-    
-    Object.defineProperty(this, "render", {
-        value: _draw,
-        writable: true,
-        enumerable: true,
-        configurable: false    
-    });
-}
-
-function Ship(hp, bulletFactory, x, y) {
-    SpaceObject.call(this, x, y);
+function Ship(hp, bulletFactory) {
     var _health = hp;
-    
     function _fireWeapon(){
         if (!this.lastShotTime || app.now() - this.lastShot > this.fireRate) {
             //var bullet = new bulletFactory.create(this);
             this.lastShotTime = app.now();
         }
     }
-    
-    function _takeDamage(object) {
+    this.damage = function (object) {
         if (--_health <= 0) {
             this.onDeath();
         }
     }
-    
     function _explode() {
         
     }
@@ -143,11 +89,11 @@ function Ship(hp, bulletFactory, x, y) {
     this.onDeath = _explode.bind(this);
 }
 
-function ShipPrototype(name, hp, bulletFactory) {
-    var _init = (function(x,y) {
-        Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY, x, y);
-        this.others.push(this);
-    }).bind(this);
+function ShipPrototype(props) {
+    this.props = props;
+    var _init = function(x, y) {
+
+    };
     
     Object.defineProperty(this, "init", {
         value: _init,
@@ -155,29 +101,33 @@ function ShipPrototype(name, hp, bulletFactory) {
         enumerable: false,
         configurable: false
     });
-    Object.defineProperty(this, "SHIP_TYPE", {
-        value: name,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
+    
     Object.defineProperty(this, "SPAWN_HEALTH", {
-        value: hp,
+        value: props.hp,
         writable: true,
         enumerable: true,
         configurable: false
     });
+    
     Object.defineProperty(this, "BULLET_FACTORY", {
-        value: bulletFactory,
+        value: props.bulletFactory,
         writable: false,
         enumerable: true,
         configurable: false
     });
+    
     Object.defineProperty(this, "others", {
         get: function() {
-            return app.ships[this.SHIP_TYPE];
+            return app.ships[this.TYPE];
         },
         enumerable: true,
         configurable: false
     });
 }
+
+Object.defineProperty(ShipPrototype.prototype, "DEFAULT_DENSITY", {
+    value: 5,
+    writable: true,
+    enumerable: true,
+    configurable: false
+});

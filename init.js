@@ -1,4 +1,4 @@
-function initGame() {
+function InitGame() {
     var _ctx;
     var _removed = [];
     var _actors = [];
@@ -70,13 +70,6 @@ function initGame() {
             writable: false,
             configurable: false
         });
-
-        Object.defineProperty(this, "camera", {
-            value: new Camera(),
-            enumerable: true,
-            writable: false,
-            configurable: false
-        });
         
         Object.defineProperty(this, "iOS", {
             value: navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false,
@@ -86,14 +79,14 @@ function initGame() {
         });
         
         Object.defineProperty(this, "toMeters", {
-            value: function(x) { return x/12; },
+            value: function(x) { return x/4; },
             enumerable: true,
             writable: false,
             configurable: false
         });
         
         Object.defineProperty(this, "toPixels", {
-            value: function(x) { return 12*x; },
+            value: function(x) { return 4*x; },
             enumerable: true,
             writable: false,
             configurable: false
@@ -108,7 +101,7 @@ function initGame() {
         
         Object.defineProperty(this, "ships", {
             value: {
-                "Plasma Ship": [],
+                "PLASMA_SHIP": [],
                 "Power Ship": [],
                 "Spread Ship": [],
                 "Wave Ship": []
@@ -218,9 +211,8 @@ function initGame() {
 
     window.app = new App();
     window.addEventListener("resize", resetCanvas);
-    (using.bind(window))(Box2D);
     resetCanvas();
-}
+};
 
 function loadAssets() {
     app.loadImage("asset/PlasmaShip.png");
