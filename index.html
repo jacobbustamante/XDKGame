@@ -12,6 +12,7 @@
     <script src="main.js"></script>
     <script src="camera.js"></script>
     <script src="init.js"></script>
+    <script src="input.js"></script>
 
 </head>
     <body>
@@ -28,18 +29,19 @@
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.onload = function(e) {
-                    var player = new Ship();
-                    player.img.initAnimatedImage(tmp, 6, 30);
-                    player.isPlayer = true;
-                    player.x = 50;
-                    player.y = 400;
-                    window.app.actors.push(player);
+                    app.player = new Ship();
+                    app.player.img.initAnimatedImage(tmp, 6, 30);
+                    app.player.isPlayer = true;
+                    app.player.x = 50;
+                    app.player.y = 400;
+                    window.app.actors.push(app.player);
                     //main();
                     window.setInterval(main, 1000/30);
                 };
                 
             }
             start();
+            setupInput();
             //window.addEventListener("load", start);
             
         </script>
