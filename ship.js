@@ -6,7 +6,8 @@ function Ship() {
     this.radius=Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
     this.isPlayer = false;
     
-    //
+    //comment
+    // another one
     this.theta = 55;
     this.speed = 0;
     
