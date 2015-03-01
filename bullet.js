@@ -1,6 +1,7 @@
 function Bullet() {
 
     this.isBullet=true;
+    this.fromPlayer=false;
     
     this.x = 0;
     this.y = 0;

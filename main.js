@@ -3,22 +3,28 @@ function main() {
         var len = app.actors.length;
         for (var i = 0; i < len; ++i) {
             app.actors[i].update();
-            /*
+            
             if(app.actors[i].isBullet===true || app.actors[i].isShip===true)
             {
                 for(var j=i+1; j<len; ++j){
-                    if(app.actors[i].isBullet===true && app.actors[j].isShip===true){
+                    if(app.actors[i].isBullet===true && app.actors[j].isShip===true &&
+                        ((app.actors[i].fromPlayer===true && app.actors[j].isPlayer===false) ||
+                         (app.actors[i].fromPlayer===false && app.actors[j].isPlayer===true))){
                         if(isCollision(app.actors[j],app.actors[i])){
-                            app.actors[j].health-=10;   
+                            app.actors[j].health-=10;
+                            app.kill(app.actors[i]);
                             if(app.actors[j].health<=0){
                                 app.kill(app.actors[j]);
                             }
                         }
                     }
                     
-                    else if (app.actors[j].isBullet===true && app.actors[i].isShip===true){
+                    else if (app.actors[j].isBullet===true && app.actors[i].isShip===true &&
+                        ((app.actors[j].fromPlayer===true && app.actors[i].isPlayer===false) ||
+                         (app.actors[j].fromPlayer===false && app.actors[i].isPlayer===true))){
                         if(isCollision(app.actors[i],app.actors[j])){
-                            app.actors[i].health-=10;   
+                            app.actors[i].health-=10;
+                            app.kill(app.actors[j]);   
                             if(app.actors[i].health<=0){
                                 app.kill(app.actors[i]);
                             }
@@ -27,7 +33,7 @@ function main() {
                                                 
                 }
                 
-            }*/
+            }
         }
 
         app.removeKilled();
@@ -53,8 +59,14 @@ function isCollision(ship,bullet){
    
     var distance = Math.sqrt(Math.pow(ship.x-bullet.x,2)+Math.pow(ship.y-bullet.y,2));
     
-    if(distance<ship.radius+bullet.radius)
+    if(distance < 44)
+        return true;
+    else
+        return false;
+    /*
+    if((ship.img.frameWidth/2 + bullet.img.frameWidth/2) < distance)
         return true;
     
     else return false;
+    */
 }

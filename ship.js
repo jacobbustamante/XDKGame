@@ -51,6 +51,13 @@ function Ship() {
 
             this.updatePosition(0);
             this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
+
+            this.timeSinceLastShot--;
+            if (this.timeSinceLastShot < 0)
+            {
+                this.timeSinceLastShot = this.timeBetweenShots;
+                //this.shoot();
+            }
         }
         else
         {
@@ -81,6 +88,10 @@ function Ship() {
             bullet.x = b_x;
             bullet.y = b_y;
             bullet.speed += 5;
+            if (this.isPlayer===true)
+            {
+                bullet.fromPlayer = true;
+            }
             window.app.actors.push(bullet);
         });
     }

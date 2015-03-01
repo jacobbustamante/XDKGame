@@ -29,8 +29,8 @@ function _createNewLevel() {
     player_img.addEventListener("load", function(e) {
         player_ship.img.initAnimatedImage(player_img, 6, 30);
         player.isPlayer = true;
-        player.x = Math.floor((Math.random() * 300) + 1);
-        player.y = Math.floor((Math.random() * 300) + 1);
+        player.x = 50;
+        player.y = 400;
         window.app.actors.push(player_ship);
     });
     
