@@ -1,13 +1,13 @@
 function Ship() {
+    isShip=true;
+    
     this.x = 50;
     this.y = 50;
     this.vx = 0;
     this.vy = 0;
-    this.radius=Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
+    this.radius=0;
     this.isPlayer = false;
-    
-    //comment
-    // another one
+
     this.theta = 55;
     this.speed = 0;
     
@@ -41,7 +41,10 @@ function Ship() {
         if(this.isPlayer){
             this.getVelocity();
             this.updatePosition();
+            this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
+            
             this.shoot();
+            
         }
         else
         {
