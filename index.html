@@ -5,11 +5,8 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 
     <script src="animatedImage.js"></script>
-<<<<<<< HEAD
 
-=======
     <script src="level.js"></script>
->>>>>>> a6c72ff3ae2f1c9ec4fad5cf607d681aac302a87
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
     
@@ -24,6 +21,48 @@
         <script>
 
             initGame();
+
+            var player;
+
+            document.addEventListener("keydown", moveShip);
+            document.body.addEventListener("touchstart", onTap);
+            function moveShip(e) {
+//    var ctx = app.ctx;
+    
+    //paintGreen();
+    switch(e.which) {
+        case 87: // w
+            player.y -= 25;
+            break;
+        case 83: // s
+            player.y += 25;
+            break;
+        case 65: // a
+            player.x -= 25;
+            break;
+        case 68: // d
+            player.x += 25;
+            break;
+        default:
+            break;
+    }
+}
+function onTap(e) {
+    e.preventDefault();
+    var g = app.ctx;
+    for(var i = 0, len = e.touches.length; i < len; ++i) {
+        var t = e.touches[i];
+        var x = t.clientX;
+        var y = t.clientY;
+        var str = "(" + x + "," + y + ")";
+        //g.fillText(str, x, y);
+        if (e.x <=(app.canvas.width / 4))
+            player.x -= 25;
+        else
+            player.x += 25;
+    }
+}
+
             function start() {       
                 var canvas = document.getElementById(app.CANVAS_ID);
                 var ctx = canvas.getContext("2d");
@@ -33,11 +72,12 @@
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.onload = function(e) {
-                    var player = new Ship(5, "Power");
+                    player = new Ship(5, "Power");
                     player.img.initAnimatedImage(tmp, 6, 30);
                     player.isPlayer = true;
                     player.x = 50;
                     player.y = 400;
+                    player.health = 400;
                     window.app.actors.push(player);
                     //main();
                     window.setInterval(main, 1000/30);
