@@ -5,8 +5,10 @@ function Ship() {
     this.vy = 0;
     this.isPlayer = false;
     
+    //comment
+    // another one
     this.theta = 55;
-    this.speed = 2;
+    this.speed = 0;
     
     this.health=100;
     
@@ -26,11 +28,24 @@ function Ship() {
         configurable: false
     });
     
+    Object.defineProperty(this, "bullet_img", {
+        value: new Image(),
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
     function _update() {
         
         if(this.isPlayer){
-        this.getVelocity();
-        this.updatePosition();
+            this.getVelocity();
+            this.updatePosition();
+            this.shoot();
+        }
+        else
+        {
+            this.getVelocity();
+            this.updatePosition();
         }
     }
     
@@ -40,10 +55,15 @@ function Ship() {
     }
     
     function _shoot(){
+        
         var bullet = new Bullet();
+        bullet.img.initAnimatedImage(this.bullet_img, 3, 60);
         bullet.x = this.x;
         bullet.y = this.y;
-        bullet.speed += this.speed;
+        //bullet.speed += this.speed;
+        bullet.speed += 5;
+        console.log(bullet);
+        window.app.actors.push(bullet);
     }
 
     function _getVelocity(){
