@@ -5,10 +5,9 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 
     <script src="animatedImage.js"></script>
-    
+    <script src="level.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
-    <script src="level.js"></script>
     
     <script src="main.js"></script>
     <script src="camera.js"></script>
@@ -39,6 +38,16 @@
                     //main();
                     window.setInterval(main, 1000/30);
                 };
+                var soundArray = ["asset/BaseShotSound.wav", "asset/ControlNewShip.wav",                "asset/DestroyShip.wav", "asset/MainMenuIntro.wav",                     "asset/MainMenuLoop.wav", "asset/PlasmaShotSound.wav", "asset/StunBomb.wav", "asset/TripleShotSound.wav", "asset/WaveShotSound.wav", "asset/FirstShipLoop.wav"];
+                for(var i = 0; i < 10; i++){
+                    var aud = new Audio{soundArray[i]};
+                    
+                }
+                var tmp2 = new Audio();
+                var sound = 9;
+                var tmp3 = addEventListener("load", function(e){
+                    sound--;
+                });
             }
             start();
             setupInput();
