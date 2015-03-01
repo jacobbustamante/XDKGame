@@ -1,8 +1,12 @@
 function Bullet() {
+
+    this.isBullet=true;
+    
     this.x = 0;
     this.y = 0;
     this.vx = 0;
     this.vy = 0;
+    this.radius = 0;
 
     this.theta = 90;
     this.speed = 0;
@@ -24,8 +28,9 @@ function Bullet() {
     });
     
     function _update() {
+        this.updatePosition(0);
         this.getVelocity();
-        this.updatePosition();
+        this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
     }
     
     function _draw(){
@@ -41,7 +46,7 @@ function Bullet() {
     }
     
     function _updatePosition(time){
-        if(!time){
+        if(time == 0){
         this.x+=this.vx*2;
         this.y+=this.vy*2;
         }

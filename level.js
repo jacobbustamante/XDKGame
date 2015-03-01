@@ -33,8 +33,8 @@ function _createNewLevel() {
     power_ship_img.addEventListener("load", function(e) {
         for (var i = 0; i < power_count; i++)
         {
-            power_ships.push(new Ship(power_health));
-            power_ships[i].img.initAnimatedImage(power_ship_img, 6, 60);
+            power_ships.push(new Ship(power_health, 1));
+            power_ships[i].img.initAnimatedImage(power_ship_img, 6, 10);
             power_ships[i].x = Math.floor((Math.random() * 300) + 1);
             power_ships[i].y = Math.floor((Math.random() * 300) + 1);
         }
@@ -47,8 +47,8 @@ function _createNewLevel() {
     plasma_ship_img.addEventListener("load", function(e) {
         for (var i = 0; i < plasma_count; i++)
         {
-            plasma_ships.push(new Ship(plasma_health));
-            plasma_ships[i].img.initAnimatedImage(plasma_ship_img, 8, 60);
+            plasma_ships.push(new Ship(plasma_health, 2));
+            plasma_ships[i].img.initAnimatedImage(plasma_ship_img, 8, 10);
             plasma_ships[i].x = Math.floor((Math.random() * 300) + 1);
             plasma_ships[i].y = Math.floor((Math.random() * 300) + 1);
         }
@@ -61,8 +61,8 @@ function _createNewLevel() {
     spread_ship_img.addEventListener("load", function(e) {
         for (var i = 0; i < spread_count; i++)
         {
-            spread_ships.push(new Ship(spread_health));
-            spread_ships[i].img.initAnimatedImage(spread_ship_img, 6, 60);
+            spread_ships.push(new Ship(spread_health, 3));
+            spread_ships[i].img.initAnimatedImage(spread_ship_img, 6, 10);
             spread_ships[i].x = Math.floor((Math.random() * 300) + 1);
             spread_ships[i].y = Math.floor((Math.random() * 300) + 1);
         }
@@ -75,8 +75,8 @@ function _createNewLevel() {
     wave_ship_img.addEventListener("load", function(e) {
         for (var i = 0; i < wave_count; i++)
         {
-            wave_shipsships.push(new Ship(wave_health));
-            wave_ships[i].img.initAnimatedImage(wave_ship_img, 8, 60);
+            wave_shipsships.push(new Ship(wave_health, 4));
+            wave_ships[i].img.initAnimatedImage(wave_ship_img, 8, 10);
             wave_ships[i].x = Math.floor((Math.random() * 300) + 1);
             wave_ships[i].y = Math.floor((Math.random() * 300) + 1);
         }
