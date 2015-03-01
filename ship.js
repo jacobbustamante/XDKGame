@@ -1,5 +1,5 @@
 function Ship() {
-    isShip=true;
+    this.isShip=true;
     
     this.x = 50;
     this.y = 50;

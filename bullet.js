@@ -1,4 +1,5 @@
 function Bullet() {
+
     this.isBullet=true;
     
     this.x = 0;
@@ -35,7 +36,7 @@ function Bullet() {
     }
     
     function _draw(){
-        //this.tx();
+        this.tx();
         this.img.drawAnimatedImage(app.ctx, this.x, this.y);
     }
 
