@@ -1,23 +1,24 @@
 function Ship() {
+    this.isShip=true;
+    
     this.x = 50;
     this.y = 50;
     this.vx = 0;
     this.vy = 0;
+    this.radius=0;
     this.isPlayer = false;
-    
-    var b_x = 0;
-    var b_y = 0;
-    
-    //comment
-    // another one
+
     this.theta = 55;
     this.speed = 0;
     
-    this.health=30;
+    this.health=100;
 
     this.timeBetweenShots = 40;
     this.timeSinceLastShot = 40;
     
+    var b_x = 0;
+    var b_y = 0;
+
     var _tx = tx.bind(this);
     
     Object.defineProperty(this, "tx", {
@@ -44,10 +45,12 @@ function Ship() {
     function _update() {
         b_x = this.x;
         b_y = this.y;
-        
+
         if(this.isPlayer){
             this.getVelocity();
+
             this.updatePosition(0);
+            this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
         }
         else
         {
@@ -55,12 +58,10 @@ function Ship() {
             this.updatePosition(0);
 
             this.timeSinceLastShot--;
-            if (this.timeSinceLastShot <= 0)
+            if (this.timeSinceLastShot < 0)
             {
-                b_x = this.x;
-                b_y = this.y;
-                this.shoot();
                 this.timeSinceLastShot = this.timeBetweenShots;
+                this.shoot();
             }
         }
     }
@@ -73,20 +74,15 @@ function Ship() {
     function _shoot(){
         
         var bullet = new Bullet();
-        var tmp_bullet = new Image();
-        tmp_bullet.src = "asset/PlasmaShot.png";
-        tmp_bullet.onload = function(e) {
-
-        
-        bullet.img.initAnimatedImage(tmp_bullet, 3, 60);
-        bullet.x = b_x;
-        bullet.y = b_y;
-        //bullet.x = 80;
-        //bullet.y = 80;
-        //bullet.speed += this.speed;
-        bullet.speed += 5;
-        window.app.actors.push(bullet);
-        }
+        var bullet_img = new Image();
+        bullet_img.src = "asset/PowerShot.png";
+        bullet_img.addEventListener("load", function(e) {
+            bullet.img.initAnimatedImage(bullet_img, 3, 60);
+            bullet.x = b_x;
+            bullet.y = b_y;
+            bullet.speed += 5;
+            window.app.actors.push(bullet);
+        });
     }
 
     function _getVelocity(){
