@@ -3,6 +3,7 @@ function Ship() {
     this.y = 50;
     this.vx = 0;
     this.vy = 0;
+    this.radius=Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
     this.isPlayer = false;
     
     this.theta = 55;
