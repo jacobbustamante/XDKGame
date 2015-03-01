@@ -29,7 +29,7 @@ function Bullet() {
     }
     
     function _draw(){
-        this.tx();
+        //this.tx();
         this.img.drawAnimatedImage(app.ctx, this.x, this.y);
     }
 
