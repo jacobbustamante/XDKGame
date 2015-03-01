@@ -30,6 +30,11 @@
 
                 var lev = new Level();
                 lev.createNewLevel();
+                var sound = new Audio("asset/MainMenuLoop.wav");
+                sound.loop = true;
+                sound.volume = 0.25;
+                sound.load();
+                sound.play();
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.onload = function(e) {
@@ -42,18 +47,7 @@
                     //main();
                     window.setInterval(main, 1000/30);
                 };
-                /*
-                var soundArray = ["asset/BaseShotSound.wav", "asset/ControlNewShip.wav",                "asset/DestroyShip.wav", "asset/MainMenuIntro.wav",                     "asset/MainMenuLoop.wav", "asset/PlasmaShotSound.wav", "asset/StunBomb.wav", "asset/TripleShotSound.wav", "asset/WaveShotSound.wav", "asset/FirstShipLoop.wav"];
-                for(var i = 0; i < 10; i++){
-                    var aud = new Audio{soundArray[i]};
-                    
-                }
-                var tmp2 = new Audio();
-                var sound = 9;
-                var tmp3 = addEventListener("load", function(e){
-                    sound--;
-                });
-*/
+                
             }
             start();
             setupInput();
