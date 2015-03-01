@@ -5,12 +5,18 @@ function Ship() {
     this.vy = 0;
     this.isPlayer = false;
     
+    var b_x = 0;
+    var b_y = 0;
+    
     //comment
     // another one
     this.theta = 55;
     this.speed = 0;
     
-    this.health=100;
+    this.health=30;
+
+    this.timeBetweenShots = 40;
+    this.timeSinceLastShot = 40;
     
     var _tx = tx.bind(this);
     
@@ -36,16 +42,26 @@ function Ship() {
     });
     
     function _update() {
+        b_x = this.x;
+        b_y = this.y;
         
         if(this.isPlayer){
             this.getVelocity();
             this.updatePosition();
-            this.shoot();
         }
         else
         {
             this.getVelocity();
-            this.updatePosition();
+            this.updatePosition(0);
+
+            this.timeSinceLastShot--;
+            if (this.timeSinceLastShot <= 0)
+            {
+                b_x = this.x;
+                b_y = this.y;
+                this.shoot();
+                this.timeSinceLastShot = this.timeBetweenShots;
+            }
         }
     }
     
@@ -57,13 +73,20 @@ function Ship() {
     function _shoot(){
         
         var bullet = new Bullet();
-        bullet.img.initAnimatedImage(this.bullet_img, 3, 60);
-        bullet.x = this.x;
-        bullet.y = this.y;
+        var tmp_bullet = new Image();
+        tmp_bullet.src = "asset/PlasmaShot.png";
+        tmp_bullet.onload = function(e) {
+
+        
+        bullet.img.initAnimatedImage(tmp_bullet, 3, 60);
+        bullet.x = b_x;
+        bullet.y = b_y;
+        //bullet.x = 80;
+        //bullet.y = 80;
         //bullet.speed += this.speed;
         bullet.speed += 5;
-        console.log(bullet);
         window.app.actors.push(bullet);
+        }
     }
 
     function _getVelocity(){
@@ -74,7 +97,7 @@ function Ship() {
     }
     
     function _updatePosition(time){
-        if(!time){
+        if(time == 0){
         this.x+=this.vx*2;
         this.y+=this.vy*2;
         }
