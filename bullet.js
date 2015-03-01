@@ -28,15 +28,13 @@ function Bullet() {
     });
     
     function _update() {
-        this.updatePosition();
+        this.updatePosition(0);
         this.getVelocity();
         this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
-        
-        
     }
     
     function _draw(){
-        this.tx();
+        //this.tx();
         this.img.drawAnimatedImage(app.ctx, this.x, this.y);
     }
 
@@ -48,7 +46,7 @@ function Bullet() {
     }
     
     function _updatePosition(time){
-        if(!time){
+        if(time == 0){
         this.x+=this.vx*2;
         this.y+=this.vy*2;
         }

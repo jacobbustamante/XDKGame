@@ -3,6 +3,7 @@ function main() {
         var len = app.actors.length;
         for (var i = 0; i < len; ++i) {
             app.actors[i].update();
+            /*
             if(app.actors[i].isBullet===true || app.actors[i].isShip===true)
             {
                 for(var j=i+1; j<len; ++j){
@@ -26,7 +27,7 @@ function main() {
                                                 
                 }
                 
-            }
+            }*/
         }
 
         app.removeKilled();

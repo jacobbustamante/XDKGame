@@ -23,6 +23,16 @@ function _createNewLevel() {
             window.app.actors.push(ships[i]);
         }
     });
+    var player_ship = new Ship();
+    var player_img = new Image();
+    player_img.src = "asset/PowerShip.png";
+    player_img.addEventListener("load", function(e) {
+        player_ship.img.initAnimatedImage(player_img, 6, 30);
+        player.isPlayer = true;
+        player.x = Math.floor((Math.random() * 300) + 1);
+        player.y = Math.floor((Math.random() * 300) + 1);
+        window.app.actors.push(player_ship);
+    });
     
 }
         

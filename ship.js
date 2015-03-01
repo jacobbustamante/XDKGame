@@ -12,7 +12,13 @@ function Ship() {
     this.speed = 0;
     
     this.health=100;
+
+    this.timeBetweenShots = 40;
+    this.timeSinceLastShot = 40;
     
+    var b_x = 0;
+    var b_y = 0;
+
     var _tx = tx.bind(this);
     
     Object.defineProperty(this, "tx", {
@@ -37,19 +43,26 @@ function Ship() {
     });
     
     function _update() {
-        
+        b_x = this.x;
+        b_y = this.y;
+
         if(this.isPlayer){
             this.getVelocity();
-            this.updatePosition();
+
+            this.updatePosition(0);
             this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
-            
-            this.shoot();
-            
         }
         else
         {
             this.getVelocity();
-            this.updatePosition();
+            this.updatePosition(0);
+
+            this.timeSinceLastShot--;
+            if (this.timeSinceLastShot < 0)
+            {
+                this.timeSinceLastShot = this.timeBetweenShots;
+                this.shoot();
+            }
         }
     }
     
@@ -61,13 +74,15 @@ function Ship() {
     function _shoot(){
         
         var bullet = new Bullet();
-        bullet.img.initAnimatedImage(this.bullet_img, 3, 60);
-        bullet.x = this.x;
-        bullet.y = this.y;
-        //bullet.speed += this.speed;
-        bullet.speed += 5;
-        console.log(bullet);
-        window.app.actors.push(bullet);
+        var bullet_img = new Image();
+        bullet_img.src = "asset/PowerShot.png";
+        bullet_img.addEventListener("load", function(e) {
+            bullet.img.initAnimatedImage(bullet_img, 3, 60);
+            bullet.x = b_x;
+            bullet.y = b_y;
+            bullet.speed += 5;
+            window.app.actors.push(bullet);
+        });
     }
 
     function _getVelocity(){
@@ -78,7 +93,7 @@ function Ship() {
     }
     
     function _updatePosition(time){
-        if(!time){
+        if(time == 0){
         this.x+=this.vx*2;
         this.y+=this.vy*2;
         }
