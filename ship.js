@@ -2,12 +2,14 @@
 function Ship(hp, type) {
 
     this.isShip=true;
-    
+    var time = 0;
 
     this.x = 50;
     this.y = 50;
     this.vx = 0;
     this.vy = 0;
+
+    var z = 25;
 
     this.isPlayer = false;
 
@@ -67,13 +69,16 @@ function Ship(hp, type) {
         else
         {
             this.getVelocity();
-            this.updatePosition(0);
+            this.updatePosition(time++);
 
             this.timeSinceLastShot--;
             if (this.timeSinceLastShot < 0)
             {
                 this.timeSinceLastShot = this.timeBetweenShots;
                 this.shoot();
+
+                this.x += z;
+                z *= -1;
             }
         }
     }
@@ -113,20 +118,21 @@ function Ship(hp, type) {
 
     function _getVelocity(){
         
-        this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
-        this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
+        //this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
+        //this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
               
     }
     
     function _updatePosition(time){
-        if(time == 0){
-        this.x+=this.vx*2;
-        this.y+=this.vy*2;
-        }
-        else{
-        this.x+=this.vx*time;
-        this.y+=this.vy*time;
-        }
+
+
+        if(time%50 == 1){
+            this.vx*=-1;
+        //this.x+=this.vx*2;
+       }
+        this.x+=this.vx;
+        this.y+=this.vy;
+        
     }
     
     this.update = _update.bind(this);

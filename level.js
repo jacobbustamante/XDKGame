@@ -35,8 +35,8 @@ function _createNewLevel() {
         {
             power_ships.push(new Ship(power_health, 1));
             power_ships[i].img.initAnimatedImage(power_ship_img, 6, 10);
-            power_ships[i].x = Math.floor((Math.random() * 300) + 1);
-            power_ships[i].y = Math.floor((Math.random() * 300) + 1);
+            power_ships[i].x = Math.floor((Math.random() * 500) + 1);
+            power_ships[i].y = Math.floor((Math.random() * 500) + 1);
         }
         
         for(var i=1;i<power_ships.length;i++)
@@ -49,8 +49,8 @@ function _createNewLevel() {
         {
             plasma_ships.push(new Ship(plasma_health, 2));
             plasma_ships[i].img.initAnimatedImage(plasma_ship_img, 8, 10);
-            plasma_ships[i].x = Math.floor((Math.random() * 300) + 1);
-            plasma_ships[i].y = Math.floor((Math.random() * 300) + 1);
+            plasma_ships[i].x = Math.floor((Math.random() * 500) + 1);
+            plasma_ships[i].y = Math.floor((Math.random() * 500) + 1);
         }
         
         for(var i=1;i<plasma_ships.length;i++)
@@ -63,8 +63,8 @@ function _createNewLevel() {
         {
             spread_ships.push(new Ship(spread_health, 3));
             spread_ships[i].img.initAnimatedImage(spread_ship_img, 6, 10);
-            spread_ships[i].x = Math.floor((Math.random() * 300) + 1);
-            spread_ships[i].y = Math.floor((Math.random() * 300) + 1);
+            spread_ships[i].x = Math.floor((Math.random() * 500) + 1);
+            spread_ships[i].y = Math.floor((Math.random() * 500) + 1);
         }
         
         for(var i=1;i<spread_ships.length;i++)
@@ -89,8 +89,8 @@ function _createNewLevel() {
         {
             wave_shipsships.push(new Ship(wave_health, 4));
             wave_ships[i].img.initAnimatedImage(wave_ship_img, 8, 10);
-            wave_ships[i].x = Math.floor((Math.random() * 300) + 1);
-            wave_ships[i].y = Math.floor((Math.random() * 300) + 1);
+            wave_ships[i].x = Math.floor((Math.random() * 500) + 1);
+            wave_ships[i].y = Math.floor((Math.random() * 500) + 1);
         }
         
         for(var i=1;i<wave_ships.length;i++)

@@ -11,8 +11,13 @@ function main() {
                         ((app.actors[i].fromPlayer===true && app.actors[j].isPlayer===false) ||
                          (app.actors[i].fromPlayer===false && app.actors[j].isPlayer===true))){
                         if(isCollision(app.actors[j],app.actors[i])){
-                            app.actors[j].health-=10;
-                            app.kill(app.actors[i]);
+                            
+                            
+                            if (app.actors[i].type != 1)
+                            {
+                                app.kill(app.actors[i]);
+                                app.actors[j].health-=10;
+                            }
                             if(app.actors[j].health<=0){
                                 app.kill(app.actors[j]);
                             }
@@ -23,8 +28,12 @@ function main() {
                         ((app.actors[j].fromPlayer===true && app.actors[i].isPlayer===false) ||
                          (app.actors[j].fromPlayer===false && app.actors[i].isPlayer===true))){
                         if(isCollision(app.actors[i],app.actors[j])){
-                            app.actors[i].health-=10;
-                            app.kill(app.actors[j]);   
+                            
+                            if (app.actors[j].type != 1)
+                            {
+                                app.kill(app.actors[j]);   
+                                app.actors[i].health-=10;
+                            }
                             if(app.actors[i].health<=0){
                                 app.kill(app.actors[i]);
                             }

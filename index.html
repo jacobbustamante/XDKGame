@@ -43,6 +43,9 @@
         case 68: // d
             player.x += 25;
             break;
+        case 74:
+            player.shoot();
+            break;
         default:
             break;
     }
@@ -81,8 +84,8 @@ function onTap(e) {
                     player.img.initAnimatedImage(tmp, 6, 30);
                     player.isPlayer = true;
                     player.x = 50;
-                    player.y = 400;
-                    player.health = 400;
+                    player.y = 900;
+                    player.health = 150;
                     window.app.actors.push(player);
                     //main();
                     window.setInterval(main, 1000/30);
