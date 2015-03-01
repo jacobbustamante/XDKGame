@@ -1,6 +1,9 @@
-function Ship() {
+
+function Ship(hp, type) {
+
     this.isShip=true;
     
+
     this.x = 50;
     this.y = 50;
     this.vx = 0;
@@ -11,10 +14,13 @@ function Ship() {
     this.theta = 55;
     this.speed = 0;
     
-    this.health=100;
+
+    this.health=hp;
+
 
     this.timeBetweenShots = 40;
     this.timeSinceLastShot = 40;
+
     
     var b_x = 0;
     var b_y = 0;
@@ -75,12 +81,20 @@ function Ship() {
         
         var bullet = new Bullet();
         var bullet_img = new Image();
-        bullet_img.src = "asset/PowerShot.png";
+        if(type == 1)
+            bullet_img.src = "asset/PowerShot.png";
+        if(type == 2)
+            bullet_img.src = "asset/PlasmaShot.png";
+        if(type == 3)
+            bullet_img.src = "asset/SpreadShot.png";
+        if(type == 4)
+            bullet_img.src = "asset/WaveShot.png";
         bullet_img.addEventListener("load", function(e) {
             bullet.img.initAnimatedImage(bullet_img, 3, 60);
             bullet.x = b_x;
             bullet.y = b_y;
             bullet.speed += 5;
+            bullet.type = type;
             window.app.actors.push(bullet);
         });
     }

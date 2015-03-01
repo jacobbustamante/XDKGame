@@ -9,7 +9,10 @@ function main() {
                 for(var j=i+1; j<len; ++j){
                     if(app.actors[i].isBullet===true && app.actors[j].isShip===true){
                         if(isCollision(app.actors[j],app.actors[i])){
-                            app.actors[j].health-=10;   
+                            app.actors[j].health-=app.actors[i].attack;  
+                            if(app.actors[i].type != 1) {
+                                app.kill(app.actors[i]);
+                            }
                             if(app.actors[j].health<=0){
                                 app.kill(app.actors[j]);
                             }
@@ -18,7 +21,7 @@ function main() {
                     
                     else if (app.actors[j].isBullet===true && app.actors[i].isShip===true){
                         if(isCollision(app.actors[i],app.actors[j])){
-                            app.actors[i].health-=10;   
+                            app.actors[i].health-=app.actors[i].attack;   
                             if(app.actors[i].health<=0){
                                 app.kill(app.actors[i]);
                             }

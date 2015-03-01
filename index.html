@@ -29,7 +29,7 @@
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
                 tmp.onload = function(e) {
-                    var player = new Ship();
+                    var player = new Ship(5, "Power");
                     player.img.initAnimatedImage(tmp, 6, 30);
                     player.isPlayer = true;
                     player.x = 50;
