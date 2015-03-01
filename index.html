@@ -54,9 +54,9 @@ function onTap(e) {
         var t = e.touches[i];
         var x = t.clientX;
         var y = t.clientY;
-        var str = "(" + x + "," + y + ")";
+        v//ar str = "(" + x + "," + y + ")";
         //g.fillText(str, x, y);
-        if (e.x <=(app.canvas.width / 4))
+        if (e.x <=(app.canvas.width / 2))
             player.x -= 25;
         else
             player.x += 25;

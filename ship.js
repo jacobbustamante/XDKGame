@@ -8,7 +8,7 @@ function Ship(hp, type) {
     this.y = 50;
     this.vx = 0;
     this.vy = 0;
-    this.radius=0;
+
     this.isPlayer = false;
 
     this.theta = 55;
@@ -56,7 +56,6 @@ function Ship(hp, type) {
             this.getVelocity();
 
             this.updatePosition(0);
-            this.radius=Math.sqrt(Math.pow(this.x+(this.img.frameWidth/2),2)+Math.pow(this.y+(this.img.image.height/2),2));
 
             this.timeSinceLastShot--;
             if (this.timeSinceLastShot < 0)
