@@ -36,14 +36,12 @@ function setupInput() {
 
 
         function _render() {
-            this.tx();
-            app.ctx.drawImage(dpadBase, 0, 0);
+            app.ctx.drawImage(dpadBase, this.x, this.y);
             var tx = this.x;
             var ty = this.y;
             this.x = this.fx;
             this.y = this.fy;
-            this.tx();
-            app.ctx.drawImage(dpadMove, 0, 0);
+            app.ctx.drawImage(dpadMove, this.x, this.y);
             this.x = tx;
             this.y = ty;
         }
@@ -112,6 +110,10 @@ function setupInput() {
             }
             app.actors.push(dpad);
         }
+    }
+    
+    function noAction(e) {
+        e.preventDefault();
     }
 }
 

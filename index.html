@@ -3,9 +3,11 @@
 <head>
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
-
-    <script src="animatedImage.js"></script>
-
+    
+    <script src="box2d.min.js" type="text/jscript"></script>
+    <script src="box2d-helpers.js" type="text/javascript"></script>
+    
+    <script src="animation.js"></script>
     <script src="level.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
@@ -19,80 +21,58 @@
     <body>
         
         <script>
-
             initGame();
-
+            loadAssets();
+            
             var player;
-
             document.addEventListener("keydown", moveShip);
             document.body.addEventListener("touchstart", onTap);
             function moveShip(e) {
-//    var ctx = app.ctx;
-    
-    //paintGreen();
-    switch(e.which) {
-        case 87: // w
-            player.y -= 25;
-            break;
-        case 83: // s
-            player.y += 25;
-            break;
-        case 65: // a
-            player.x -= 25;
-            break;
-        case 68: // d
-            player.x += 25;
-            break;
-        default:
-            break;
-    }
-}
-function onTap(e) {
-    e.preventDefault();
-    var g = app.ctx;
-    for(var i = 0, len = e.touches.length; i < len; ++i) {
-        var t = e.touches[i];
-        var x = t.clientX;
-        var y = t.clientY;
-        v//ar str = "(" + x + "," + y + ")";
-        //g.fillText(str, x, y);
-        if (e.x <=(app.canvas.width / 2))
-            player.x -= 25;
-        else
-            player.x += 25;
-    }
-}
+                switch(e.which) {
+                    case 87: // w
+                        player.y -= 25;
+                        break;
+                    case 83: // s
+                        player.y += 25;
+                        break;
+                    case 65: // a
+                        player.x -= 25;
+                        break;
+                    case 68: // d
+                        player.x += 25;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            function onTap(e) {
+                e.preventDefault();
+                var g = app.ctx;
+                for(var i = 0, len = e.touches.length; i < len; ++i) {
+                    var t = e.touches[i];
+                    var x = t.clientX;
+                    var y = t.clientY;
+                    v//ar str = "(" + x + "," + y + ")";
+                    //g.fillText(str, x, y);
+                    if (e.x <=(app.canvas.width / 2))
+                        player.x -= 25;
+                    else
+                        player.x += 25;
+                }
+            }
 
-            function start() {       
-                var canvas = document.getElementById(app.CANVAS_ID);
-                var ctx = canvas.getContext("2d");
-
+            function start() {
                 var lev = new Level();
                 lev.createNewLevel();
+                
                 var sound = new Audio("asset/FirstShipLoop.wav");
                 sound.loop = true;
                 sound.volume = 0.25;
                 sound.load();
                 sound.play();
-                var tmp = new Image();
-                tmp.src = "asset/PowerShip.png";
-                tmp.onload = function(e) {
-                    player = new Ship(5, "Power");
-                    player.img.initAnimatedImage(tmp, 6, 30);
-                    player.isPlayer = true;
-                    player.x = 50;
-                    player.y = 400;
-                    player.health = 400;
-                    window.app.actors.push(player);
-                    //main();
-                    window.setInterval(main, 1000/30);
-                };
-                
+                window.setInterval(main, 1000/30);
             }
-            start();
-            setupInput();
-            //window.addEventListener("load", start);
-            
         </script>
 
     </body>

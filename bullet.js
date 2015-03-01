@@ -1,7 +1,40 @@
-function Bullet(type) {
+function initBulletConstructors() {
+    window.PlasmaShot = Bullet.bind(null, "Plasma Shot", app.cache["asset/PlasmaShot.png"], 5);
+    window.PowerShot = Bullet.bind(null, "Power Shot", app.cache["asset/PowerShot.png"], 20);
+    window.SpreadShot = Bullet.bind(null, "Spread Shot", app.cache["asset/SpreadShot.png"], 15);
+    window.WaveShot = Bullet.bind(null, "Wave Shot", app.cache["asset/WaveShot.png"], 30);
+}
 
-    this.isBullet=true;
-    this.fromPlayer=false;
+function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
+    AnimatedImage.call(this);
+    
+    this.initAnimatedImage(spriteSheet, 3, 60);
+    this.attack = attack;
+    this.velocity = velocity;
+    this.position = originShip.position;
+    
+    Object.defineProperty(this, "isBullet", {
+        value: true,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "TYPE", {
+        value: bulletType,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+ 
+    Object.defineProperty(this, "ORIGIN", {
+        value: originShip,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+
     
     this.x = 0;
     this.y = 0;
@@ -13,45 +46,10 @@ function Bullet(type) {
     this.speed = 0;
     this.type = type;
     var attack = 0;
-    if(type == 1) {
-         attack = 20;  
-    }
-    if(type == 2) {
-         attack = 5;  
-    }
-    if(type == 3) {
-         attack = 15;  
-    }
-    if(type == 4) {
-         attack = 30;  
-    }
-    this.attack = attack;
+
     
-    var _tx = tx.bind(this);
-    
-    Object.defineProperty(this, "tx", {
-        value: _tx,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "img", {
-        value: new AnimatedImage(),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    function _update() {
-        this.updatePosition(0);
-        this.getVelocity();
-    
-    }
-    
-    function _draw(){
-        //this.tx();
-        this.img.drawAnimatedImage(app.ctx, this.x, this.y);
+    function _draw() {
+        this.drawSprite(this.x, this.y);
     }
 
     function _getVelocity(){
@@ -77,12 +75,4 @@ function Bullet(type) {
     this.getVelocity = _getVelocity.bind(this);
     this.updatePosition = _updatePosition.bind(this);
     
-}
-
-function tx() {
-    var g = app.ctx;
-    g.setTransform(1, 0, 0, 1, this.x, this.y);
-    g.rotate((Math.PI/180)*this.theta);
-    //g.translate(this.x, this.y);
-    g.transform(1, 0, 0, 1, app.camera.x, app.camera.y);
 }

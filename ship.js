@@ -1,146 +1,183 @@
+function PlasmaShip(x, y) {
+    this.init(x,y);
+    this.initAnimatedImage(app.cache["asset/PlasmaShip.png"], 8, 10);
+    this.circleShape(26);
+}
 
-function Ship(hp, type) {
+function PowerShip(x, y) {
+    this.init(x,y);
+    this.initAnimatedImage(app.cache["asset/PowerShip.png"], 6, 10);
+    this.circleShape(20);
+}
 
-    this.isShip=true;
-    
+function SpreadShip(x, y) {
+    this.init(x,y);
+    this.initAnimatedImage(app.cache["asset/SpreadShip.png"], 6, 10);
+    this.circleShape(29);
+}
 
-    this.x = 50;
-    this.y = 50;
-    this.vx = 0;
-    this.vy = 0;
+function WaveShip() {
+    this.init(x,y);
+    this.initAnimatedImage(app.cache["asset/WaveShip.png"], 8, 10);
+    this.circleShape(30);
+}
 
-    this.isPlayer = false;
+function initShipPrototypes() {
+    PlasmaShip.prototype = new ShipPrototype("Plasma Ship", 50, PlasmaShot);
+    PowerShip.prototype = new ShipPrototype("Power Ship", 100, PowerShot);
+    SpreadShip.prototype = new ShipPrototype("Spread Ship", 70, SpreadShot);
+    WaveShip.prototype = new ShipPrototype("Wave Ship", 60, WaveShot);
+}
 
-    this.theta = 55;
-    this.speed = 0;
-    
+function updateAiShip() {
+    this.fireWeapon();
+}
 
-    this.health=hp;
-
-
-    this.timeBetweenShots = 40;
-    this.timeSinceLastShot = 40;
-
-    
-    var b_x = 0;
-    var b_y = 0;
-
-    var _tx = tx.bind(this);
-    
-    Object.defineProperty(this, "tx", {
-        value: _tx,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "img", {
-        value: new AnimatedImage(),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "bullet_img", {
-        value: new Image(),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    function _update() {
-        b_x = this.x;
-        b_y = this.y;
-
-        if(this.isPlayer){
-            this.getVelocity();
-
-            this.updatePosition(0);
-
-            this.timeSinceLastShot--;
-            if (this.timeSinceLastShot < 0)
-            {
-                this.timeSinceLastShot = this.timeBetweenShots;
-                //this.shoot();
-            }
-        }
-        else
-        {
-            this.getVelocity();
-            this.updatePosition(0);
-
-            this.timeSinceLastShot--;
-            if (this.timeSinceLastShot < 0)
-            {
-                this.timeSinceLastShot = this.timeBetweenShots;
-                this.shoot();
-            }
-        }
-    }
-    
-    function _draw(){
-        //this.tx();
-        this.img.drawAnimatedImage(app.ctx, this.x, this.y);
-    }
-    
-    function _shoot(){
-        
-        var bullet = new Bullet();
-        var bullet_img = new Image();
-        if(type == 1)
-            bullet_img.src = "asset/PowerShot.png";
-        if(type == 2)
-            bullet_img.src = "asset/PlasmaShot.png";
-        if(type == 3)
-            bullet_img.src = "asset/SpreadShot.png";
-        if(type == 4)
-            bullet_img.src = "asset/WaveShot.png";
-        bullet_img.addEventListener("load", function(e) {
-            bullet.img.initAnimatedImage(bullet_img, 3, 60);
-            bullet.x = b_x;
-            bullet.y = b_y;
-            bullet.speed += 5;
-
-            if (this.isPlayer===true)
-            {
-                bullet.fromPlayer = true;
-            }
-
-            bullet.type = type;
-            window.app.actors.push(bullet);
-        });
-    }
-
-    function _getVelocity(){
-        
-        this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
-        this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
-              
-    }
-    
-    function _updatePosition(time){
-        if(time == 0){
-        this.x+=this.vx*2;
-        this.y+=this.vy*2;
-        }
-        else{
-        this.x+=this.vx*time;
-        this.y+=this.vy*time;
-        }
-    }
-    
-    this.update = _update.bind(this);
-    this.render = _draw.bind(this);
-    this.shoot = _shoot.bind(this);
-    this.getVelocity = _getVelocity.bind(this);
-    this.updatePosition = _updatePosition.bind(this);
+function updatePlayerShip() {
     
 }
 
-function tx() {
-    var g = app.ctx;
-    g.setTransform(1, 0, 0, 1, this.x, this.y);
-    g.rotate((Math.PI/180)*this.theta);
-    //g.translate(this.x, this.y);
-    g.transform(1, 0, 0, 1, app.camera.x, app.camera.y);
+function SpaceObject(x, y) {
+    AnimatedImage.call(this);
+    var DEFAULT_DENSITY = 5;
+    
+    var _boxShape = (function(w, h, d) {
+        if (d === undefined) {
+            d = DEFAULT_DENSITY;
+        }
+        var shape = new b2PolygonShape();
+        shape.SetAsBox(w, h);
+        this.body.CreateFixture(shape, d);
+    }).bind(this);
+    
+    var _circleShape = (function(r, d) {
+        if (d === undefined) {
+            d = DEFAULT_DENSITY;
+        }
+        var shape = new b2CircleShape();
+        shape.set_m_radius(r);
+        this.body.CreateFixture(shape, d);
+    }).bind(this);
+    
+    var _draw = (function() {
+        this.drawSprite(this.x, this.y);
+    }).bind(this);
+    
+    if (x === undefined) {
+        x = 0;
+    }    
+    if (y === undefined) {
+        y = 0;
+    }
+    var bodyDef = new Box2D.b2BodyDef();
+    bodyDef.set_type(Box2D.b2_dynamicBody);
+    bodyDef.set_position(new b2Vec2(x, y));
+    
+    Object.defineProperty(this, "body", {
+        value: app.world.CreateBody(bodyDef),
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "boxShape", {
+        value: _boxShape,
+        writable: false,
+        enumerable: false,
+        configurable: false    
+    });
+    
+    Object.defineProperty(this, "circleShape", {
+        value: _circleShape,
+        writable: false,
+        enumerable: false,
+        configurable: false    
+    });
+    
+    Object.defineProperty(this, "render", {
+        value: _draw,
+        writable: true,
+        enumerable: true,
+        configurable: false    
+    });
+}
+
+function Ship(hp, bulletFactory, x, y) {
+    SpaceObject.call(this, x, y);
+    var _health = hp;
+    
+    function _fireWeapon(){
+        if (!this.lastShotTime || app.now() - this.lastShot > this.fireRate) {
+            //var bullet = new bulletFactory.create(this);
+            this.lastShotTime = app.now();
+        }
+    }
+    
+    function _takeDamage(object) {
+        if (--_health <= 0) {
+            this.onDeath();
+        }
+    }
+    
+    function _explode() {
+        
+    }
+    
+    Object.defineProperty(this, "health", {
+        get: function() { return _health; },
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "isShip", {
+        value: true,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    this.lastShotTime = null;
+    this.fireRate = 50;
+    this.update = updateAiShip.bind(this);
+    this.fireWeapon = _fireWeapon.bind(this);
+    this.onDeath = _explode.bind(this);
+}
+
+function ShipPrototype(name, hp, bulletFactory) {
+    var _init = (function(x,y) {
+        Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY, x, y);
+        this.others.push(this);
+    }).bind(this);
+    
+    Object.defineProperty(this, "init", {
+        value: _init,
+        writable: false,
+        enumerable: false,
+        configurable: false
+    });
+    Object.defineProperty(this, "SHIP_TYPE", {
+        value: name,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    Object.defineProperty(this, "SPAWN_HEALTH", {
+        value: hp,
+        writable: true,
+        enumerable: true,
+        configurable: false
+    });
+    Object.defineProperty(this, "BULLET_FACTORY", {
+        value: bulletFactory,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    Object.defineProperty(this, "others", {
+        get: function() {
+            return app.ships[this.SHIP_TYPE];
+        },
+        enumerable: true,
+        configurable: false
+    });
 }

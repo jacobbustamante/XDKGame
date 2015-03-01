@@ -2,28 +2,8 @@ function initGame() {
     var _ctx;
     var _removed = [];
     var _actors = [];
-
-    function resetGraphicsContexts() {
-        _ctx.fillStyle = "#000000";
-        _ctx.font = "20px sans-serif";
-        _ctx.globalAlpha = 1;
-        _ctx.globalCompositeOperation = "source-over";
-        _ctx.imageSmoothingEnabled = true;
-        _ctx.lineCap = "butt";
-        _ctx.lineDashOffset = 0;
-        _ctx.lineJoin = "miter";
-        _ctx.lineWidth = 1;
-        _ctx.miterLimit = 10;
-        _ctx.shadowBlur = 0;
-        _ctx.shadowColor = "rgba(0, 0, 0, 0)";
-        _ctx.shadowOffsetX = 0;
-        _ctx.shadowOffsetY = 0;
-        _ctx.strokeStyle = "#000000";
-        _ctx.textAlign = "start";
-        _ctx.textBaseline = "alphabetic";
-        _ctx.setTransform(1, 0, 0, 1, 0, 0);
-    }
-
+    var _numUnloaded = 0;
+    
     function App() {
         Object.defineProperty(this, "CANVAS_ID", {
             value: "game-canvas",
@@ -45,6 +25,7 @@ function initGame() {
             configurable: false
         });
 
+        /*
         Object.defineProperty(this, "actors", {
             get: function() { return _actors; },
             enumerable: true,
@@ -63,43 +44,25 @@ function initGame() {
         });
 
         Object.defineProperty(this, "removeKilled", {
-            value: function() {
-                if (_removed.length) {
-                    var len = _actors.length;
-                    var newLength = len - _removed.length;
-                    for (var next = _removed.pop(); next; next = _removed.pop()) {
-                        for (var i = 0; i < len; ++i) {
-                            if (_actors[i] === next) {
-                                _actors[i] = null;
-                            }
-                        }
-                    }
-
-                    var n = 0;
-                    var tmp = new Array(newLength);
-                    for (var i = 0; i < len; ++i) {
-                        if (_actors[i]) {
-                            tmp[n++] = _actors[i];
-                        }
-                    }
-
-                    _actors = tmp;
-                }
-            },
+            value: _removeKilled,
             writable: false,
             enumerable: true,
             configurable: false
-        }); 
+        });
+        */
 
-        var context = {
+        Object.defineProperty(this, "ctx", {
             get: function() { return _ctx; },
             enumerable: true,
             configurable: false
-        };
-
-        Object.defineProperty(this, "ctx", context);
-        Object.defineProperty(this, "context", context);
-        Object.defineProperty(this, "graphics", context);
+        });
+        
+        Object.defineProperty(this, "world", {
+            value: new Box2D.b2World(new Box2D.b2Vec2(0, 0)),
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
 
         Object.defineProperty(this, "resetGraphics", {
             value: resetGraphicsContexts,
@@ -114,6 +77,64 @@ function initGame() {
             writable: false,
             configurable: false
         });
+        
+        Object.defineProperty(this, "iOS", {
+            value: navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "toMeters", {
+            value: function(x) { return x/12; },
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "toPixels", {
+            value: function(x) { return 12*x; },
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "now", {
+            value: timeNow,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "ships", {
+            value: {
+                "Plasma Ship": [],
+                "Power Ship": [],
+                "Spread Ship": [],
+                "Wave Ship": []
+            },
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "cache", {
+            value: {},
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "loadImage", {
+            value: loadImageAsset,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+    }
+    
+    function timeNow() {
+        return (new Date()).getTime();
     }
 
     function getWindowDimension(dim) {
@@ -127,35 +148,94 @@ function initGame() {
         if (canvas) {
             canvas.parentNode.removeChild(canvas);
         }
-        var iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
-
-        console.log("ios? ",iOS)
+        
         canvas = document.createElement("canvas");
         canvas.id = app.CANVAS_ID;
-        if (iOS) {
-            var w = getWindowDimension("width");
-            var h = getWindowDimension("height");
-            canvas.width = (w);
-            canvas.height = (h);
-        }
-        else {
-            canvas.width = getWindowDimension("width");
-            canvas.height = getWindowDimension("height");
-        }
+        canvas.width = getWindowDimension("width");
+        canvas.height = getWindowDimension("height");
         canvas.style.position = "absolute";
         canvas.style.top = "0";
         canvas.style.left = "0";
-        if (iOS) {
-            canvas.style.width = w;
-            canvas.style.height = h;
-        }
-
         document.body.appendChild(canvas);
         _ctx = canvas.getContext("2d");
         resetGraphicsContexts();
     }
+    
+    function _removeKilled() {
+        if (_removed.length) {
+            var len = _actors.length;
+            var newLength = len - _removed.length;
+            for (var next = _removed.pop(); next; next = _removed.pop()) {
+                for (var i = 0; i < len; ++i) {
+                    if (_actors[i] === next) {
+                        _actors[i] = null;
+                    }
+                }
+            }
+            var n = 0;
+            var tmp = new Array(newLength);
+            for (var i = 0; i < len; ++i) {
+                if (_actors[i]) {
+                    tmp[n++] = _actors[i];
+                }
+            }
+            _actors = tmp;
+        }
+    }
+    
+    function resetGraphicsContexts() {
+        _ctx.fillStyle = "#000000";
+        _ctx.font = "20px sans-serif";
+        _ctx.globalAlpha = 1;
+        _ctx.globalCompositeOperation = "source-over";
+        _ctx.imageSmoothingEnabled = true;
+        _ctx.lineCap = "butt";
+        _ctx.lineDashOffset = 0;
+        _ctx.lineJoin = "miter";
+        _ctx.lineWidth = 1;
+        _ctx.miterLimit = 10;
+        _ctx.shadowBlur = 0;
+        _ctx.shadowColor = "rgba(0, 0, 0, 0)";
+        _ctx.shadowOffsetX = 0;
+        _ctx.shadowOffsetY = 0;
+        _ctx.strokeStyle = "#000000";
+        _ctx.textAlign = "start";
+        _ctx.textBaseline = "alphabetic";
+        _ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    
+    function loadImageAsset(path) {
+        ++_numUnloaded;
+        var i = new Image();
+        i.addEventListener("load", function(e){
+            app.cache[path] = i;
+            if (--_numUnloaded === 0) {
+                afterAssetsLoad();
+            }
+        });
+        i.src = path;
+    }
 
     window.app = new App();
     window.addEventListener("resize", resetCanvas);
+    (using.bind(window))(Box2D);
     resetCanvas();
+}
+
+function loadAssets() {
+    app.loadImage("asset/PlasmaShip.png");
+    app.loadImage("asset/PowerShip.png");
+    app.loadImage("asset/SpreadShip.png");
+    app.loadImage("asset/WaveShip.png");  
+    app.loadImage("asset/PlasmaShot.png");
+    app.loadImage("asset/PowerShot.png");
+    app.loadImage("asset/SpreadShot.png");
+    app.loadImage("asset/WaveShot.png");
+}
+
+function afterAssetsLoad() {
+    initBulletConstructors();
+    initShipPrototypes();
+    setupInput();
+    start();
 }

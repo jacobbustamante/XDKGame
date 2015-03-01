@@ -1,6 +1,6 @@
 function main() {
     function loop() {
-        var len = app.actors.length;
+        var len = 0;
         for (var i = 0; i < len; ++i) {
             app.actors[i].update();
             
@@ -36,11 +36,11 @@ function main() {
             }
         }
 
-        app.removeKilled();
+        //app.removeKilled();
     }
 
     function render() {
-        var len = app.actors.length;
+        var len = 0;//app.actors.length;
         app.resetGraphics();
         app.ctx.setTransform(1, 0, 0, 1, 0, 0);
         app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
@@ -52,7 +52,6 @@ function main() {
     
     loop();
     render();
-    //window.requestAnimationFrame(main);
 }
 
 function isCollision(ship,bullet){
