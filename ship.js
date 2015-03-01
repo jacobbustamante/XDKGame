@@ -5,6 +5,8 @@ function Ship() {
     this.vy = 0;
     this.isPlayer = false;
     
+    //comment
+    // another one
     this.theta = 55;
     this.speed = 0;
     
@@ -48,7 +50,7 @@ function Ship() {
     }
     
     function _draw(){
-        //this.tx();
+        this.tx();
         this.img.drawAnimatedImage(app.ctx, this.x, this.y);
     }
     

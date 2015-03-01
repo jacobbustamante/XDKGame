@@ -12,6 +12,7 @@
     <script src="main.js"></script>
     <script src="camera.js"></script>
     <script src="init.js"></script>
+    <script src="input.js"></script>
 
 </head>
     <body>
@@ -27,22 +28,23 @@
                 lev.createNewLevel();
                 var tmp = new Image();
                 tmp.src = "asset/PowerShip.png";
-                var tmp_bullet = new Image();
-                tmp_bullet.src = "asset/PlasmaShot.png";
-                tmp_bullet.onload = function(e) {
-                    var player = new Ship();
-                    player.img.initAnimatedImage(tmp, 6, 30);
-                    player.bullet_img = tmp_bullet;
-                    player.isPlayer = true;
-                    player.x = 50;
-                    player.y = 400;
-                    window.app.actors.push(player);
-                    //main();
-                    window.setInterval(main, 1000/30);
+                tmp.onload = function(e) {
+                    var tmp_bullet = new Image();
+                    tmp_bullet.src = "asset/PlasmaShot.png";
+                    tmp_bullet.onload = function(e) {
+                        app.player = new Ship();
+                        app.player.img.initAnimatedImage(tmp, 6, 30);
+                        app.player.isPlayer = true;
+                        app.player.x = 50;
+                        app.player.y = 400;
+                        window.app.actors.push(app.player);
+                        //main();
+                        window.setInterval(main, 1000/30);
+                    };
                 };
-                
             }
             start();
+            setupInput();
             //window.addEventListener("load", start);
             
         </script>
