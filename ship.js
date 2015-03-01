@@ -1,4 +1,4 @@
-function Ship() {
+function Ship(hp) {
     this.x = 50;
     this.y = 50;
     this.vx = 0;
@@ -10,7 +10,7 @@ function Ship() {
     this.theta = 55;
     this.speed = 0;
     
-    this.health=100;
+    this.health=hp;
     
     var _tx = tx.bind(this);
     
