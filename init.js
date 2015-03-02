@@ -25,7 +25,6 @@ function InitGame() {
             configurable: false
         });
 
-        /*
         Object.defineProperty(this, "actors", {
             get: function() { return _actors; },
             enumerable: true,
@@ -49,7 +48,6 @@ function InitGame() {
             enumerable: true,
             configurable: false
         });
-        */
 
         Object.defineProperty(this, "ctx", {
             get: function() { return _ctx; },
@@ -152,6 +150,10 @@ function InitGame() {
         document.body.appendChild(canvas);
         _ctx = canvas.getContext("2d");
         resetGraphicsContexts();
+        
+        if (app.camera) {
+            app.camera.resizeCanvas();
+        }
     }
     
     function _removeKilled() {

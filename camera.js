@@ -1,24 +1,134 @@
 function Camera() {
     GameType.call(this, "CAMERA");
-    SpaceObject.call(this, 0, 0);
+    var bodyDef = new b2BodyDef();
+    bodyDef.set_type(b2_kinematicBody);
+    //bodyDef.set_type(b2_dynamicBody);
+    bodyDef.set_position(new b2Vec2(0, 0));
+    SpaceObject.call(this, bodyDef);
     
-    var fixtureDef = new b2FixtureDef();
-    fixtureDef.set_shape(makeBoxShape(app.toMeters(app.canvas.width), app.toMeters(app.canvas.height), 0, 0, 0));
-    fixtureDef.set_density(0);
-    fixtureDef.set_friction(0);
-    fixtureDef.set_isSensor(true);
-    this.body.CreateFixture(fixtureDef);
+    var _body = this.body;
+    var _fixture = null;
+    var _mToPx = 2;
+    var _canvasOffset = null;
+    var _fieldOfView = null;
     
-    function _move(x, y) {
+    var _resizeCanvas = (function () {
+        resetFOV();
+        resetCanvasOffset();
+        resetFixture();
+    }).bind(this);
+    _resizeCanvas();
+    
+    Object.defineProperty(this, "MetersToPixels", {
+        get: function() {
+            return _mToPx;
+        },
+        set: function(scale) {
+            _mToPx = scale;
+            _resizeCanvas();
+        },
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "PixelsToMeters", {
+        get: function() {
+            return 1/_mToPx;
+        },
+        set: function(scale) {
+            _mToPx = 1/scale;
+            _resizeCanvas();
+        },
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "x", {
+        get: function() {
+            return _body.GetPosition().get_x();
+        },
+        set: function(newX) {
+            var oldX = _body.GetPosition().get_x();
+            _canvasOffset.x = _canvasOffset.x - (newX - oldX);
+            _body.GetPosition().set_x(newX);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(this, "y", {
+        get: function() {
+            return _body.GetPosition().get_y();
+        },
+        set: function(newY) {
+            var oldY = _body.GetPosition().get_y();
+            _canvasOffset.y = _canvasOffset.y + (newY - oldY);
+            _body.GetPosition().set_y(newY);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(this, "offsetX", {
+        get: function() {
+            return _canvasOffset.x;
+        },
+        configurable: false,
+        enumerable: true
+    });
+    
+    Object.defineProperty(this, "offsetY", {
+        get: function() {
+            return _canvasOffset.y;
+        },
+        configurable: false,
+        enumerable: true
+    });
+    
+    var _move = (function(x, y) {
         this.x = x;
         this.y = y;
-    }
-    var moveFunc = _move.bind(this);
+    }).bind(this); 
     
     Object.defineProperty(this, "move", {
-        value: moveFunc,
+        value: _move,
         writable: false,
         configurable: false,
         enumerable: true
     });
+    
+    Object.defineProperty(this, "resizeCanvas", {
+        value: _resizeCanvas,
+        writable: false,
+        configurable: false,
+        enumerable: true
+    });
+    
+    function resetFOV() {
+        _fieldOfView = {
+            h: app.canvas.width/_mToPx,
+            v: app.canvas.height/_mToPx
+        }
+    }
+    
+    function resetCanvasOffset() {
+        var pos = _body.GetPosition();
+        _canvasOffset = {
+            x: app.canvas.width/2 + pos.get_x(),
+            y: app.canvas.height/2 + pos.get_y()
+        }
+    }
+    
+    function resetFixture() {
+        if (_fixture) {
+            _body.DestroyFixture(_fixture);
+        }
+        var fixtureDef = new b2FixtureDef();
+        var shape = makeBoxShape(_fieldOfView.h, _fieldOfView.v, 0, 0, 0)
+        fixtureDef.set_shape(shape);
+        fixtureDef.set_density(0);
+        fixtureDef.set_friction(0);
+        fixtureDef.set_isSensor(true);
+        _fixture = _body.CreateFixture(fixtureDef);
+    }
 }

@@ -17,9 +17,7 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
     this.fps = framesPerSecond;
     this.currentFrame = 0;
     
-    function _drawAnimatedImage(x, y) {
-        if (isNaN(parseFloat(x)) || !isFinite(x)) throw "x must be a number";
-        if (isNaN(parseFloat(y)) || !isFinite(y)) throw "y must be a number";
+    function _drawAnimatedImage() {
         if (this.frameStart === null) {
             this.frameStart = app.now();
         }
@@ -29,7 +27,7 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
             this.frameStart = app.now();
         }
         var sourceX = _frameWidth * this.currentFrame;
-        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, x, y, _frameWidth, _frameHeight);
+        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, -_frameWidth/2, -_frameHeight/2, _frameWidth, _frameHeight);
     };
 
     /*

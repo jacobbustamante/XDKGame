@@ -1,6 +1,7 @@
 (using.bind(window))(Box2D);
 
 function GameType(typeName) {
+    this.update = function(){};
     Object.defineProperty(this, "TYPE", {
         value: typeName,
         writable: false,
@@ -14,6 +15,7 @@ function GameType(typeName) {
         enumerable: true,
         configurable: false
     });
+    app.actors.push(this);
 }
 
 
@@ -47,53 +49,104 @@ function makeCircleShape(r, x, y) {
     return shape;
 };
 
-function SpaceObject(x, y) {
-    var bodyDef = new b2BodyDef();
-    bodyDef.set_type(b2_dynamicBody);
-    bodyDef.set_position(new b2Vec2(guaranteeNumber(x), guaranteeNumber(y)));
-    Object.defineProperty(this, "body", {
-        value: app.world.CreateBody(bodyDef),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    var _body = this.body;
-    function _getPos() {
-        return _body.GetPosition();
+function windowCoordinatesToMathCoordinates(windowX, windowY) {
+    var canvasBounds = app.canvas.getBoundingClientRect();
+    return {
+        x: windowX - canvasBounds.left, 
+        y: app.canvas.height - (windowY - canvasBounds.top)
+    };
+}
+
+function SpaceObject() {
+    if (arguments.length == 2) {
+        var bodyDef = new b2BodyDef();
+        var x = guaranteeNumber(arguments[0], 0);
+        var y = guaranteeNumber(arguments[1], 0)
+        bodyDef.set_type(b2_dynamicBody);
+        bodyDef.set_position(new b2Vec2(x, y));
+        Object.defineProperty(this, "body", {
+            value: app.world.CreateBody(bodyDef),
+            writable: false,
+            enumerable: true,
+            configurable: true
+        });
     }
+    else if (arguments.length == 1) {
+        Object.defineProperty(this, "body", {
+            value: app.world.CreateBody(arguments[0]),
+            writable: false,
+            enumerable: true,
+            configurable: true
+        });
+    }
+    else {
+        var bodyDef = new b2BodyDef();
+        bodyDef.set_type(b2_dynamicBody);
+        bodyDef.set_position(new b2Vec2(0, 0));
+        Object.defineProperty(this, "body", {
+            value: app.world.CreateBody(bodyDef),
+            writable: false,
+            enumerable: true,
+            configurable: true
+        });
+    }
+    this.body.actor = this;
+    var _body = this.body;
     
-    Object.defineProperty(this, "theta", {
-        get: function(){ return _body.GetAngle(); },
-        set: function(t){ _body.SetTransform(new b2Vec2(_body.GetPosition().get_x(),_body.GetPosition().get_y()), t); },
+    Object.defineProperty(this, "angle", {
+        get: function() {
+            return _body.GetAngle();
+        },
+        set: function(rotation) {
+            var pos = _body.GetPosition();
+            _body.SetTransform(pos, rotation);
+        },
         enumerable: true,
         configurable: false
     });
     
     Object.defineProperty(this, "x", {
-        get: function(){return _getPos().get_x()},
-        set: function(n){ _getPos().set_x(n); },
+        get: function() {
+            return _body.GetPosition().get_x();
+        },
+        set: function(newX) {
+            _body.GetPosition().set_x(newX);
+        },
         enumerable: true,
-        configurable: false
+        configurable: true
     });
     
     Object.defineProperty(this, "y", {
-        get: function(){ return _getPos().get_y(); },
-        set: function(n){ _getPos().set_y(n); },
+        get: function() {
+            return _body.GetPosition().get_y();
+        },
+        set: function(newY) {
+            _body.GetPosition().set_y(newY);
+        },
         enumerable: true,
-        configurable: false
+        configurable: true
     });
     
     Object.defineProperty(this, "vx", {
-        get: function(){ return _body.GetLinearVelocity().get_x(); },
-        set: function(n){ _body.SetLinearVelocity(new b2Vec2(n, _body.GetLinearVelocity().get_y())); },
+        get: function() {
+            return _body.GetLinearVelocity().get_x();
+        },
+        set: function(newVX) {
+            var v = new b2Vec2(newVX, _body.GetLinearVelocity().get_y())
+            _body.SetLinearVelocity(v);
+        },
         enumerable: true,
         configurable: false
     });
     
     Object.defineProperty(this, "vy", {
-        get: function(){ return _body.GetLinearVelocity().get_y(); },
-        set: function(n){ _body.SetLinearVelocity(new b2Vec2(_body.GetLinearVelocity().get_x(),n)); },
+        get: function() {
+            return _body.GetLinearVelocity().get_y();
+        },
+        set: function(newVY) {
+            var v = new b2Vec2(_body.GetLinearVelocity().get_x(), newVY);
+            _body.SetLinearVelocity(v);
+        },
         enumerable: true,
         configurable: false
     });
