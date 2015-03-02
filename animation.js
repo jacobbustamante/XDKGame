@@ -1,5 +1,4 @@
 function AnimatedImage(image, frameCount, framesPerSecond) {
-    console.log(image);
     if (frameCount <= 0) throw "framecount can not be <= 0";
     if (framesPerSecond <= 0) throw "fps can not be <= 0";
     this.frameStart = null;
@@ -26,13 +25,17 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
             this.currentFrame %= _frameCount;
             this.frameStart = app.now();
         }
-        var scale = .75;
+        var scale = .65;
         if (app.iOS) {
             scale = .5;
         }
-        
+        scale *= app.camera.PixelsToMeters;
         var sourceX = _frameWidth * this.currentFrame;
-        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, -scale/2, -scale/2, scale, scale);
+        var posX = -_frameWidth*app.camera.MetersToPixels/2;
+        var posY = -_frameHeight*app.camera.MetersToPixels/2;
+        var sixeW = _frameWidth/app.camera.PixelsToMeters;
+        var sizeH = _frameHeight/app.camera.PixelsToMeters;
+        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, posX, posY, sixeW, sizeH);
     }
 
     /*

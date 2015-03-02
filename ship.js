@@ -6,7 +6,7 @@ function PlasmaShip(x, y) {
     this.others.push(this);
     
     var fixtureDef = new b2FixtureDef();
-    fixtureDef.set_shape(makeCircleShape(6.5, 0, 0));
+    fixtureDef.set_shape(makeBoxShape(1/2, 1.1/2, 0, 0, 0));
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
@@ -37,7 +37,8 @@ function initShipPrototypes() {
         bullet: PlasmaShot,
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
-        framesPerSecond: 10
+        framesPerSecond: 10,
+        topSpeed: 12
     });
     PowerShip.prototype = new ShipPrototype("Power Ship", 100, PowerShot);
     SpreadShip.prototype = new ShipPrototype("Spread Ship", 70, SpreadShot);
@@ -48,9 +49,7 @@ function updateAiShip() {
     this.fireWeapon();
 }
 
-function updatePlayerShip() {
-    
-}
+
 
 function Ship(hp, bulletFactory) {
     var _health = hp;
@@ -90,6 +89,7 @@ function Ship(hp, bulletFactory) {
 }
 
 function ShipPrototype(props) {
+    this.topSpeed = props.topSpeed ? props.topSpeed : 150;
     this.props = props;
     var _init = function(x, y) {
 

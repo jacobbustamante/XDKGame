@@ -18,10 +18,7 @@ function setupInput() {
     dpadMove.src = "asset/dpadMove.png";
     
     function afterImgLoad() {
-        document.body.addEventListener("touchstart", startTap);
-        document.body.addEventListener("touchmove", noAction);
-        document.body.addEventListener("touchend", noAction);
-        document.body.addEventListener("touchcancel", noAction);
+        
     }
     
     function Dpad(x, y) {
@@ -112,8 +109,21 @@ function setupInput() {
         }
     }
     
-    function noAction(e) {
-        e.preventDefault();
-    }
+    
 }
+function onTap(e) {
+                e.preventDefault();
+                var g = app.ctx;
+                for(var i = 0, len = e.touches.length; i < len; ++i) {
+                    var t = e.touches[i];
+                    var x = t.clientX;
+                    var y = t.clientY;
+                    v//ar str = "(" + x + "," + y + ")";
+                    //g.fillText(str, x, y);
+                    if (e.x <=(app.canvas.width / 2))
+                        player.x -= 25;
+                    else
+                        player.x += 25;
+                }
+            }
 

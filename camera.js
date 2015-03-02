@@ -1,5 +1,6 @@
 function Camera() {
     GameType.call(this, "CAMERA");
+    app.actors.pop(this);
     this.isRendered = false;
     var bodyDef = new b2BodyDef();
     bodyDef.set_type(b2_dynamicBody);
@@ -8,26 +9,54 @@ function Camera() {
     
     var _body = this.body;
     var _fixture = null;
-    var _mToPx = 1/52;
+    var _PTM = 48;
     var _canvasOffset = null;
     var _centerCanvas = null;
     var _fieldOfView = null;
     
-    function _worldPointFromPixelPoint(pixelPoint) {
+    this.minZoom = -Infinity;//_mToPx/0.75;
+    this.maxZoom = Infinity;//_mToPx/2;
+    this.defaultZoom = _PTM;
+    
+    var _cam = this;
+    
+    var _worldPointFromPixelPoint = function(pixelPoint) {
         return {                
-            x: (pixelPoint.x - _canvasOffset.x)/(1/_mToPx),
-            y: (pixelPoint.y - (app.canvas.height - _canvasOffset.y))/(1/_mToPx)
+            x: (pixelPoint.x - _canvasOffset.x)/(_PTM),
+            y: (pixelPoint.y - (app.canvas.height - _canvasOffset.y))/(_PTM)
         };
-    }
+    };
+    
+    Object.defineProperty(this, "fov", {
+        get: function() {
+            return {
+                h:_fieldOfView.h, v: _fieldOfView.v
+            };
+        },
+        enumerable: true,
+        configurable: false
+    });
+    
     
     function _move(x, y) {
-        var pos = _worldPointFromPixelPoint(_centerCanvas);
-        _body.GetPosition().set_x(x);
-        _body.GetPosition().set_y(y);
+        var pos = null;
+        if (_followPlayer) {
+            pos = {
+                x: app.player.x,
+                y: app.player.y
+            }
+        }
+        else {
+            pos = _worldPointFromPixelPoint(_centerCanvas);
+        }
+        
+        
         var destX = x - pos.x;
         var destY = y - pos.y;
-        _canvasOffset.x -= destX * (1/_mToPx);
-        _canvasOffset.y += destY * (1/_mToPx);
+        _canvasOffset.x -= destX * (_PTM);
+        _canvasOffset.y += destY * (_PTM);
+        _body.GetPosition().set_x(x);
+        _body.GetPosition().set_y(y);
     }
     
     var _followPlayer = false;
@@ -94,6 +123,7 @@ function Camera() {
     Object.defineProperty(this, "offsetX", {
         get: function() {
             return _canvasOffset.x;
+            //return centerCanvas.x;
         },
         configurable: false,
         enumerable: true
@@ -102,6 +132,7 @@ function Camera() {
     Object.defineProperty(this, "offsetY", {
         get: function() {
             return _canvasOffset.y;
+            //return centerCanvas.y;
         },
         configurable: false,
         enumerable: true
@@ -109,11 +140,11 @@ function Camera() {
     
     Object.defineProperty(this, "MetersToPixels", {
         get: function() {
-            return _mToPx;
+            return 1/_PTM;
         },
         set: function(scale) {
             var camPos = _worldPointFromPixelPoint(_centerCanvas);
-            _mToPx = scale;
+            _PTM = 1/scale;
             _resizeCanvas();
             _move(camPos.x, camPos.y);
         },
@@ -123,13 +154,15 @@ function Camera() {
     
     Object.defineProperty(this, "PixelsToMeters", {
         get: function() {
-            return 1/_mToPx;
+            return _PTM;
         },
         set: function(scale) {
             var camPos = _worldPointFromPixelPoint(_centerCanvas);
-            _mToPx = 1/scale;
-            _resizeCanvas();
-            _move(camPos.x, camPos.y);
+            if (scale < 1/this.maxZoom && scale > 1/this.minZoom) {
+                _mToPx = _PTM;
+                _resizeCanvas();
+                _move(camPos.x, camPos.y);
+            }
         },
         enumerable: true,
         configurable: false
@@ -142,15 +175,21 @@ function Camera() {
         enumerable: true
     });
     
+    Object.defineProperty(this, "screenToWorld", {
+        value: _worldPointFromPixelPoint,
+        writable: false,
+        configurable: false,
+        enumerable: true
+    });
+    
     function resetFOV() {
         _fieldOfView = {
-            h: app.canvas.width/_mToPx,
-            v: app.canvas.height/_mToPx
+            h: app.canvas.width/_PTM,
+            v: app.canvas.height/_PTM
         };
     }
     
     function resetCanvasCenterPoint() {
-        var pos = _body.GetPosition();
         _centerCanvas = {
             x: app.canvas.width/2,
             y: app.canvas.height/2

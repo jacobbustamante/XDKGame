@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8"> 
     <title>Cosmic ...</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     
@@ -17,7 +18,7 @@
     <script src="ship.js"></script>
     <script src="main.js"></script>
     
-    <script src="input.js"></script>
+    <script src="input2.js"></script>
 
 </head>
     <body>
@@ -48,75 +49,12 @@
             
             var speed = 20;
             
-            window.addEventListener("keydown", moveShip);
-            function moveShip(e) {
-                //e.preventDefault();
-                switch(e.which) {
-                    case 87: // w
-                        app.player.vy = speed;
-                        break;
-                    case 83: // s
-                        app.player.vy = -speed;
-                        break;
-                    case 65: // a
-                        app.player.vx = -speed;
-                        break;
-                    case 68: // d
-                        app.player.vx = speed;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            window.addEventListener("keyup", stopShip);
-            function stopShip(e) {
-                //e.preventDefault();
-                switch(e.which) {
-                    case 87: // w
-                        app.player.vy = 0;
-                        break;
-                    case 83: // s
-                        app.player.vy = 0;
-                        break;
-                    case 65: // a
-                        app.player.vx = 0;
-                        break;
-                    case 68: // d
-                        app.player.vx = 0;
-                        break;
-                    default:
-                        break;
-                }
-            }
             
-            document.addEventListener("mousewheel", zoomCamera, false);
-            function zoomCamera(e) {
-                if (e.wheelDelta > 0) {
-                    app.camera.PixelsToMeters = (app.camera.PixelsToMeters/1.15);
-                }
-                else {
-                    app.camera.PixelsToMeters = (app.camera.PixelsToMeters*1.15);
-                }
-            }
             
-            document.body.addEventListener("touchstart", onTap);
-            function onTap(e) {
-                e.preventDefault();
-                var g = app.ctx;
-                for(var i = 0, len = e.touches.length; i < len; ++i) {
-                    var t = e.touches[i];
-                    var x = t.clientX;
-                    var y = t.clientY;
-                    v//ar str = "(" + x + "," + y + ")";
-                    //g.fillText(str, x, y);
-                    if (e.x <=(app.canvas.width / 2))
-                        player.x -= 25;
-                    else
-                        player.x += 25;
-                }
-            }
+            
 
             function start() {
+                
                 Object.defineProperty(app, "camera", {
                     value: new Camera(),
                     enumerable: true,
@@ -132,6 +70,9 @@
                 sound.load();
                 sound.play();
                 app.player = new PlasmaShip(0, 0);
+                app.player.update =  updatePlayerShip;
+                
+                var x = new PlasmaShip(-10, 0);
                 
                 if (app.iOS) {
                     window.setInterval(main_iOS, 1000/60);
