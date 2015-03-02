@@ -26,28 +26,58 @@
             InitGame();
             loadAssets();
             
-            var player;
-            document.addEventListener("keydown", moveShip);
-            document.body.addEventListener("touchstart", onTap);
+            var speed = 100;
+            
+            window.addEventListener("keydown", moveShip);
             function moveShip(e) {
                 switch(e.which) {
                     case 87: // w
-                        player.y -= 25;
+                        app.player.vy = speed;
                         break;
                     case 83: // s
-                        player.y += 25;
+                        app.player.vy = -speed;
                         break;
                     case 65: // a
-                        player.x -= 25;
+                        app.player.vx = -speed;
                         break;
                     case 68: // d
-                        player.x += 25;
+                        app.player.vx = speed;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            window.addEventListener("keyup", stopShip);
+            function stopShip(e) {
+                switch(e.which) {
+                    case 87: // w
+                        app.player.vy = 0;
+                        break;
+                    case 83: // s
+                        app.player.vy = 0;
+                        break;
+                    case 65: // a
+                        app.player.vx = 0;
+                        break;
+                    case 68: // d
+                        app.player.vx = 0;
                         break;
                     default:
                         break;
                 }
             }
             
+            document.addEventListener("mousewheel", zoomCamera, false);
+            function zoomCamera(e) {
+                if (e.wheelDelta > 0) {
+                    app.camera.PixelsToMeters = (app.camera.PixelsToMeters/1.15);
+                }
+                else {
+                    app.camera.PixelsToMeters = (app.camera.PixelsToMeters*1.15);
+                }
+            }
+            
+            document.body.addEventListener("touchstart", onTap);
             function onTap(e) {
                 e.preventDefault();
                 var g = app.ctx;
@@ -79,6 +109,7 @@
                 sound.volume = 0.25;
                 sound.load();
                 sound.play();
+                app.player = new PlasmaShip(0, 0);
                 window.setInterval(main, 1000/60);
             }
         </script>

@@ -15,6 +15,13 @@ function GameType(typeName) {
         enumerable: true,
         configurable: false
     });
+    
+    Object.defineProperty(this, "isRendered", {
+        value: true,
+        writable: true,
+        enumerable: true,
+        configurable: true
+    });
     app.actors.push(this);
 }
 

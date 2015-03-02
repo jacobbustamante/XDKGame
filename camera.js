@@ -1,5 +1,6 @@
 function Camera() {
     GameType.call(this, "CAMERA");
+    this.isRendered = false;
     var bodyDef = new b2BodyDef();
     bodyDef.set_type(b2_kinematicBody);
     //bodyDef.set_type(b2_dynamicBody);
@@ -8,11 +9,13 @@ function Camera() {
     
     var _body = this.body;
     var _fixture = null;
-    var _mToPx = 2;
+    var _mToPx = 1.5;
     var _canvasOffset = null;
+    var _centerCanvas = null;
     var _fieldOfView = null;
     
     var _resizeCanvas = (function () {
+        resetCanvasCenterPoint();
         resetFOV();
         resetCanvasOffset();
         resetFixture();
@@ -24,8 +27,10 @@ function Camera() {
             return _mToPx;
         },
         set: function(scale) {
+            var camPos = _worldPointFromPixelPoint(_centerCanvas);
             _mToPx = scale;
             _resizeCanvas();
+            _move(camPos.x, camPos.y);
         },
         enumerable: true,
         configurable: false
@@ -36,8 +41,10 @@ function Camera() {
             return 1/_mToPx;
         },
         set: function(scale) {
+            var camPos = _worldPointFromPixelPoint(_centerCanvas);
             _mToPx = 1/scale;
             _resizeCanvas();
+            _move(camPos.x, camPos.y);
         },
         enumerable: true,
         configurable: false
@@ -111,10 +118,18 @@ function Camera() {
         }
     }
     
+    function resetCanvasCenterPoint() {
+        var pos = _body.GetPosition();
+        _centerCanvas = {
+            x: app.canvas.width/2,
+            y: app.canvas.height/2
+        }
+    }
+    
     function resetCanvasOffset() {
         var pos = _body.GetPosition();
         _canvasOffset = {
-            x: app.canvas.width/2 + pos.get_x(),
+            x: app.canvas.width/2 - pos.get_x(),
             y: app.canvas.height/2 + pos.get_y()
         }
     }
@@ -130,5 +145,12 @@ function Camera() {
         fixtureDef.set_friction(0);
         fixtureDef.set_isSensor(true);
         _fixture = _body.CreateFixture(fixtureDef);
+    }
+    
+    function _worldPointFromPixelPoint(pixelPoint) {
+        return {                
+            x: (pixelPoint.x - _canvasOffset.x)/(1/_mToPx),
+            y: (pixelPoint.y - (app.canvas.height - _canvasOffset.y))/(1/_mToPx)
+        };
     }
 }

@@ -10,26 +10,22 @@ function main() {
 
     function render() {
         app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
-        var list = app.camera.body.GetContactList();
-        if (list.e) {
-            app.ctx.save();
-                app.ctx.translate(app.camera.offsetX, app.camera.offsetY);
-                app.ctx.rotate(app.camera.angle);
-                app.ctx.scale(1, -1);
-                app.ctx.scale(app.camera.PixelsToMeters, app.camera.PixelsToMeters)
-                while (list.e) {
-                    var actor = list.get_contact().GetFixtureB().GetBody().actor;
-                    if (actor) {
-                        app.ctx.save();
-                            app.ctx.translate(actor.x, actor.y);
-                            app.ctx.rotate(actor.angle);
-                            actor.drawAnimatedImage();
-                        app.ctx.restore();
-                    }
-                    list = list.get_next()
+        app.ctx.save();
+            app.ctx.translate(app.camera.offsetX, app.camera.offsetY);
+            app.ctx.rotate(app.camera.angle);
+            app.ctx.scale(1, -1);
+            app.ctx.scale(app.camera.PixelsToMeters, app.camera.PixelsToMeters)
+            for (var i = 0; i < app.actors.length; ++i) {
+                var actor = app.actors[i];
+                if (actor && actor.isRendered) {
+                    app.ctx.save();
+                        app.ctx.translate(actor.x, actor.y);
+                        app.ctx.rotate(actor.angle);
+                        actor.drawAnimatedImage();
+                    app.ctx.restore();
                 }
-            app.ctx.restore();
-        }
+            }
+        app.ctx.restore();
     }
     
     loop();
