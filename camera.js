@@ -2,8 +2,7 @@ function Camera() {
     GameType.call(this, "CAMERA");
     this.isRendered = false;
     var bodyDef = new b2BodyDef();
-    bodyDef.set_type(b2_kinematicBody);
-    //bodyDef.set_type(b2_dynamicBody);
+    bodyDef.set_type(b2_dynamicBody);
     bodyDef.set_position(new b2Vec2(0, 0));
     SpaceObject.call(this, bodyDef);
     
@@ -14,13 +13,99 @@ function Camera() {
     var _centerCanvas = null;
     var _fieldOfView = null;
     
+    function _worldPointFromPixelPoint(pixelPoint) {
+        return {                
+            x: (pixelPoint.x - _canvasOffset.x)/(1/_mToPx),
+            y: (pixelPoint.y - (app.canvas.height - _canvasOffset.y))/(1/_mToPx)
+        };
+    }
+    
+    function _move(x, y) {
+        var pos = _worldPointFromPixelPoint(_centerCanvas);
+        _body.GetPosition().set_x(x);
+        _body.GetPosition().set_y(y);
+        var destX = x - pos.x;
+        var destY = y - pos.y;
+        _canvasOffset.x -= destX * (1/_mToPx);
+        _canvasOffset.y += destY * (1/_mToPx);
+    }
+    
+    var _followPlayer = false;
+    Object.defineProperty(this, "followPlayer", {
+        get: function() {
+            return _followPlayer;
+        },
+        set: function(b) {
+            if (b === true || b === false) {
+                _followPlayer = b;
+            }
+        },
+        enumerable: true,
+        configurable: false
+    });
+    
+    this.update = function(){
+        if (_followPlayer) {
+            _move(app.player.x, app.player.y);
+        }
+    };
+    
     var _resizeCanvas = (function () {
+        var pos = _body.GetPosition();
         resetCanvasCenterPoint();
         resetFOV();
         resetCanvasOffset();
         resetFixture();
+        _move(pos.get_x(), pos.get_y());
     }).bind(this);
     _resizeCanvas();
+    
+     
+    
+    Object.defineProperty(this, "move", {
+        value: _move,
+        writable: false,
+        configurable: false,
+        enumerable: true
+    });
+    
+    Object.defineProperty(this, "x", {
+        get: function() {
+            return _body.GetPosition().get_x();
+        },
+        set: function(newX) {
+            _move(newX, _body.GetPosition().get_y());
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(this, "y", {
+        get: function() {
+            return _body.GetPosition().get_y();
+        },
+        set: function(newY) {
+            _move(_body.GetPosition().get_x(), newY);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(this, "offsetX", {
+        get: function() {
+            return _canvasOffset.x;
+        },
+        configurable: false,
+        enumerable: true
+    });
+    
+    Object.defineProperty(this, "offsetY", {
+        get: function() {
+            return _canvasOffset.y;
+        },
+        configurable: false,
+        enumerable: true
+    });
     
     Object.defineProperty(this, "MetersToPixels", {
         get: function() {
@@ -50,60 +135,6 @@ function Camera() {
         configurable: false
     });
     
-    Object.defineProperty(this, "x", {
-        get: function() {
-            return _body.GetPosition().get_x();
-        },
-        set: function(newX) {
-            var oldX = _body.GetPosition().get_x();
-            _canvasOffset.x = _canvasOffset.x - (newX - oldX);
-            _body.GetPosition().set_x(newX);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    
-    Object.defineProperty(this, "y", {
-        get: function() {
-            return _body.GetPosition().get_y();
-        },
-        set: function(newY) {
-            var oldY = _body.GetPosition().get_y();
-            _canvasOffset.y = _canvasOffset.y + (newY - oldY);
-            _body.GetPosition().set_y(newY);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    
-    Object.defineProperty(this, "offsetX", {
-        get: function() {
-            return _canvasOffset.x;
-        },
-        configurable: false,
-        enumerable: true
-    });
-    
-    Object.defineProperty(this, "offsetY", {
-        get: function() {
-            return _canvasOffset.y;
-        },
-        configurable: false,
-        enumerable: true
-    });
-    
-    var _move = (function(x, y) {
-        this.x = x;
-        this.y = y;
-    }).bind(this); 
-    
-    Object.defineProperty(this, "move", {
-        value: _move,
-        writable: false,
-        configurable: false,
-        enumerable: true
-    });
-    
     Object.defineProperty(this, "resizeCanvas", {
         value: _resizeCanvas,
         writable: false,
@@ -115,7 +146,7 @@ function Camera() {
         _fieldOfView = {
             h: app.canvas.width/_mToPx,
             v: app.canvas.height/_mToPx
-        }
+        };
     }
     
     function resetCanvasCenterPoint() {
@@ -123,15 +154,14 @@ function Camera() {
         _centerCanvas = {
             x: app.canvas.width/2,
             y: app.canvas.height/2
-        }
+        };
     }
     
     function resetCanvasOffset() {
-        var pos = _body.GetPosition();
         _canvasOffset = {
-            x: app.canvas.width/2 - pos.get_x(),
-            y: app.canvas.height/2 + pos.get_y()
-        }
+            x: app.canvas.width/2,
+            y: app.canvas.height/2
+        };
     }
     
     function resetFixture() {
@@ -139,18 +169,11 @@ function Camera() {
             _body.DestroyFixture(_fixture);
         }
         var fixtureDef = new b2FixtureDef();
-        var shape = makeBoxShape(_fieldOfView.h, _fieldOfView.v, 0, 0, 0)
+        var shape = makeBoxShape(_fieldOfView.h, _fieldOfView.v, 0, 0, 0);
         fixtureDef.set_shape(shape);
         fixtureDef.set_density(0);
         fixtureDef.set_friction(0);
         fixtureDef.set_isSensor(true);
         _fixture = _body.CreateFixture(fixtureDef);
-    }
-    
-    function _worldPointFromPixelPoint(pixelPoint) {
-        return {                
-            x: (pixelPoint.x - _canvasOffset.x)/(1/_mToPx),
-            y: (pixelPoint.y - (app.canvas.height - _canvasOffset.y))/(1/_mToPx)
-        };
     }
 }
