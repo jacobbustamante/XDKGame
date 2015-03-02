@@ -14,8 +14,8 @@ function Camera() {
     var _centerCanvas = null;
     var _fieldOfView = null;
     
-    this.minZoom = -Infinity;//_mToPx/0.75;
-    this.maxZoom = Infinity;//_mToPx/2;
+    this.minZoom = _PTM*2;//_mToPx/0.75;
+    this.maxZoom = _PTM/2;//_mToPx/2;
     this.defaultZoom = _PTM;
     
     var _cam = this;
@@ -138,7 +138,7 @@ function Camera() {
         enumerable: true
     });
     
-    Object.defineProperty(this, "MetersToPixels", {
+    Object.defineProperty(this, "MetersPerPixel", {
         get: function() {
             return 1/_PTM;
         },
@@ -152,17 +152,18 @@ function Camera() {
         configurable: false
     });
     
-    Object.defineProperty(this, "PixelsToMeters", {
+    Object.defineProperty(this, "PixelsPerMeter", {
         get: function() {
             return _PTM;
         },
         set: function(scale) {
             var camPos = _worldPointFromPixelPoint(_centerCanvas);
-            if (scale < 1/this.maxZoom && scale > 1/this.minZoom) {
-                _mToPx = _PTM;
-                _resizeCanvas();
-                _move(camPos.x, camPos.y);
-            }
+            _PTM = scale;
+            _resizeCanvas();
+            _move(camPos.x, camPos.y);
+            //if (scale < this.minZoom && scale > this.maxZoom) {
+                
+            //}
         },
         enumerable: true,
         configurable: false

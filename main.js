@@ -28,7 +28,7 @@ function render() {
         app.ctx.translate(app.camera.offsetX, app.camera.offsetY);
         app.ctx.rotate(app.camera.angle);
         app.ctx.scale(1, -1);
-        app.ctx.scale(app.camera.PixelsToMeters, app.camera.PixelsToMeters)
+        app.ctx.scale(app.camera.PixelsPerMeter, app.camera.PixelsPerMeter);
         for (var i = 0; i < app.actors.length; ++i) {
             var actor = app.actors[i];
             if (actor && actor.isRendered) {

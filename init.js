@@ -197,6 +197,12 @@ function InitGame() {
         _ctx.textAlign = "start";
         _ctx.textBaseline = "alphabetic";
         _ctx.setTransform(1, 0, 0, 1, 0, 0);
+        Object.defineProperty(app, "camera", {
+            value: new Camera(),
+            enumerable: true,
+            writable: true,
+            configurable: false
+        });
     }
     
     function loadImageAsset(path) {

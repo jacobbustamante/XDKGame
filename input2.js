@@ -84,10 +84,10 @@ function zoomCamera(e) {
         return;
     }
     if (delta > 0) {
-        app.camera.PixelsToMeters = (app.camera.PixelsToMeters/1.05);
+        app.camera.PixelsPerMeter = (app.camera.PixelsPerMeter/1.05);
     }
     else {
-        app.camera.PixelsToMeters = (app.camera.PixelsToMeters*1.05);
+        app.camera.PixelsPerMeter = (app.camera.PixelsPerMeter*1.05);
     }
 }
 

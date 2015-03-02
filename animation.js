@@ -13,6 +13,16 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
         configurable: false,
         enumerable: true
     });
+    Object.defineProperty(this, "width", {
+        value: _frameWidth*app.camera.MetersPerPixel,
+        configurable: true,
+        enumerable: true
+    });
+    Object.defineProperty(this, "height", {
+        value: _frameHeight*app.camera.MetersPerPixel,
+        configurable: true,
+        enumerable: true
+    });
     this.fps = framesPerSecond;
     this.currentFrame = 0;
     
@@ -31,42 +41,9 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
         }
         scale *= app.camera.PixelsToMeters;
         var sourceX = _frameWidth * this.currentFrame;
-        var posX = -_frameWidth*app.camera.MetersToPixels/2;
-        var posY = -_frameHeight*app.camera.MetersToPixels/2;
-        var sixeW = _frameWidth/app.camera.PixelsToMeters;
-        var sizeH = _frameHeight/app.camera.PixelsToMeters;
-        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, posX, posY, sixeW, sizeH);
+        var posX = -this.width/2;
+        var posY = -this.height/2;
+        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, posX, posY, this.height, this.height);
     }
-
-    /*
-    Object.defineProperty(this, "initAnimatedImage", {
-        value: _initAnimatedImage,
-        writable: false,
-        configurable: false,
-        enumerable: true
-    });
-    
-    Object.defineProperty(this, "initAnimation", {
-        value: _initAnimatedImage,
-        writable: false,
-        configurable: false,
-        enumerable: true
-    });
-    
-    Object.defineProperty(this, "", {
-        value: _drawAnimatedImage,
-        writable: false,
-        configurable: false,
-        enumerable: true
-    });
-    
-    Object.defineProperty(this, "drawSprite", {
-        value: _drawAnimatedImage.bind(this, app.ctx),
-        writable: false,
-        configurable: false,
-        enumerable: true
-    });
-    */
-
     this.drawAnimatedImage = _drawAnimatedImage.bind(this); 
 }
