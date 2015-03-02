@@ -90,6 +90,7 @@ function SpaceObject() {
         var bodyDef = new b2BodyDef();
         bodyDef.set_type(b2_dynamicBody);
         bodyDef.set_position(new b2Vec2(0, 0));
+        bodyDef.set_linearDamping(0.3);
         Object.defineProperty(this, "body", {
             value: app.world.CreateBody(bodyDef),
             writable: false,

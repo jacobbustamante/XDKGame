@@ -26,9 +26,14 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
             this.currentFrame %= _frameCount;
             this.frameStart = app.now();
         }
+        var scale = .75;
+        if (app.iOS) {
+            scale = .5;
+        }
+        
         var sourceX = _frameWidth * this.currentFrame;
-        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, -_frameWidth/2, -_frameHeight/2, _frameWidth, _frameHeight);
-    };
+        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, -scale/2, -scale/2, scale, scale);
+    }
 
     /*
     Object.defineProperty(this, "initAnimatedImage", {

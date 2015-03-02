@@ -9,7 +9,7 @@ function Camera() {
     
     var _body = this.body;
     var _fixture = null;
-    var _mToPx = 1.5;
+    var _mToPx = 1/52;
     var _canvasOffset = null;
     var _centerCanvas = null;
     var _fieldOfView = null;

@@ -23,13 +23,34 @@
     <body>
         
         <script>
+            window.requestAnimationFunc = (function(){
+                if (window.requestAnimationFrame) {
+                    return window.requestAnimationFrame;
+                }
+                if (window.webkitRequestAnimationFrame) {
+                    return window.webkitRequestAnimationFrame;
+                }
+                if (window.mozRequestAnimationFrame) {
+                    window.mozRequestAnimationFrame;
+                }
+                if (window.oRequestAnimationFrame) {
+                    window.oRequestAnimationFrame;
+                }
+                if (window.msRequestAnimationFrame) {
+                    window.msRequestAnimationFrame;
+                }
+                return function(callback){
+                    window.setTimeout(callback, 1000/60);
+                };      
+            })();
             InitGame();
             loadAssets();
             
-            var speed = 100;
+            var speed = 20;
             
             window.addEventListener("keydown", moveShip);
             function moveShip(e) {
+                //e.preventDefault();
                 switch(e.which) {
                     case 87: // w
                         app.player.vy = speed;
@@ -49,6 +70,7 @@
             }
             window.addEventListener("keyup", stopShip);
             function stopShip(e) {
+                //e.preventDefault();
                 switch(e.which) {
                     case 87: // w
                         app.player.vy = 0;
@@ -110,7 +132,14 @@
                 sound.load();
                 sound.play();
                 app.player = new PlasmaShip(0, 0);
-                window.setInterval(main, 1000/60);
+                
+                if (app.iOS) {
+                    window.setInterval(main_iOS, 1000/60);
+                }
+                else{
+                    window.requestAnimationFunc(main);
+                }
+                
             }
         </script>
 

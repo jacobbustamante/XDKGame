@@ -212,18 +212,30 @@ function InitGame() {
     }
 
     window.app = new App();
+    
     window.addEventListener("resize", resetCanvas);
+    
+    window.addEventListener('orientationchange', resetCanvas);
     resetCanvas();
 };
 
 function loadAssets() {
+    app.loadImage("asset/bg.png");
+    app.loadImage("asset/debris.png");
+    app.loadImage("asset/dpadBase.png");
+    app.loadImage("asset/dpadMove.png");
+    app.loadImage("asset/moon.png");
+    app.loadImage("asset/obstacle.png");
+    app.loadImage("asset/obstacle2.png");
+    app.loadImage("asset/obstacle3.png");
     app.loadImage("asset/PlasmaShip.png");
-    app.loadImage("asset/PowerShip.png");
-    app.loadImage("asset/SpreadShip.png");
-    app.loadImage("asset/WaveShip.png");  
     app.loadImage("asset/PlasmaShot.png");
+    app.loadImage("asset/PowerShip.png");
     app.loadImage("asset/PowerShot.png");
+    app.loadImage("asset/ShipPlaceHolderPlaceHolder.png");
+    app.loadImage("asset/SpreadShip.png");
     app.loadImage("asset/SpreadShot.png");
+    app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
 }
 
