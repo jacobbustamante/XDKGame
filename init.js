@@ -92,6 +92,13 @@ function InitGame() {
             configurable: false
         });
         
+        Object.defineProperty(this, "defaultPixelsPerMeter", {
+            value: 48,
+            enumerable: true,
+            writeable: false,
+            configureable: false
+        });
+        
         Object.defineProperty(this, "toMeters", {
             value: function(x) { return x/4; },
             enumerable: true,
@@ -196,7 +203,7 @@ function InitGame() {
                 for (var i = 0; i < len; ++i) {
                     if (_actors[i] === next) {
                         if (_actors[i].body) {
-                            app.world.DestroyBody(_actors[i].body)
+                            app.world.DestroyBody(_actors[i].body);
                         }
                         _actors[i] = null;
                     }
@@ -319,6 +326,7 @@ function loadAssets() {
     app.loadImage("asset/SpreadShot.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
+    app.loadImage("asset/explosion.png")
    
     app.loadAudio("asset/BaseShotSound.wav", false);
     app.loadAudio("asset/PlasmaShotSound.wav", false);

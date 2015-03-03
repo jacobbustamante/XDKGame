@@ -27,6 +27,7 @@ function main() {
 }
 
 function loop() {
+    app.removeKilled();
     app.world.Step(1/60, 3, 2);
     var len = app.actors.length;
     for (var i = 0; i < len; ++i) {
@@ -36,7 +37,7 @@ function loop() {
     for (var i = 0; i < len; ++i) {
         app.bullets[i].update();
     }
-    app.removeKilled();   
+    app.removeKilled();
 }
 /*
 var obst1 = "obstacle";

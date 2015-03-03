@@ -57,12 +57,11 @@ function WaveShip(x, y) {
     this.body.CreateFixture(fixtureDef);
 }
 
-
-
 function initShipPrototypes() {
     PlasmaShip.prototype = new ShipPrototype({
         typeName: "PLASMA_SHIP",
         hp: 50,
+        bulletDamage: 20,
         bullet: PlasmaShot,
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
@@ -78,6 +77,7 @@ function initShipPrototypes() {
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
         hp: 100,
+        bulletDamage: 5,
         bullet: PowerShot,
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
@@ -93,6 +93,7 @@ function initShipPrototypes() {
     SpreadShip.prototype = new ShipPrototype({
         typeName: "SPREAD_SHIP",
         hp: 70,
+        bulletDamage: 15,
         bullet: SpreadShot,
         sprite: app.cache["asset/SpreadShip.png"],
         frameCount: 6,
@@ -108,6 +109,7 @@ function initShipPrototypes() {
     WaveShip.prototype = new ShipPrototype({
         typeName: "WAVE_SHIP",
         hp: 60,
+        bulletDamage: 30,
         bullet: WaveShot,
         sprite: app.cache["asset/WaveShip.png"],
         frameCount: 8,
@@ -138,19 +140,27 @@ function Ship(hp, bulletFactory) {
         }
     }
     this.damage = function (object) {
-        if (--_health <= 0) {
+        if (_health -= object.bulletDamage <= 0) {
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
     }
     function _explode() {
-        
+        AnimatedImage.call(this, app.cache["asset/explosion.png"], 8, 10);
+        this.updateCurrentFrame = showFramesThenKill.bind(this);
+        this.update = function() {};   
     }
     
     Object.defineProperty(this, "health", {
         get: function() { return _health; },
         enumerable: true,
         configurable: false
+    });
+    
+    Object.defineProperty(this, "bulletDamage", {
+        value: this.props.bulletDamage,
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, "isShip", {
