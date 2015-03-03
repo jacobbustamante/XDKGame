@@ -12,7 +12,28 @@ function setupInput(){
     var _moveUp = makeCharCodeArray("w", 38);
     var _moveRight = makeCharCodeArray("d", 39);
     var _moveDown = makeCharCodeArray("s", 40);
+    var _powerChange = makeCharCodeArray("j");
+    var _plasmaChange = makeCharCodeArray("i");
+    var _spreadChange = makeCharCodeArray("k");
+    var _waveChange = makeCharCodeArray("l");
 
+    var _lastChangeTime = 0;
+    var _changeDelay = 2000;
+    
+    
+    window.changePlayer = function(type) {
+        if(type == "Power")
+            app.player = new PowerShip(app.player.x, app.player.y);
+        if(type == "Plasma")
+            app.player = new PlasmaShip(app.player.x, app.player.y);
+        if(type == "Spread")
+            app.player = new SpreadShip(app.player.x, app.player.y);
+        if(type == "Wave")
+            app.player = new WaveShip(app.player.x, app.player.y);
+        app.player.update =  updatePlayerShip;
+        _lastChangeTime = getTimeStamp();
+    }
+    
     window.updatePlayerShip = function() {
             var velX = 0
             var velY = 0;
@@ -52,7 +73,34 @@ function setupInput(){
                 }
                 
             }
-
+            
+            if (isKeyDown(_powerChange)) {
+                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                    changePlayer("Power");
+                    this.update = function(){};
+                }
+            }
+            if (isKeyDown(_plasmaChange)) {
+                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                    changePlayer("Plasma");
+                    this.update = function(){};
+                }
+            }
+        
+            if (isKeyDown(_spreadChange)) {
+                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                    changePlayer("Spread");
+                    this.update = function(){};
+                }
+            }
+            if (isKeyDown(_waveChange)) {
+                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                    changePlayer("Wave");
+                    this.update = function(){};
+                }
+            }
+                
+            
             var vec = new b2Vec2(velX, velY);
 
             vec.Normalize();

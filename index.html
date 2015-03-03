@@ -60,8 +60,10 @@
                 });
                 var lev = new Level();
                 lev.createNewLevel();
-                
+
                 app.player = new PlasmaShip(0, 0);
+
+
                 app.player.update =  updatePlayerShip;
                 
                 var intro = app.cache["asset/MainMenuIntro.wav"];

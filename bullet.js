@@ -6,6 +6,7 @@ function initBulletConstructors() {
 }
 
 function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
+    //GameType..call(this, )
     SpaceObject.call(this, originShip.x, originShip.y);
     
     this.initAnimatedImage(spriteSheet, 3, 60);
@@ -15,13 +16,6 @@ function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
     
     Object.defineProperty(this, "isBullet", {
         value: true,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "TYPE", {
-        value: bulletType,
         writable: false,
         enumerable: true,
         configurable: false
