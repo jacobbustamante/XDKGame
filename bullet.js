@@ -37,7 +37,7 @@ function Bullet(origin) {
     fixtureDef.set_friction(0);
     fixtureDef.set_isSensor(true);
     this.body.CreateFixture(fixtureDef);
-    this.topSpeed = 20;
+    this.topSpeed = 40;
     this.angle = origin.angle;
     var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
     vec.Normalize();
@@ -53,7 +53,7 @@ function Bullet(origin) {
     });
     
     Object.defineProperty(this, "TTL", {
-        value: 5000,
+        value: 2000,
         writable: false,
         enumerable: true,
         configurable: false
@@ -89,7 +89,7 @@ function Bullet(origin) {
             list = list.get_next();
         }
         
-    }
+    };
     this.update = _updateFunc.bind(this);
     
     function _handleSensorContact(gameObj, bullet) {

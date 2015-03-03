@@ -1,7 +1,7 @@
 function PlasmaShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -16,7 +16,7 @@ function PlasmaShip(x, y) {
 function PowerShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -31,7 +31,7 @@ function PowerShip(x, y) {
 function SpreadShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -45,7 +45,7 @@ function SpreadShip(x, y) {
 function WaveShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -62,6 +62,7 @@ function initShipPrototypes() {
         typeName: "PLASMA_SHIP",
         hp: 50,
         bulletDamage: 20,
+        fireRate: 100,
         bullet: PlasmaShot,
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
@@ -78,6 +79,7 @@ function initShipPrototypes() {
         typeName: "POWER_SHIP",
         hp: 100,
         bulletDamage: 5,
+        fireRate: 30,
         bullet: PowerShot,
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
@@ -94,6 +96,7 @@ function initShipPrototypes() {
         typeName: "SPREAD_SHIP",
         hp: 70,
         bulletDamage: 15,
+        fireRate: 200,
         bullet: SpreadShot,
         sprite: app.cache["asset/SpreadShip.png"],
         frameCount: 6,
@@ -110,6 +113,7 @@ function initShipPrototypes() {
         typeName: "WAVE_SHIP",
         hp: 60,
         bulletDamage: 30,
+        fireRate: 350,
         bullet: WaveShot,
         sprite: app.cache["asset/WaveShip.png"],
         frameCount: 8,
@@ -140,7 +144,8 @@ function Ship(hp, bulletFactory) {
         }
     }
     this.damage = function (object) {
-        if (_health -= object.bulletDamage <= 0) {
+        _health -= object.bulletDamage;
+        if (_health <= 0) {
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
@@ -171,7 +176,7 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.fireRate = 500;
+    this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
     this.update = updateAiShip.bind(this);
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
