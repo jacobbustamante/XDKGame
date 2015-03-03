@@ -35,7 +35,7 @@ var inMenu = false;
 function showMainMenu()
 {
     inMenu = true;
-    window.addEventListener("mousedown", registerMouseDown, true);
+    window.addEventListener("mousedown", closeMainMenu, true);
     
     app.ctx.save();
         app.ctx.fillStyle = 'black';
@@ -49,8 +49,8 @@ function showMainMenu()
     app.ctx.restore();
 }
 
-function registerMouseDown()
+function closeMainMenu()
 {
     inMenu = false;
-    window.removeEventListener("mousedown", registerMouseDown, true);
+    window.removeEventListener("mousedown", closeMainMenu, true);
 }
