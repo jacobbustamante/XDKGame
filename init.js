@@ -195,6 +195,9 @@ function InitGame() {
             for (var next = _removed.pop(); next; next = _removed.pop()) {
                 for (var i = 0; i < len; ++i) {
                     if (_actors[i] === next) {
+                        if (_actors[i].body) {
+                            app.world.DestroyBody(_actors[i].body)
+                        }
                         _actors[i] = null;
                     }
                 }
@@ -208,11 +211,33 @@ function InitGame() {
             }
             _actors = tmp;
         }
+        if (_removedBullets.length) {
+            var len = _bullets.length;
+            var newLength = len - _removedBullets.length;
+            for (var next = _removedBullets.pop(); next; next = _removedBullets.pop()) {
+                for (var i = 0; i < len; ++i) {
+                    if (_bullets[i] === next) {
+                        if (_bullets[i].body) {
+                            app.world.DestroyBody(_bullets[i].body)
+                        }
+                        _bullets[i] = null;
+                    }
+                }
+            }
+            var n = 0;
+            var tmp = new Array(newLength);
+            for (var i = 0; i < len; ++i) {
+                if (_bullets[i]) {
+                    tmp[n++] = _bullets[i];
+                }
+            }
+            _bullets = tmp;
+        }
     }
     
     function _removeBullet(bullet) {
         if (bullet) {
-            _removedBullets.push(actor);
+            _removedBullets.push(bullet);
         }
     }
     
@@ -311,7 +336,6 @@ function loadAssets() {
 }
 
 function afterAssetsLoad() {
-    initBulletConstructors();
     initShipPrototypes();
     setupInput();
     showMainMenu();
