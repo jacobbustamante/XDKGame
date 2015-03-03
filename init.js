@@ -92,6 +92,13 @@ function InitGame() {
             configurable: false
         });
         
+        Object.defineProperty(this, "defaultPixelsPerMeter", {
+            value: 48,
+            enumerable: true,
+            writeable: false,
+            configureable: false
+        });
+        
         Object.defineProperty(this, "toMeters", {
             value: function(x) { return x/4; },
             enumerable: true,
@@ -153,6 +160,13 @@ function InitGame() {
             writable: true,
             configurable: false
         });
+        
+        Object.defineProperty(this, "curMenu", {
+            value: 0,
+            enumerable: true,
+            writable: true,
+            configurable: false
+        });
 
     }
     
@@ -195,6 +209,9 @@ function InitGame() {
             for (var next = _removed.pop(); next; next = _removed.pop()) {
                 for (var i = 0; i < len; ++i) {
                     if (_actors[i] === next) {
+                        if (_actors[i].body) {
+                            app.world.DestroyBody(_actors[i].body);
+                        }
                         _actors[i] = null;
                     }
                 }
@@ -208,11 +225,33 @@ function InitGame() {
             }
             _actors = tmp;
         }
+        if (_removedBullets.length) {
+            var len = _bullets.length;
+            var newLength = len - _removedBullets.length;
+            for (var next = _removedBullets.pop(); next; next = _removedBullets.pop()) {
+                for (var i = 0; i < len; ++i) {
+                    if (_bullets[i] === next) {
+                        if (_bullets[i].body) {
+                            app.world.DestroyBody(_bullets[i].body)
+                        }
+                        _bullets[i] = null;
+                    }
+                }
+            }
+            var n = 0;
+            var tmp = new Array(newLength);
+            for (var i = 0; i < len; ++i) {
+                if (_bullets[i]) {
+                    tmp[n++] = _bullets[i];
+                }
+            }
+            _bullets = tmp;
+        }
     }
     
     function _removeBullet(bullet) {
         if (bullet) {
-            _removedBullets.push(actor);
+            _removedBullets.push(bullet);
         }
     }
     
@@ -294,6 +333,7 @@ function loadAssets() {
     app.loadImage("asset/SpreadShot.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
+    app.loadImage("asset/explosion.png")
    
     app.loadAudio("asset/BaseShotSound.wav", false);
     app.loadAudio("asset/PlasmaShotSound.wav", false);
@@ -311,10 +351,9 @@ function loadAssets() {
 }
 
 function afterAssetsLoad() {
-    initBulletConstructors();
     initShipPrototypes();
     setupInput();
-    showMainMenu();
+    showMenu();
     start();
 }
 

@@ -8,7 +8,7 @@ function Camera() {
     
     var _body = this.body;
     var _fixture = null;
-    var _PTM = 48;
+    var _PTM = app.defaultPixelsPerMeter;
     var _centerCanvas = null;
     var _fieldOfView = null;
     

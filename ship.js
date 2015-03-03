@@ -1,7 +1,7 @@
 function PlasmaShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -16,7 +16,7 @@ function PlasmaShip(x, y) {
 function PowerShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -31,7 +31,7 @@ function PowerShip(x, y) {
 function SpreadShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -45,7 +45,7 @@ function SpreadShip(x, y) {
 function WaveShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
-    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
@@ -57,12 +57,12 @@ function WaveShip(x, y) {
     this.body.CreateFixture(fixtureDef);
 }
 
-
-
 function initShipPrototypes() {
     PlasmaShip.prototype = new ShipPrototype({
         typeName: "PLASMA_SHIP",
         hp: 50,
+        bulletDamage: 20,
+        fireRate: 100,
         bullet: PlasmaShot,
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
@@ -70,35 +70,61 @@ function initShipPrototypes() {
         topSpeed: 12,
         bulletFactory: function(origin) {
             new PlasmaShot(origin);
-            app.cache["asset/PlasmaShotSound.wav"].play();
+            if (app.player === origin) {
+                app.cache["asset/PlasmaShotSound.wav"].play();
+            }
         }
     });
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
         hp: 100,
+        bulletDamage: 5,
+        fireRate: 30,
         bullet: PowerShot,
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new PowerShot(origin);
+            if (app.player === origin) {
+                app.cache["asset/BaseShotSound.wav"].play();
+            }
+        }
     });
     SpreadShip.prototype = new ShipPrototype({
         typeName: "SPREAD_SHIP",
         hp: 70,
+        bulletDamage: 15,
+        fireRate: 200,
         bullet: SpreadShot,
         sprite: app.cache["asset/SpreadShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new SpreadShot(origin);
+            if (app.player === origin) {
+                app.cache["asset/TripleShotSound.wav"].play();
+            }
+        }
     });
     WaveShip.prototype = new ShipPrototype({
         typeName: "WAVE_SHIP",
         hp: 60,
+        bulletDamage: 30,
+        fireRate: 350,
         bullet: WaveShot,
         sprite: app.cache["asset/WaveShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new WaveShot(origin);
+            if (app.player === origin) {
+                app.cache["asset/WaveShotSound.wav"].play();
+            }
+        }
     });
 
 }
@@ -118,19 +144,32 @@ function Ship(hp, bulletFactory) {
         }
     }
     this.damage = function (object) {
-        if (--_health <= 0) {
+        _health -= object.bulletDamage;
+        if (_health <= 0) {
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
     }
+    var _isDead = false;
     function _explode() {
-        
+        if (!_isDead) {
+            AnimatedImage.call(this, app.cache["asset/explosion.png"], 8, 10);
+            this.updateCurrentFrame = showFramesThenKill.bind(this);
+            this.update = function() {};
+            _isDead = true;
+        }
     }
     
     Object.defineProperty(this, "health", {
         get: function() { return _health; },
         enumerable: true,
         configurable: false
+    });
+    
+    Object.defineProperty(this, "bulletDamage", {
+        value: this.props.bulletDamage,
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, "isShip", {
@@ -141,7 +180,7 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.fireRate = 500;
+    this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
     this.update = updateAiShip.bind(this);
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);

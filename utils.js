@@ -9,13 +9,6 @@ function GameType(typeName) {
         configurable: false
     });
     
-    Object.defineProperty(this, "TYPE_HASH", {
-        value: hashString(typeName),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
     Object.defineProperty(this, "isRendered", {
         value: true,
         writable: true,
@@ -27,20 +20,6 @@ function GameType(typeName) {
     }
 }
 
-
-
-function hashString(s) {
-    var h = 0, i, c, len;
-    if (s.length == 0)
-        return h;
-    for (i = 0, len = s.length; i < len; i++) {
-        c   = s.charCodeAt(i);
-        h  = ((h << 5) - h) + c;
-        h = h | 0; // convert to int32
-    }
-    return h;
-}
-
 function guaranteeNumber(n, otherwise) {
     return !isNaN(parseFloat(n)) && isFinite(n) ? parseFloat(n) : (otherwise | 0);
 }
@@ -49,14 +28,14 @@ function makeBoxShape(width, height, centerX, centerY, theta) {
     var shape = new b2PolygonShape();
     shape.SetAsBox(width, height, new b2Vec2(guaranteeNumber(centerX), guaranteeNumber(centerY)), guaranteeNumber(theta));
     return shape;
-};
+}
     
 function makeCircleShape(r, x, y) {
     var shape = new b2CircleShape();
     shape.set_m_radius(r);
     shape.set_m_p(new b2Vec2(guaranteeNumber(x), guaranteeNumber(y)));
     return shape;
-};
+}
 
 function windowCoordinatesToMathCoordinates(windowX, windowY) {
     var canvasBounds = app.canvas.getBoundingClientRect();
@@ -67,10 +46,11 @@ function windowCoordinatesToMathCoordinates(windowX, windowY) {
 }
 
 function SpaceObject() {
+    var bodyDef = null;
     if (arguments.length == 2) {
-        var bodyDef = new b2BodyDef();
+        bodyDef = new b2BodyDef();
         var x = guaranteeNumber(arguments[0], 0);
-        var y = guaranteeNumber(arguments[1], 0)
+        var y = guaranteeNumber(arguments[1], 0);
         bodyDef.set_type(b2_dynamicBody);
         bodyDef.set_position(new b2Vec2(x, y));
         Object.defineProperty(this, "body", {
@@ -89,7 +69,7 @@ function SpaceObject() {
         });
     }
     else {
-        var bodyDef = new b2BodyDef();
+        bodyDef = new b2BodyDef();
         bodyDef.set_type(b2_dynamicBody);
         bodyDef.set_position(new b2Vec2(0, 0));
         bodyDef.set_linearDamping(0.3);
@@ -144,7 +124,7 @@ function SpaceObject() {
             return _body.GetLinearVelocity().get_x();
         },
         set: function(newVX) {
-            var v = new b2Vec2(newVX, _body.GetLinearVelocity().get_y())
+            var v = new b2Vec2(newVX, _body.GetLinearVelocity().get_y());
             _body.SetLinearVelocity(v);
         },
         enumerable: true,

@@ -1,10 +1,32 @@
 function PlasmaShot(origin) {
     GameType.call(this, "PLASMA_SHOT", false);
     AnimatedImage.call(this, app.cache["asset/PlasmaShot.png"], 3, 10);
+    Bullet.call(this, origin);
+}
+
+function PowerShot(origin) {
+    GameType.call(this, "POWER_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/PowerShot.png"], 3, 10);
+    Bullet.call(this, origin);
+}
+
+function SpreadShot (origin) {
+    GameType.call(this, "SPREAD_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/SpreadShot.png"], 3, 10);
+    Bullet.call(this, origin);
+}
+
+function WaveShot(origin) {
+    GameType.call(this, "WAVE_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/WaveShot.png"], 3, 10);
+    Bullet.call(this, origin);
+}
+
+function Bullet(origin) {
     app.bullets.push(this);
     var bodyDef = new b2BodyDef();
     bodyDef.set_type(b2_dynamicBody);
-    bodyDef.set_bullet(true);
+    bodyDef.set_bullet(false);
     bodyDef.set_position(new b2Vec2(origin.x, origin.y));
     SpaceObject.call(this, origin.x, origin.y);
     var fixtureDef = new b2FixtureDef();
@@ -15,7 +37,7 @@ function PlasmaShot(origin) {
     fixtureDef.set_friction(0);
     fixtureDef.set_isSensor(true);
     this.body.CreateFixture(fixtureDef);
-    this.topSpeed = 20;
+    this.topSpeed = 40;
     this.angle = origin.angle;
     var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
     vec.Normalize();
@@ -30,6 +52,20 @@ function PlasmaShot(origin) {
         configurable: false
     });
     
+    Object.defineProperty(this, "TTL", {
+        value: 2000,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "CREATED_TIMESTAMP", {
+        value: app.now(),
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
     Object.defineProperty(this, "isBullet", {
         value: true,
         writable: false,
@@ -38,6 +74,10 @@ function PlasmaShot(origin) {
     });
     
     var _updateFunc = function() {
+        if (app.now() - this.CREATED_TIMESTAMP > this.TTL) {
+            app.removeBullet(this);
+            return;
+        }
         // hit other ships or objects except ships of same type
         var list = this.body.GetContactList();
         while (list.e !== 0) {
@@ -49,7 +89,7 @@ function PlasmaShot(origin) {
             list = list.get_next();
         }
         
-    }
+    };
     this.update = _updateFunc.bind(this);
     
     function _handleSensorContact(gameObj, bullet) {
@@ -58,7 +98,7 @@ function PlasmaShot(origin) {
         }
         if (_isGameObjectHitable(gameObj, bullet.ORIGIN)) {
             if (gameObj.damage) {
-                gameObj.damage();
+                gameObj.damage(bullet.ORIGIN);
                 app.removeBullet(bullet);
             }
         }
@@ -67,52 +107,7 @@ function PlasmaShot(origin) {
     function _isGameObjectHitable(gameObj, originShip) {
         return gameObj.TYPE !== originShip.TYPE && 
             !gameObj.isBullet && gameObj.TYPE !== app.camera.TYPE;
-    }
-}
-
-function initBulletConstructors() {
-    /*
-    //window. = Bullet.bind(null, "Plasma Shot", , 5);
-    */
-    window.PowerShot = Bullet.bind(null, "Power Shot", app.cache["asset/PowerShot.png"], 20);
-    window.SpreadShot = Bullet.bind(null, "Spread Shot", app.cache["asset/SpreadShot.png"], 15);
-    window.WaveShot = Bullet.bind(null, "Wave Shot", app.cache["asset/WaveShot.png"], 30);
-    
-}
-
-function Bullet(bulletType, spriteSheet, attack, velocity, originShip) {
-    //GameType..call(this, )
-    SpaceObject.call(this, originShip.x, originShip.y);
-    
-    this.initAnimatedImage(spriteSheet, 3, 60);
-    this.attack = attack;
-    this.velocity = velocity;
-    this.position = originShip.position;
-    
-    Object.defineProperty(this, "isBullet", {
-        value: true,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
- 
-    Object.defineProperty(this, "ORIGIN", {
-        value: originShip,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-
-    
-    function _draw() {
-        this.drawSprite(this.x, this.y);
-    }
-    
-    this.update = _update.bind(this);
-    this.render = _draw.bind(this);
-    this.getVelocity = _getVelocity.bind(this);
-    this.updatePosition = _updatePosition.bind(this);
-    
+    }   
 }
 
 function BulletPrototype(){}
