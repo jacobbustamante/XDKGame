@@ -1,11 +1,15 @@
 function main_iOS() {
+    // in menu
     if (app.inMenu) {
         drawCurrentMenu();
     }
     // in game
     else {
+        app.camera.update();
         loop();
+        app.camera.update();
         render();
+        drawScore();
     }
 }
 
@@ -30,11 +34,12 @@ function loop() {
     app.removeKilled();
     app.world.Step(1/60, 3, 2);
     var len = app.actors.length;
-    for (var i = 0; i < len; ++i) {
+    var i = 0;
+    for (; i < len; ++i) {
         app.actors[i].update();
     }
     len = app.bullets.length;
-    for (var i = 0; i < len; ++i) {
+    for (i = 0; i < len; ++i) {
         app.bullets[i].update();
     }
     app.removeKilled();
@@ -83,7 +88,8 @@ function drawBackgroundImage() {
 }
 
 function render() {
-    drawBackgroundImage();
+    app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
+    //drawBackgroundImage();
     app.ctx.save();
         //app.ctx.translate(app.camera.x, app.cameray);
         var canvasCenter = app.camera.center;
@@ -92,7 +98,8 @@ function render() {
         app.ctx.scale(app.camera.PixelsPerMeter, app.camera.PixelsPerMeter);    
         app.ctx.rotate(app.camera.angle);
         app.ctx.translate(-app.camera.x, -app.camera.y);
-        for (var i = 0; i < app.actors.length; ++i) {
+        var i = 0;
+        for (; i < app.actors.length; ++i) {
             var actor = app.actors[i];
             if (actor && actor.isRendered) {
                 app.ctx.save();
@@ -103,7 +110,7 @@ function render() {
             }
         }
 
-        for (var i = 0; i < app.bullets.length; ++i) {
+        for (i = 0; i < app.bullets.length; ++i) {
             var bullet = app.bullets[i];
             if (bullet && bullet.isRendered) {
                 app.ctx.save();

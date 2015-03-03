@@ -203,11 +203,15 @@ function InitGame() {
     }
     
     function _removeKilled() {
+        var len = 0;
+        var newLength = 0;
+        var next = null;
         if (_removed.length) {
-            var len = _actors.length;
-            var newLength = len - _removed.length;
-            for (var next = _removed.pop(); next; next = _removed.pop()) {
-                for (var i = 0; i < len; ++i) {
+            len = _actors.length;
+            newLength = len - _removed.length;
+            var i = 0;
+            for (next = _removed.pop(); next; next = _removed.pop()) {
+                for (;i < len; ++i) {
                     if (_actors[i] === next) {
                         if (_actors[i].body) {
                             app.world.DestroyBody(_actors[i].body);
@@ -218,7 +222,7 @@ function InitGame() {
             }
             var n = 0;
             var tmp = new Array(newLength);
-            for (var i = 0; i < len; ++i) {
+            for (i = 0; i < len; ++i) {
                 if (_actors[i]) {
                     tmp[n++] = _actors[i];
                 }
@@ -226,9 +230,9 @@ function InitGame() {
             _actors = tmp;
         }
         if (_removedBullets.length) {
-            var len = _bullets.length;
-            var newLength = len - _removedBullets.length;
-            for (var next = _removedBullets.pop(); next; next = _removedBullets.pop()) {
+            len = _bullets.length;
+            newLength = len - _removedBullets.length;
+            for (next = _removedBullets.pop(); next; next = _removedBullets.pop()) {
                 for (var i = 0; i < len; ++i) {
                     if (_bullets[i] === next) {
                         if (_bullets[i].body) {
@@ -316,7 +320,7 @@ function InitGame() {
 };
 
 function loadAssets() {
-    app.loadImage("asset/bg.png");
+    //app.loadImage("asset/bg.png");
     app.loadImage("asset/debris.png");
     app.loadImage("asset/dpadBase.png");
     app.loadImage("asset/dpadMove.png");
@@ -328,12 +332,11 @@ function loadAssets() {
     app.loadImage("asset/PlasmaShot.png");
     app.loadImage("asset/PowerShip.png");
     app.loadImage("asset/PowerShot.png");
-    app.loadImage("asset/ShipPlaceHolderPlaceHolder.png");
     app.loadImage("asset/SpreadShip.png");
     app.loadImage("asset/SpreadShot.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
-    app.loadImage("asset/explosion.png")
+    app.loadImage("asset/Eplosion.png")
    
     app.loadAudio("asset/BaseShotSound.wav", false);
     app.loadAudio("asset/PlasmaShotSound.wav", false);
@@ -353,7 +356,7 @@ function loadAssets() {
 function afterAssetsLoad() {
     initShipPrototypes();
     setupInput();
-    showMenu();
+    //showMenu();
     start();
 }
 

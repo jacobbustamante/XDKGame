@@ -149,7 +149,8 @@ function Ship(hp, bulletFactory) {
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
-    }
+    };
+    
     var _isDead = false;
     function _explode() {
         if (!_isDead) {
