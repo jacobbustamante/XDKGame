@@ -152,6 +152,12 @@ function Ship(hp, bulletFactory) {
     };
     
     var _isDead = false;
+    
+    Object.defineProperty(this, "isDead", {
+        get: function() { return _isDead; },
+        enumerable: true,
+        configurable: true
+    });
     function _explode() {
         if (!_isDead) {
             AnimatedImage.call(this, app.cache["asset/Explosion.png"], 8, 10);

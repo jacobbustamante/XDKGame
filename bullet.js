@@ -106,7 +106,7 @@ function Bullet(origin) {
     
     function _isGameObjectHitable(gameObj, originShip) {
         return gameObj.TYPE !== originShip.TYPE && 
-            !gameObj.isBullet && gameObj.TYPE !== app.camera.TYPE;
+            !gameObj.isBullet && gameObj.TYPE !== app.camera.TYPE && !(gameObj.isDead);
     }   
 }
 
