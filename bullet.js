@@ -17,7 +17,7 @@ function PlasmaShot(origin) {
     this.body.CreateFixture(fixtureDef);
     this.topSpeed = 20;
     this.angle = origin.angle;
-    var vec = new b2Vec2(Math.sin(this.angle), Math.cos(this.angle));
+    var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
     vec.Normalize();
     vec.op_mul(this.topSpeed);
     this.vx = vec.get_x();

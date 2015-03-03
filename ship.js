@@ -70,7 +70,7 @@ function initShipPrototypes() {
         topSpeed: 12,
         bulletFactory: function(origin) {
             new PlasmaShot(origin);
-            app.cache["asset/PlasmaShot.wav"].play();
+            app.cache["asset/PlasmaShotSound.wav"].play();
         }
     });
     PowerShip.prototype = new ShipPrototype({
@@ -141,7 +141,7 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.fireRate = 50;
+    this.fireRate = 500;
     this.update = updateAiShip.bind(this);
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
