@@ -70,7 +70,9 @@ function initShipPrototypes() {
         topSpeed: 12,
         bulletFactory: function(origin) {
             new PlasmaShot(origin);
-            app.cache["asset/PlasmaShotSound.wav"].play();
+            if (app.player === origin) {
+                app.cache["asset/PlasmaShotSound.wav"].play();
+            }
         }
     });
     PowerShip.prototype = new ShipPrototype({
@@ -80,7 +82,13 @@ function initShipPrototypes() {
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new PowerShot(origin);
+            if (app.player === origin) {
+                app.cache["asset/BaseShotSound.wav"].play();
+            }
+        }
     });
     SpreadShip.prototype = new ShipPrototype({
         typeName: "SPREAD_SHIP",
@@ -89,7 +97,13 @@ function initShipPrototypes() {
         sprite: app.cache["asset/SpreadShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new SpreadShot(origin);
+            if (app.player === origin) {
+                app.cache["asset/TripleShotSound.wav"].play();
+            }
+        }
     });
     WaveShip.prototype = new ShipPrototype({
         typeName: "WAVE_SHIP",
@@ -98,7 +112,13 @@ function initShipPrototypes() {
         sprite: app.cache["asset/WaveShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new WaveShot(origin);
+            if (app.player === origin) {
+                app.cache["asset/WaveShotSound.wav"].play();
+            }
+        }
     });
 
 }

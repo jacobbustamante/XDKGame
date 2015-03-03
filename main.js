@@ -17,7 +17,12 @@ function loop() {
     for (var i = 0; i < len; ++i) {
         app.actors[i].update();
     }
+    len = app.bullets.length;
+    for (var i = 0; i < len; ++i) {
+        app.bullets[i].update();
+    }
     app.removeKilled();
+    
 }
 
 function render() {
