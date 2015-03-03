@@ -61,13 +61,14 @@
                 var lev = new Level();
                 lev.createNewLevel();
                 
-                var sound = new Audio("asset/FirstShipLoop.wav");
-                sound.loop = true;
-                sound.volume = 0.25;
-                sound.load();
-                sound.play();
                 app.player = new PlasmaShip(0, 0);
                 app.player.update =  updatePlayerShip;
+                
+                var intro = app.cache["asset/MainMenuIntro.wav"];
+                intro.play();
+                intro.addEventListener("ended", function(e){
+                    app.cache["asset/MainMenuLoop.wav"].play();
+                });
                 
                 var x = new PlasmaShip(-5, 0);
                 app.camera.MetersPerPixel = 1/36;
