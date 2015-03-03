@@ -31,3 +31,29 @@ function drawMainMenu()
         app.ctx.fillText("Touch anywhere to begin", app.canvas.width / 2, app.canvas.height / 2);
     app.ctx.restore();
 }
+
+function drawEndScreen()
+{
+    app.ctx.save();
+        app.ctx.fillStyle = 'black';
+        app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 800, 0);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 800);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 800, 800);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 0);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 800);
+        app.ctx.fillStyle = 'white';
+        app.ctx.textAlign="center";
+        app.ctx.font=app.canvas.width/20+"px Arial"; 
+        app.ctx.fillText("Thanks for playing Khosmood Rising", app.canvas.width / 2, app.canvas.height / 4);
+    
+        app.ctx.font=app.canvas.width/40+"px Arial"; 
+        app.ctx.fillText("Touch anywhere to play again", app.canvas.width / 2, app.canvas.height / 2);
+    
+        app.ctx.font=app.canvas.width/80+"px Arial"; 
+        app.ctx.fillText("Credits:\nNathan Farnum <dlitedlite@hotmail.com>, Michael Murphy <murphym18@gmail.com>", app.canvas.width / 2, app.canvas.height * 3 / 4);
+        app.ctx.fillText("Jacob Bustamante <jakebustamante@gmail.com>, Anand Mangal <anand.mangal94@gmail.com", app.canvas.width / 2, app.canvas.height * 3 / 4 + 40);
+        app.ctx.fillText("Zachary Crandall <zach.t.crandall@gmail.com>", app.canvas.width / 2, app.canvas.height * 3 / 4 + 80);
+    app.ctx.restore();
+}

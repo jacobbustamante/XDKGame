@@ -14,6 +14,7 @@ function main() {
     if (app.inMenu) // in menu
     {
         drawMainMenu();
+        //drawEndScreen();
         window.requestAnimationFunc(main);
     }
     else // in game
