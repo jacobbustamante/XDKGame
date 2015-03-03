@@ -22,7 +22,9 @@ function GameType(typeName) {
         enumerable: true,
         configurable: true
     });
-    app.actors.push(this);
+    if (arguments.length < 2 || arguments[1]) {
+        app.actors.push(this);
+    }
 }
 
 

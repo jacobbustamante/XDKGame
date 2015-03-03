@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"> 
-    <title>Cosmic ...</title>
+    <title>Cosmic Rising</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     
     <script src="box2d.min.js" type="text/jscript"></script>
@@ -17,6 +17,7 @@
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
     <script src="main.js"></script>
+    <script src="menu.js"></script>
     
     <script src="input2.js"></script>
 
@@ -60,17 +61,21 @@
                 });
                 var lev = new Level();
                 lev.createNewLevel();
-                
-                var sound = new Audio("asset/FirstShipLoop.wav");
-                sound.loop = true;
-                sound.volume = 0.25;
-                sound.load();
-                sound.play();
-                app.player = new WaveShip(0, 0);
+
+                app.player = new PlasmaShip(0, 0);
+
+
                 app.player.update =  updatePlayerShip;
+                
+                var intro = app.cache["asset/MainMenuIntro.wav"];
+                intro.play();
+                intro.addEventListener("ended", function(e){
+                    app.cache["asset/MainMenuLoop.wav"].play();
+                });
                 
                 var x = new PlasmaShip(-5, 0);
                 app.camera.MetersPerPixel = 1/36;
+
                 if (app.iOS) {
                     window.setInterval(main_iOS, 1000/60);
                 }

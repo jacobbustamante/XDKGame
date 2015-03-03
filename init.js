@@ -1,7 +1,9 @@
 function InitGame() {
     var _ctx;
     var _removed = [];
+    var _removedBullets = [];
     var _actors = [];
+    var _bullets = [];
     var _numUnloaded = 0;
     
     function App() {
@@ -31,6 +33,12 @@ function InitGame() {
             enumerable: true,
             configurable: false
         });
+        
+        Object.defineProperty(this, "bullets", {
+            get: function() { return _bullets; },
+            enumerable: true,
+            configurable: false
+        });
 
         Object.defineProperty(this, "kill", {
             value: function(actor) {
@@ -49,6 +57,13 @@ function InitGame() {
             enumerable: true,
             configurable: false
         });
+        
+        Object.defineProperty(this, "removeBullet", {
+            value: _removeBullet,
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
 
         Object.defineProperty(this, "ctx", {
             get: function() { return _ctx; },
@@ -57,7 +72,7 @@ function InitGame() {
         });
         
         Object.defineProperty(this, "world", {
-            value: new Box2D.b2World(new Box2D.b2Vec2(0, 0)),
+            value: new Box2D.b2World(new Box2D.b2Vec2(0, 0), true),
             enumerable: true,
             writable: false,
             configurable: false
@@ -124,6 +139,21 @@ function InitGame() {
             configurable: false
         });
         
+        
+        Object.defineProperty(this, "loadAudio", {
+            value: loadAudioAsset,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "inMenu", {
+            value: true,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+
     }
     
     function timeNow() {
@@ -180,6 +210,12 @@ function InitGame() {
         }
     }
     
+    function _removeBullet(bullet) {
+        if (bullet) {
+            _removedBullets.push(actor);
+        }
+    }
+    
     function resetGraphicsContexts() {
         _ctx.fillStyle = "#000000";
         _ctx.font = "20px sans-serif";
@@ -212,13 +248,26 @@ function InitGame() {
         var i = new Image();
         i.addEventListener("load", function(e){
             app.cache[path] = i;
-            if (--_numUnloaded === 0) {
+            if (--_numUnloaded === 0) {    
                 afterAssetsLoad();
             }
         });
         i.src = path;
     }
-
+    
+    function loadAudioAsset(path, loop){
+        ++_numUnloaded;
+        var j = new Audio();
+        j.addEventListener("loadeddata", function(e){
+            app.cache[path] = j;
+            if(--_numUnloaded === 0) {
+                afterAssetsLoad();
+            }
+        });
+        j.src = path;
+        j.loop = loop;
+    }
+    
     window.app = new App();
     
     window.addEventListener("resize", resetCanvas);
@@ -245,12 +294,27 @@ function loadAssets() {
     app.loadImage("asset/SpreadShot.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
+   
+    app.loadAudio("asset/BaseShotSound.wav", false);
+    app.loadAudio("asset/PlasmaShotSound.wav", false);
+    app.loadAudio("asset/TripleShotSound.wav", false);
+    app.loadAudio("asset/WaveShotSound.wav", false);
+    
+    app.loadAudio("asset/ControlNewShip.wav", false);
+    app.loadAudio("asset/DestroyShip.wav", false);
+    app.loadAudio("asset/StunBomb.wav", false);
+    
+    app.loadAudio("asset/MainMenuIntro.wav", false);
+    app.loadAudio("asset/MainMenuLoop.wav", true);
+    app.loadAudio("asset/FirstShipLoop.wav", true);
+    
 }
 
 function afterAssetsLoad() {
     initBulletConstructors();
     initShipPrototypes();
     setupInput();
+    showMainMenu();
     start();
 }
 
