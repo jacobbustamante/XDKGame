@@ -8,6 +8,8 @@ function main() {
     loop();
     app.camera.update();
     render();
+    drawScore();
+    
     window.requestAnimationFunc(main);
 }
 
@@ -23,6 +25,12 @@ function loop() {
 function render() {
     app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
     app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
+    app.ctx.drawImage(app.cache["asset/bg.png"], 800, 0);
+    app.ctx.drawImage(app.cache["asset/bg.png"], 0, 800);
+    app.ctx.drawImage(app.cache["asset/bg.png"], 800, 800);
+    app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 0);
+    app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 800);
+    
     app.ctx.save();
         //app.ctx.translate(app.camera.x, app.cameray);
         var canvasCenter = app.camera.center;
@@ -30,7 +38,8 @@ function render() {
         app.ctx.scale(1, -1);
         app.ctx.scale(app.camera.PixelsPerMeter, app.camera.PixelsPerMeter);    
         app.ctx.rotate(app.camera.angle);
-
+        
+    
         app.ctx.translate(-app.camera.x, -app.camera.y)
         for (var i = 0; i < app.actors.length; ++i) {
             var actor = app.actors[i];
@@ -43,5 +52,7 @@ function render() {
                 app.ctx.restore();
             }
         }
+    
+    //document.write("Hi there");
     app.ctx.restore();
 }

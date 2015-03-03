@@ -5,6 +5,7 @@ function InitGame() {
     var _numUnloaded = 0;
     
     function App() {
+        this.score = 0;
         Object.defineProperty(this, "CANVAS_ID", {
             value: "game-canvas",
             writable: false,
@@ -122,6 +123,7 @@ function InitGame() {
             writable: false,
             configurable: false
         });
+        
     }
     
     function timeNow() {
@@ -251,3 +253,14 @@ function afterAssetsLoad() {
     setupInput();
     start();
 }
+
+function drawScore() {
+            app.ctx.save();
+                app.ctx.fillStyle = "White";
+                app.ctx.scale(3, 3);
+                var scoreText = "" + app.score;
+                //console.log(scoreText);
+                app.ctx.fillText(scoreText,5, 20);
+            app.ctx.restore();
+}
+
