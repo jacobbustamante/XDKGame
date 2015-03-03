@@ -67,7 +67,11 @@ function initShipPrototypes() {
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new PlasmaShot(origin);
+            
+        }
     });
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
