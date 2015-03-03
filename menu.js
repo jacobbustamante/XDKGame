@@ -27,6 +27,7 @@ function drawMainMenu()
         app.ctx.textAlign="center";
         app.ctx.font=app.canvas.width/20+"px Arial"; 
         app.ctx.fillText("Khosmood Rising", app.canvas.width / 2, app.canvas.height / 4);
+        app.ctx.font=app.canvas.width/40+"px Arial"; 
         app.ctx.fillText("Touch anywhere to begin", app.canvas.width / 2, app.canvas.height / 2);
     app.ctx.restore();
 }
