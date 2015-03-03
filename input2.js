@@ -1,135 +1,179 @@
-var keys = new Array(200);
-var mouseButtons = new Array(20);
-var mousePos = {
-    x: 0,
-    y: 0
-};
-for (var i = 0; i < keys.length; ++i) {
-    keys[i] = false;
-}
-for (var i = 0; i < mouseButtons.length; ++i) {
-    mouseButtons[i] = false;
-}
+function setupInput(){
+    var _lastEvent = getTimeStamp();
+    var _lastUpdate = 0;
+    var _lastPlayer = null;
+    
+    var _keys = new Array(200); fillFalse(_keys);
+    var _mouseButtons = new Array(20); fillFalse(_mouseButtons);
+    var _mousePos = { x: app.canvas ? app.canvas.width/2 : 0, y: 0 };
+    
+    var _fireWeaponKeys = makeCharCodeArray("", 32);
+    var _moveLeft = makeCharCodeArray("a", 37)
+    var _moveUp = makeCharCodeArray("w", 38);
+    var _moveRight = makeCharCodeArray("d", 39);
+    var _moveDown = makeCharCodeArray("s", 40);
 
-function updatePlayerShip() {
-    var velX = 0
-    var velY = 0;
-    var shipDir = app.camera.screenToWorld(mousePos)
-    this.angle = Math.atan2(shipDir.x - this.x, shipDir.y + this.y);
-    if (keys[32] || mouseButtons[1]) {
-        this.fireWeapon();
-    }
-    // w
-    if (keys[87] && !mouseButtons[3]) {
-        velY += 1;
-    }
-    // a
-    if (keys[65] && !mouseButtons[3]) {
-        velX += -1;
-    }
-    // s
-    if (keys[83] && !mouseButtons[3]) {
-        velY += -1;
-    }
-    // d
-    if (keys[68] && !mouseButtons[3]) {
-        velX += 1;
+    window.updatePlayerShip = function() {
+            var velX = 0
+            var velY = 0;
+            //tested
+            var shipDir = app.camera.screenToWorld(_mousePos);
+            //console.log(shipDir);
+            app.player.angle = Math.atan2(app.player.x - shipDir.x, shipDir.y - app.player.y);
+            
+            if (isKeyDown(_fireWeaponKeys) || _mouseButtons[1]) {
+                this.fireWeapon();
+            }
+            // w
+            if (isKeyDown(_moveUp) && !_mouseButtons[3]) {
+                velY += 1;
+            }
+            // a
+            if (isKeyDown(_moveLeft) && !_mouseButtons[3]) {
+                velX += -1;
+            }
+            // s
+            if (isKeyDown(_moveDown) && !_mouseButtons[3]) {
+                velY += -1;
+            }
+            // d
+            if (isKeyDown(_moveRight) && !_mouseButtons[3]) {
+                velX += 1;
+            }
+
+            if (_mouseButtons[3]) {
+                if (_keys[16]) {
+                    velX -= Math.sin(this.angle);
+                    velY += Math.cos(this.angle);
+                }
+                else {
+                    velX -= Math.sin(this.angle);
+                    velY += Math.cos(this.angle);
+                }
+                
+            }
+
+            var vec = new b2Vec2(velX, velY);
+
+            vec.Normalize();
+            vec.op_mul(this.topSpeed);
+            this.vx = vec.get_x();
+            this.vy = vec.get_y();
+
+            _lastPlayer = this;
+            _lastUpdate = _lastEvent;
     }
     
-    if (mouseButtons[3]) {
-        velX += Math.sin(this.angle);
-        velY -= Math.cos(this.angle);
-    }
+    document.addEventListener("mousewheel", zoomCamera, false);
+    document.addEventListener("DOMMouseScroll", zoomCamera, false);
     
-    var vec = new b2Vec2(velX, velY);
+    window.addEventListener("keydown", registerKey, true);
+    window.addEventListener("keyup", deregisterKey, true);
+    window.addEventListener("mousemove", registerMousePos, true);
+    window.addEventListener("mousedown", registerMouseDown, true);
+    window.addEventListener("mouseup", deregisterMouseDown, true);
+    window.addEventListener("contextmenu", noAction, false);
+
+    window.addEventListener("touchstart", noAction);
+    window.addEventListener("touchmove", noAction);
+    window.addEventListener("touchend", noAction);
+    window.addEventListener("touchcancel", noAction);
     
-    vec.Normalize();
-    vec.op_mul(this.topSpeed);
-    this.vx = vec.get_x();
-    this.vy = vec.get_y();
-}
-
-document.addEventListener("mousewheel", zoomCamera, false);
-document.addEventListener("DOMMouseScroll", zoomCamera, false);
- 
-
-
-//app.canvas.addEventListener("keydown", registerKey, true);
-window.addEventListener("keydown", registerKey, true);
-window.addEventListener("keyup", deregisterKey, true);
-window.addEventListener("mousemove", registerMousePos, true);
-window.addEventListener("mousedown", registerMouseDown, true);
-window.addEventListener("mouseup", deregisterMouseDown, true);
-window.addEventListener("contextmenu", noAction, false);
-
-function noAction(e) {
-    e.preventDefault();
-    return false;
-}
-
-window.addEventListener("touchstart", noAction);
-window.addEventListener("touchmove", noAction);
-window.addEventListener("touchend", noAction);
-window.addEventListener("touchcancel", noAction);
-
-function setupInput() {
-    
-}
-
-function zoomCamera(e) {
-    var e = window.event || e; // old IE support
-	var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-    if (mouseButtons[2]) {
+    function noAction(e) {
         e.preventDefault();
-        return;
+        return false;
     }
-    if (delta > 0) {
-        app.camera.PixelsPerMeter = (app.camera.PixelsPerMeter/1.05);
-    }
-    else {
-        app.camera.PixelsPerMeter = (app.camera.PixelsPerMeter*1.05);
-    }
-}
-
-function updateMousePos(canvas) {
-    var rect = canvas.getBoundingClientRect();
-    mousePosPixel = {
-        x: mousePos.x - rect.left,
-        y: canvas.height - (mousePos.y - rect.top)
-    };
-    //mousePos = app.camera.screenToWorld(mousePosPixel);
-}
-
-function registerMousePos(e) {
-    //e.preventDefault();
-    mousePos.x = e.clientX;
-    mousePos.y = e.clientY;
-    updateMousePos(app.canvas);
-}
-
-function registerMouseDown(e) {
-    e.preventDefault();
-    mouseButtons[e.which] = true;
     
-}
+    function zoomCamera(e) {
+        var e = window.event || e; // old IE support
+        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+        if (delta < 0) {
+            app.camera.PixelsPerMeter = (app.camera.PixelsPerMeter/1.05);
+        }
+        else {
+            app.camera.PixelsPerMeter = (app.camera.PixelsPerMeter*1.05);
+        }
+    }
 
-function deregisterMouseDown(e) {
-    e.preventDefault();
-    mouseButtons[e.which] = false;
-}
+    function registerMousePos(e) {
+        _mousePos.x = e.clientX;
+        _mousePos.y = e.clientY;
+        _lastEvent = e.timeStamp ? e.timeStamp : getTimeStamp();
+    }
 
-function registerKey(e) {
+    function registerMouseDown(e) {
+        e.preventDefault();
+        _mouseButtons[e.which] = true;
+        _lastEvent = e.timeStamp ? e.timeStamp : getTimeStamp();
+    }
+
+    function deregisterMouseDown(e) {
+        e.preventDefault();
+        _mouseButtons[e.which] = false;
+        _lastEvent = e.timeStamp ? e.timeStamp : getTimeStamp();
+    }
+
+    function registerKey(e) {
+        _keys[e.which] = true;
+        if (e.repeat) {
+            e.preventDefault();
+        }
+        else {
+            _lastEvent = e.timeStamp ? e.timeStamp : getTimeStamp();
+        }
+    }
+
+    function deregisterKey(e) {
+        _keys[e.which] = false;
+        if (e.repeat) {
+            e.preventDefault();
+        }
+        else {
+            _lastEvent = getTimeStamp();
+        }
+    }
     
-    keys[e.which] = true;
-    if (e.repeat) {
-        e.preventDefault();
+    function makeCharCodeArray(str) {
+        str = str.toUpperCase();
+        var len = str.length + arguments.length - 1;
+        var arr = new Array(len);
+        var i = 0;
+        
+        for (; i < str.length; ++i) {
+            arr[i] = str.charCodeAt(i);
+        }
+        
+        var k = 1;
+        while (i < len) {
+            arr[i++] = arguments[k++];
+        }
+        
+        return arr;
     }
+    
+    function isKeyDown(arrCodes) {
+        var len = arrCodes.length;
+        var i = 0;
+        while (i < len) {
+            if (_keys[arrCodes[i++]]) {
+                return true;
+            }
+        }
+        return false;  
+    }
+    
+    function fillFalse(arr) {
+        var len = arr.length;
+        var i = 0;
+        while (i < len) {
+            _keys[i++] = false;
+        }
+    }
+    
+    function getTimeStamp() {
+        return (new Date()).getTime();
+    }   
 }
 
-function deregisterKey(e) {
-    keys[e.which] = false;
-    if (e.repeat) {
-        e.preventDefault();
-    }
-}
+
 

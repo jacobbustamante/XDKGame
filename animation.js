@@ -43,7 +43,8 @@ function AnimatedImage(image, frameCount, framesPerSecond) {
         var sourceX = _frameWidth * this.currentFrame;
         var posX = -this.width/2;
         var posY = -this.height/2;
-        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, posX, posY, this.height, this.height);
+        app.ctx.scale(1, -1);
+        app.ctx.drawImage(_image, sourceX, 0, _frameWidth, _frameHeight, posX, posY, this.width, this.height);
     }
     this.drawAnimatedImage = _drawAnimatedImage.bind(this); 
 }

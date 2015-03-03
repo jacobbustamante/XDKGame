@@ -25,17 +25,20 @@ function render() {
     //app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
     app.ctx.save();
         //app.ctx.translate(app.camera.x, app.cameray);
-        app.ctx.translate(app.camera.offsetX, app.camera.offsetY);
-        app.ctx.rotate(app.camera.angle);
+        var canvasCenter = app.camera.center;
+        app.ctx.translate(canvasCenter.x, canvasCenter.y);
         app.ctx.scale(1, -1);
-        app.ctx.scale(app.camera.PixelsPerMeter, app.camera.PixelsPerMeter);
+        app.ctx.scale(app.camera.PixelsPerMeter, app.camera.PixelsPerMeter);    
+        app.ctx.rotate(app.camera.angle);
+
+        app.ctx.translate(-app.camera.x, -app.camera.y)
         for (var i = 0; i < app.actors.length; ++i) {
             var actor = app.actors[i];
             if (actor && actor.isRendered) {
                 app.ctx.save();
+                    
                     app.ctx.translate(actor.x, actor.y);
                     app.ctx.rotate(actor.angle);
-                    app.ctx.scale(1, 1)
                     actor.drawAnimatedImage();
                 app.ctx.restore();
             }

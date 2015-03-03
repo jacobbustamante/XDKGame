@@ -44,14 +44,11 @@
                     window.setTimeout(callback, 1000/60);
                 };      
             })();
+            
             InitGame();
             loadAssets();
             
-            var speed = 20;
-            
-            
-            
-            
+
 
             function start() {
                 
@@ -73,7 +70,7 @@
                 app.player.update =  updatePlayerShip;
                 
                 var x = new PlasmaShip(-5, 0);
-                
+                app.camera.MetersPerPixel = 1/36;
                 if (app.iOS) {
                     window.setInterval(main_iOS, 1000/60);
                 }

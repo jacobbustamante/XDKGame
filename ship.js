@@ -5,11 +5,8 @@ function PlasmaShip(x, y) {
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
     var fixtureDef = new b2FixtureDef();
-    console.log("app.camera.MetersPerPixel: ", app.camera.MetersPerPixel);
     var tmpW = this.width/2;
-    console.log("tmpW", tmpW);
     var tmpH = this.height/2;
-    console.log("tmpH", tmpH);
     fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);

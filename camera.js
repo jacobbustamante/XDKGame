@@ -1,6 +1,5 @@
 function Camera() {
     GameType.call(this, "CAMERA");
-    app.actors.pop(this);
     this.isRendered = false;
     var bodyDef = new b2BodyDef();
     bodyDef.set_type(b2_dynamicBody);
@@ -10,7 +9,6 @@ function Camera() {
     var _body = this.body;
     var _fixture = null;
     var _PTM = 48;
-    var _canvasOffset = null;
     var _centerCanvas = null;
     var _fieldOfView = null;
     
@@ -21,9 +19,14 @@ function Camera() {
     var _cam = this;
     
     var _worldPointFromPixelPoint = function(pixelPoint) {
-        return {                
-            x: (pixelPoint.x - _canvasOffset.x)/(_PTM),
-            y: (pixelPoint.y - (app.canvas.height - _canvasOffset.y))/(_PTM)
+        var dyScreen = (app.canvas.height/2 - pixelPoint.y)/_PTM;
+        var dxScreen = (pixelPoint.x - app.canvas.width/2)/_PTM;
+        var d = Math.sqrt(dyScreen*dyScreen + dxScreen*dxScreen);
+        var phi = Math.atan2(dyScreen, dxScreen) - _body.GetAngle();
+        var pos = _body.GetPosition();
+        return {
+            x: pos.get_x() + d*Math.cos(phi),
+            y: pos.get_y() + d*Math.sin(phi)
         };
     };
     
@@ -39,22 +42,6 @@ function Camera() {
     
     
     function _move(x, y) {
-        var pos = null;
-        if (_followPlayer) {
-            pos = {
-                x: app.player.x,
-                y: app.player.y
-            }
-        }
-        else {
-            pos = _worldPointFromPixelPoint(_centerCanvas);
-        }
-        
-        
-        var destX = x - pos.x;
-        var destY = y - pos.y;
-        _canvasOffset.x -= destX * (_PTM);
-        _canvasOffset.y += destY * (_PTM);
         _body.GetPosition().set_x(x);
         _body.GetPosition().set_y(y);
     }
@@ -83,7 +70,6 @@ function Camera() {
         var pos = _body.GetPosition();
         resetCanvasCenterPoint();
         resetFOV();
-        resetCanvasOffset();
         resetFixture();
         _move(pos.get_x(), pos.get_y());
     }).bind(this);
@@ -98,6 +84,14 @@ function Camera() {
         enumerable: true
     });
     
+    Object.defineProperty(this, "center", {
+        get: function() {
+            return { x: _centerCanvas.x, y: _centerCanvas.y };
+        },
+        configurable: false,
+        enumerable: true
+    });
+    /*
     Object.defineProperty(this, "x", {
         get: function() {
             return _body.GetPosition().get_x();
@@ -120,24 +114,30 @@ function Camera() {
         configurable: true
     });
     
-    Object.defineProperty(this, "offsetX", {
+    Object.defineProperty(this, "vx", {
         get: function() {
-            return _canvasOffset.x;
-            //return centerCanvas.x;
+            return _body.GetLinearVelocity().get_x();
         },
-        configurable: false,
-        enumerable: true
+        set: function(newVX) {
+            var v = new b2Vec2(newVX, _body.GetLinearVelocity().get_y())
+            _body.SetLinearVelocity(v);
+        },
+        enumerable: true,
+        configurable: false
     });
     
-    Object.defineProperty(this, "offsetY", {
+    Object.defineProperty(this, "vy", {
         get: function() {
-            return _canvasOffset.y;
-            //return centerCanvas.y;
+            return _body.GetLinearVelocity().get_y();
         },
-        configurable: false,
-        enumerable: true
+        set: function(newVY) {
+            var v = new b2Vec2(_body.GetLinearVelocity().get_x(), newVY);
+            _body.SetLinearVelocity(v);
+        },
+        enumerable: true,
+        configurable: false
     });
-    
+    */
     Object.defineProperty(this, "MetersPerPixel", {
         get: function() {
             return 1/_PTM;
@@ -161,9 +161,6 @@ function Camera() {
             _PTM = scale;
             _resizeCanvas();
             _move(camPos.x, camPos.y);
-            //if (scale < this.minZoom && scale > this.maxZoom) {
-                
-            //}
         },
         enumerable: true,
         configurable: false
@@ -192,13 +189,6 @@ function Camera() {
     
     function resetCanvasCenterPoint() {
         _centerCanvas = {
-            x: app.canvas.width/2,
-            y: app.canvas.height/2
-        };
-    }
-    
-    function resetCanvasOffset() {
-        _canvasOffset = {
             x: app.canvas.width/2,
             y: app.canvas.height/2
         };

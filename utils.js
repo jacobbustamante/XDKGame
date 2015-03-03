@@ -101,7 +101,7 @@ function SpaceObject() {
     this.body.actor = this;
     var _body = this.body;
     
-    Object.defineProperty(this, "angle", {
+    var _angleProp = {
         get: function() {
             return _body.GetAngle();
         },
@@ -111,7 +111,9 @@ function SpaceObject() {
         },
         enumerable: true,
         configurable: false
-    });
+    };
+    Object.defineProperty(this, "angle", _angleProp);
+    Object.defineProperty(this, "theta", _angleProp);
     
     Object.defineProperty(this, "x", {
         get: function() {
@@ -144,7 +146,7 @@ function SpaceObject() {
             _body.SetLinearVelocity(v);
         },
         enumerable: true,
-        configurable: false
+        configurable: true
     });
     
     Object.defineProperty(this, "vy", {
@@ -156,7 +158,7 @@ function SpaceObject() {
             _body.SetLinearVelocity(v);
         },
         enumerable: true,
-        configurable: false
+        configurable: true
     });
     
 }
