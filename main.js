@@ -1,14 +1,28 @@
 function main_iOS() {
-    loop();
-    render();
+    if (inMenu)
+    {
+        
+    }
+    else // in game
+    {
+        loop();
+        render();
+    }
 }
 
 function main() {
-    app.camera.update();
-    loop();
-    app.camera.update();
-    render();
-    window.requestAnimationFunc(main);
+    if (inMenu) // in menu
+    {
+        window.requestAnimationFunc(main);
+    }
+    else // in game
+    {
+        app.camera.update();
+        loop();
+        app.camera.update();
+        render();
+        window.requestAnimationFunc(main);
+    }
 }
 
 function loop() {
@@ -21,6 +35,7 @@ function loop() {
 }
 
 function render() {
+    app.ctx.fillStyle = 'black';
     app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
     app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
     app.ctx.save();

@@ -31,14 +31,26 @@ function showPauseScreen()
     
     //window.removeEventListener("mousedown", registerMouseDown, true);
 }
-
+var inMenu = false;
 function showMainMenu()
 {
-    var x = new PlasmaShip(0, 0);
-    resetCanvas();
-    var len = app.actors.lenth;
-    for (var i = 0; i < len; ++i) {
-        app.kill(app.actors[i]);
-    }
-    //_actors = [];
+    inMenu = true;
+    window.addEventListener("mousedown", registerMouseDown, true);
+    
+    app.ctx.save();
+        app.ctx.fillStyle = 'black';
+        app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
+        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
+        app.ctx.fillStyle = 'white';
+        app.ctx.textAlign="center"; 
+        app.ctx.font="45px Arial"; 
+        app.ctx.fillText("Khosmood Rising", app.canvas.width / 2, app.canvas.height / 4);
+        app.ctx.fillText("Touch anywhere to begin", app.canvas.width / 2, app.canvas.height / 2);
+    app.ctx.restore();
+}
+
+function registerMouseDown()
+{
+    inMenu = false;
+    window.removeEventListener("mousedown", registerMouseDown, true);
 }

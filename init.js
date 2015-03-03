@@ -136,6 +136,13 @@ function InitGame() {
             writable: false,
             configurable: false
         });
+        
+        Object.defineProperty(this, "inMenu", {
+            value: true,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
     }
     
     function timeNow() {
@@ -290,5 +297,6 @@ function afterAssetsLoad() {
     initBulletConstructors();
     initShipPrototypes();
     setupInput();
+    showMainMenu();
     start();
 }
