@@ -16,11 +16,19 @@ function Level() {
         
         for (var i = 0; i < spread_count; i++)
             {
+
                // var pow = new PowerShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
 //               
                 
                 var pla = new PlasmaShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
                // var spr = new SpreadShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+
+                //var pow = new PowerShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+//               
+                
+           
+                //var spr = new SpreadShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+
                 //var wav = new WaveShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
                 
                 
