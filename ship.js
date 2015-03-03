@@ -112,8 +112,8 @@ function updateAiShip() {
 function Ship(hp, bulletFactory) {
     var _health = hp;
     function _fireWeapon(){
-        if (!this.lastShotTime || app.now() - this.lastShot > this.fireRate) {
-            //var bullet = new bulletFactory.create(this);
+        if (!this.lastShotTime || app.now() - this.lastShotTime > this.fireRate) {
+            this.BULLET_FACTORY(this);
             this.lastShotTime = app.now();
         }
     }

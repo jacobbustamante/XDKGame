@@ -2,16 +2,15 @@ function PlasmaShot(origin) {
     GameType.call(this, "PLASMA_SHOT", false);
     AnimatedImage.call(this, app.cache["asset/PlasmaShot.png"], 3, 10);
     app.bullets.push(this);
-    var bodydef = new b2BodyDef();
+    var bodyDef = new b2BodyDef();
     bodyDef.set_type(b2_dynamicBody);
-    bodyDef.set_isbullet(true);
+    bodyDef.set_bullet(true);
     bodyDef.set_position(new b2Vec2(origin.x, origin.y));
     SpaceObject.call(this, origin.x, origin.y);
     var fixtureDef = new b2FixtureDef();
     var tmpW = this.width/2;
     var tmpH = this.height/2;
     fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
-    fixtureDef.set_shape(shape);
     fixtureDef.set_density(0);
     fixtureDef.set_friction(0);
     fixtureDef.set_isSensor(true);

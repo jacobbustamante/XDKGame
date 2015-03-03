@@ -43,5 +43,15 @@ function render() {
                 app.ctx.restore();
             }
         }
+        for (var i = 0; i < app.bullets.length; ++i) {
+            var bullet = app.bullets[i];
+            if (bullet && bullet.isRendered) {
+                app.ctx.save();
+                    app.ctx.translate(bullet.x, bullet.y);
+                    app.ctx.rotate(bullet.angle);
+                    bullet.drawAnimatedImage();
+                app.ctx.restore();
+            }
+        }
     app.ctx.restore();
 }
