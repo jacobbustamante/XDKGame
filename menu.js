@@ -1,59 +1,93 @@
 
-function showMainMenu()
+function showMenu()
 {
     app.inMenu = true;
-    window.addEventListener("mousedown", closeMainMenu, true);
-    drawMainMenu();
+    window.addEventListener("mousedown", closeMenu, true);
+    drawCurrentMenu();
 }
 
-function closeMainMenu()
+function closeMenu(e)
+{    
+    if (app.curMenu == 1)
+    {
+        if (Math.abs((app.canvas.height * 3/4) - e.clientY - (app.canvas.width/40)*(1/3)) < (app.canvas.width/40)*(3/4) &&
+            Math.abs((app.canvas.width / 2) - e.clientX) < (app.canvas.width/40) * 3.5)
+        {
+            app.curMenu = 2;
+        }
+        else
+        {
+            app.inMenu = false;
+            window.removeEventListener("mousedown", closeMenu, true);      
+        }
+    }
+    else if (app.curMenu == 2)
+    {
+        app.curMenu = 1;
+    }
+    else
+    {
+        app.inMenu = false;
+        window.removeEventListener("mousedown", closeMenu, true);   
+    }
+}
+
+function drawCurrentMenu()
 {
-    app.inMenu = false;
-    window.removeEventListener("mousedown", closeMainMenu, true);
+    drawBackgroundImage();
+    
+    if (app.curMenu == 0)
+        _drawMainMenu();
+    else if (app.curMenu == 1)
+        _drawEndScreen();
+    else if (app.curMenu == 2)
+        _drawCredits();
 }
 
-function drawMainMenu()
+function _drawMainMenu()
 {
     app.ctx.save();
-        app.ctx.fillStyle = 'black';
-        app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 800, 0);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 800);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 800, 800);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 0);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 800);
         app.ctx.fillStyle = 'white';
         app.ctx.textAlign="center";
         app.ctx.font=app.canvas.width/20+"px Arial"; 
-        app.ctx.fillText("Khosmood Rising", app.canvas.width / 2, app.canvas.height / 4);
+        app.ctx.fillText("Cosmic Rising", app.canvas.width / 2, app.canvas.height / 4);
         app.ctx.font=app.canvas.width/40+"px Arial"; 
         app.ctx.fillText("Touch anywhere to begin", app.canvas.width / 2, app.canvas.height / 2);
     app.ctx.restore();
 }
 
-function drawEndScreen()
-{
+function _drawEndScreen()
+{   
     app.ctx.save();
-        app.ctx.fillStyle = 'black';
-        app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 800, 0);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 0, 800);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 800, 800);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 0);
-        app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 800);
         app.ctx.fillStyle = 'white';
         app.ctx.textAlign="center";
+    
         app.ctx.font=app.canvas.width/20+"px Arial"; 
-        app.ctx.fillText("Thanks for playing Khosmood Rising", app.canvas.width / 2, app.canvas.height / 4);
+        app.ctx.fillText("Final Score: " + app.score, app.canvas.width / 2, app.canvas.height / 4);
     
         app.ctx.font=app.canvas.width/40+"px Arial"; 
-        app.ctx.fillText("Touch anywhere to play again", app.canvas.width / 2, app.canvas.height / 2);
+        app.ctx.fillText("Touch anywhere to play again!", app.canvas.width / 2, app.canvas.height / 2);
     
-        app.ctx.font=app.canvas.width/80+"px Arial"; 
-        app.ctx.fillText("Credits:\nNathan Farnum <dlitedlite@hotmail.com>, Michael Murphy <murphym18@gmail.com>", app.canvas.width / 2, app.canvas.height * 3 / 4);
-        app.ctx.fillText("Jacob Bustamante <jakebustamante@gmail.com>, Anand Mangal <anand.mangal94@gmail.com", app.canvas.width / 2, app.canvas.height * 3 / 4 + 40);
-        app.ctx.fillText("Zachary Crandall <zach.t.crandall@gmail.com>", app.canvas.width / 2, app.canvas.height * 3 / 4 + 80);
+        app.ctx.font=app.canvas.width/40+"px Arial"; 
+        app.ctx.fillText("View Credits", app.canvas.width / 2, app.canvas.height * 3 / 4);
+    app.ctx.restore();
+}
+
+function _drawCredits()
+{
+    app.ctx.save();
+        app.ctx.fillStyle = 'white';
+        
+        app.ctx.textAlign="center";
+        app.ctx.font=app.canvas.width/30+"px Arial"; 
+        app.ctx.fillText("Thanks for playing Cosmic Rising!", app.canvas.width / 2, app.canvas.height / 4);
+    
+        app.ctx.textAlign="center";
+        app.ctx.font=app.canvas.width/50+"px Arial"; 
+        app.ctx.fillText("Nathan Farnum - dlitedlite@hotmail.com", app.canvas.width / 2, app.canvas.height * 5 / 10);
+        app.ctx.fillText("Michael Murphy - murphym18@gmail.com", app.canvas.width / 2, app.canvas.height * 6 / 10);
+        app.ctx.fillText("Jacob Bustamante - jakebustamante@gmail.com", app.canvas.width / 2, app.canvas.height * 7 / 10);
+        app.ctx.fillText("Anand Mangal - anand.mangal94@gmail.com", app.canvas.width / 2, app.canvas.height * 8 / 10);
+        app.ctx.fillText("Zachary Crandall - zach.t.crandall@gmail.com", app.canvas.width / 2, app.canvas.height * 9 / 10);
     app.ctx.restore();
 }
