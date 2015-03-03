@@ -115,6 +115,7 @@ function Ship(hp, bulletFactory) {
     }
     this.damage = function (object) {
         if (--_health <= 0) {
+            app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
     }

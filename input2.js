@@ -22,6 +22,7 @@ function setupInput(){
     
     
     window.changePlayer = function(type) {
+        app.cache["asset/ControlNewShip.wav"].play();
         if(type == "Power")
             app.player = new PowerShip(app.player.x, app.player.y);
         if(type == "Plasma")
@@ -44,6 +45,7 @@ function setupInput(){
             
             if (isKeyDown(_fireWeaponKeys) || _mouseButtons[1]) {
                 this.fireWeapon();
+                
             }
             // w
             if (isKeyDown(_moveUp) && !_mouseButtons[3]) {
