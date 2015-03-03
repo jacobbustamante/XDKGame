@@ -22,7 +22,7 @@ function loop() {
 
 function render() {
     app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
-    //app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
+    app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
     app.ctx.save();
         //app.ctx.translate(app.camera.x, app.cameray);
         var canvasCenter = app.camera.center;

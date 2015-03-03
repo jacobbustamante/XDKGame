@@ -14,22 +14,50 @@ function PlasmaShip(x, y) {
 }
 
 function PowerShip(x, y) {
-    this.init("POWER_SHIP", x, y);
-    this.initAnimatedImage(app.cache["asset/PowerShip.png"], 6, 10);
-    this.circleShape(5);
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
 }
 
 function SpreadShip(x, y) {
-    this.init("SPREAD_SHIP", x, y);
-    this.initAnimatedImage(app.cache["asset/SpreadShip.png"], 6, 10);
-    this.circleShape(7.25);
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
+}
+function WaveShip(x, y) {
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.SPAWN_HEALTH, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
 }
 
-function WaveShip() {
-    this.init("WAVE_SHIP", x, y);
-    this.initAnimatedImage(app.cache["asset/WaveShip.png"], 8, 10);
-    this.circleShape(7.5);
-}
+
 
 function initShipPrototypes() {
     PlasmaShip.prototype = new ShipPrototype({
@@ -41,9 +69,34 @@ function initShipPrototypes() {
         framesPerSecond: 10,
         topSpeed: 12
     });
-    PowerShip.prototype = new ShipPrototype("Power Ship", 100, PowerShot);
-    SpreadShip.prototype = new ShipPrototype("Spread Ship", 70, SpreadShot);
-    WaveShip.prototype = new ShipPrototype("Wave Ship", 60, WaveShot);
+    PowerShip.prototype = new ShipPrototype({
+        typeName: "POWER_SHIP",
+        hp: 100,
+        bullet: PowerShot,
+        sprite: app.cache["asset/PowerShip.png"],
+        frameCount: 6,
+        framesPerSecond: 10,
+        topSpeed: 12
+    });
+    SpreadShip.prototype = new ShipPrototype({
+        typeName: "SPREAD_SHIP",
+        hp: 70,
+        bullet: SpreadShot,
+        sprite: app.cache["asset/SpreadShip.png"],
+        frameCount: 6,
+        framesPerSecond: 10,
+        topSpeed: 12
+    });
+    WaveShip.prototype = new ShipPrototype({
+        typeName: "WAVE_SHIP",
+        hp: 60,
+        bullet: WaveShot,
+        sprite: app.cache["asset/WaveShip.png"],
+        frameCount: 8,
+        framesPerSecond: 10,
+        topSpeed: 12
+    });
+
 }
 
 function updateAiShip() {
@@ -62,6 +115,7 @@ function Ship(hp, bulletFactory) {
     }
     this.damage = function (object) {
         if (--_health <= 0) {
+            app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
     }

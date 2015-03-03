@@ -115,9 +115,9 @@ function InitGame() {
         Object.defineProperty(this, "ships", {
             value: {
                 "PLASMA_SHIP": [],
-                "Power Ship": [],
-                "Spread Ship": [],
-                "Wave Ship": []
+                "POWER_SHIP": [],
+                "SPREAD_SHIP": [],
+                "WAVE_SHIP": []
             },
             enumerable: true,
             writable: false,
@@ -133,6 +133,20 @@ function InitGame() {
         
         Object.defineProperty(this, "loadImage", {
             value: loadImageAsset,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "loadAudio", {
+            value: loadAudioAsset,
+            enumerable: true,
+            writable: false,
+            configurable: false
+        });
+        
+        Object.defineProperty(this, "loadAudio", {
+            value: loadAudioAsset,
             enumerable: true,
             writable: false,
             configurable: false
@@ -231,13 +245,26 @@ function InitGame() {
         var i = new Image();
         i.addEventListener("load", function(e){
             app.cache[path] = i;
-            if (--_numUnloaded === 0) {
+            if (--_numUnloaded === 0) {    
                 afterAssetsLoad();
             }
         });
         i.src = path;
     }
-
+    
+    function loadAudioAsset(path, loop){
+        ++_numUnloaded;
+        var j = new Audio();
+        j.addEventListener("loadeddata", function(e){
+            app.cache[path] = j;
+            if(--_numUnloaded === 0) {
+                afterAssetsLoad();
+            }
+        });
+        j.src = path;
+        j.loop = loop;
+    }
+    
     window.app = new App();
     
     window.addEventListener("resize", resetCanvas);
@@ -264,6 +291,20 @@ function loadAssets() {
     app.loadImage("asset/SpreadShot.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
+   
+    app.loadAudio("asset/BaseShotSound.wav", false);
+    app.loadAudio("asset/PlasmaShotSound.wav", false);
+    app.loadAudio("asset/TripleShotSound.wav", false);
+    app.loadAudio("asset/WaveShotSound.wav", false);
+    
+    app.loadAudio("asset/ControlNewShip.wav", false);
+    app.loadAudio("asset/DestroyShip.wav", false);
+    app.loadAudio("asset/StunBomb.wav", false);
+    
+    app.loadAudio("asset/MainMenuIntro.wav", false);
+    app.loadAudio("asset/MainMenuLoop.wav", true);
+    app.loadAudio("asset/FirstShipLoop.wav", true);
+    
 }
 
 function afterAssetsLoad() {
