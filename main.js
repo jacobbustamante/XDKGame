@@ -1,6 +1,6 @@
 function main_iOS() {
     if (app.inMenu) {
-        drawMainMenu();
+        drawCurrentMenu();
     }
     // in game
     else {
@@ -12,7 +12,7 @@ function main_iOS() {
 function main() {
     // in menu
     if (app.inMenu) {
-        drawMainMenu();
+        drawCurrentMenu();
     }
     // in game
     else {

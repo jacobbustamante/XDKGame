@@ -160,6 +160,13 @@ function InitGame() {
             writable: true,
             configurable: false
         });
+        
+        Object.defineProperty(this, "curMenu", {
+            value: 0,
+            enumerable: true,
+            writable: true,
+            configurable: false
+        });
 
     }
     
@@ -346,7 +353,7 @@ function loadAssets() {
 function afterAssetsLoad() {
     initShipPrototypes();
     setupInput();
-    showMainMenu();
+    showMenu();
     start();
 }
 
