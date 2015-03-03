@@ -98,7 +98,7 @@ function Bullet(origin) {
         }
         if (_isGameObjectHitable(gameObj, bullet.ORIGIN)) {
             if (gameObj.damage) {
-                gameObj.damage();
+                gameObj.damage(bullet.ORIGIN);
                 app.removeBullet(bullet);
             }
         }
