@@ -100,9 +100,9 @@ function InitGame() {
         Object.defineProperty(this, "ships", {
             value: {
                 "PLASMA_SHIP": [],
-                "Power Ship": [],
-                "Spread Ship": [],
-                "Wave Ship": []
+                "POWER_SHIP": [],
+                "SPREAD_SHIP": [],
+                "WAVE_SHIP": []
             },
             enumerable: true,
             writable: false,
