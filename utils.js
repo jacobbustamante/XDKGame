@@ -9,13 +9,6 @@ function GameType(typeName) {
         configurable: false
     });
     
-    Object.defineProperty(this, "TYPE_HASH", {
-        value: hashString(typeName),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
     Object.defineProperty(this, "isRendered", {
         value: true,
         writable: true,
