@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"> 
-    <title>Cosmic ...</title>
+    <title>Cosmic Rising</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     
     <script src="box2d.min.js" type="text/jscript"></script>
@@ -69,8 +69,7 @@
                 app.player = new PlasmaShip(0, 0);
                 app.player.update =  updatePlayerShip;
                 
-                var x = new PlasmaShip(-5, 0);
-                app.camera.MetersPerPixel = 1/36;
+                var x = new PlasmaShip(-5, 0);;
                 if (app.iOS) {
                     window.setInterval(main_iOS, 1000/60);
                 }

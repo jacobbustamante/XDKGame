@@ -1,7 +1,9 @@
 function InitGame() {
     var _ctx;
     var _removed = [];
+    var _removedBullets = [];
     var _actors = [];
+    var _bullets = [];
     var _numUnloaded = 0;
     
     function App() {
@@ -30,6 +32,12 @@ function InitGame() {
             enumerable: true,
             configurable: false
         });
+        
+        Object.defineProperty(this, "bullets", {
+            get: function() { return _bullets; },
+            enumerable: true,
+            configurable: false
+        });
 
         Object.defineProperty(this, "kill", {
             value: function(actor) {
@@ -48,6 +56,13 @@ function InitGame() {
             enumerable: true,
             configurable: false
         });
+        
+        Object.defineProperty(this, "removeBullet", {
+            value: _removeBullet,
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
 
         Object.defineProperty(this, "ctx", {
             get: function() { return _ctx; },
@@ -56,7 +71,7 @@ function InitGame() {
         });
         
         Object.defineProperty(this, "world", {
-            value: new Box2D.b2World(new Box2D.b2Vec2(0, 0)),
+            value: new Box2D.b2World(new Box2D.b2Vec2(0, 0), true),
             enumerable: true,
             writable: false,
             configurable: false
@@ -175,6 +190,12 @@ function InitGame() {
                 }
             }
             _actors = tmp;
+        }
+    }
+    
+    function _removeBullet(bullet) {
+        if (bullet) {
+            _removedBullets.push(actor);
         }
     }
     
