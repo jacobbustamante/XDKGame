@@ -67,7 +67,11 @@ function initShipPrototypes() {
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
-        topSpeed: 12
+        topSpeed: 12,
+        bulletFactory: function(origin) {
+            new PlasmaShot(origin);
+            app.cache["asset/PlasmaShotSound.wav"].play();
+        }
     });
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
@@ -108,13 +112,14 @@ function updateAiShip() {
 function Ship(hp, bulletFactory) {
     var _health = hp;
     function _fireWeapon(){
-        if (!this.lastShotTime || app.now() - this.lastShot > this.fireRate) {
-            //var bullet = new bulletFactory.create(this);
+        if (!this.lastShotTime || app.now() - this.lastShotTime > this.fireRate) {
+            this.BULLET_FACTORY(this);
             this.lastShotTime = app.now();
         }
     }
     this.damage = function (object) {
         if (--_health <= 0) {
+            app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
     }
@@ -136,7 +141,7 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.fireRate = 50;
+    this.fireRate = 500;
     this.update = updateAiShip.bind(this);
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
