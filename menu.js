@@ -4,6 +4,7 @@ function showMenu()
     app.inMenu = true;
     window.addEventListener("mousedown", closeMenu, true);
     drawCurrentMenu();
+    switchMusicToMenu();
 }
 
 function closeMenu(e)
@@ -18,7 +19,8 @@ function closeMenu(e)
         else
         {
             app.inMenu = false;
-            window.removeEventListener("mousedown", closeMenu, true);      
+            window.removeEventListener("mousedown", closeMenu, true);
+            switchMusicToGame();
         }
     }
     else if (app.curMenu == 2)
@@ -27,8 +29,10 @@ function closeMenu(e)
     }
     else
     {
+        app.curMenu = 1;
         app.inMenu = false;
-        window.removeEventListener("mousedown", closeMenu, true);   
+        window.removeEventListener("mousedown", closeMenu, true);
+        switchMusicToGame();
     }
 }
 
@@ -42,6 +46,27 @@ function drawCurrentMenu()
         _drawEndScreen();
     else if (app.curMenu == 2)
         _drawCredits();
+}
+
+function switchMusicToGame()
+{
+    app.cache["asset/MainMenuIntro.wav"].pause();
+    app.cache["asset/MainMenuLoop.wav"].pause();
+    app.cache["asset/FirstShipLoop.wav"].play();
+}
+
+function switchMusicToMenu()
+{
+    app.cache["asset/FirstShipLoop.wav"].pause();
+    app.cache["asset/MainMenuIntro.wav"].play();
+    app.cache["asset/MainMenuIntro.wav"].addEventListener("ended", function(e){
+        app.cache["asset/MainMenuLoop.wav"].play();
+    });
+}
+
+function onPlayerDeath()
+{
+    showMenu();
 }
 
 function _drawMainMenu()

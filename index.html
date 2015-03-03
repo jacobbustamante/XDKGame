@@ -67,11 +67,7 @@
 
                 app.player.update =  updatePlayerShip;
                 
-                var intro = app.cache["asset/MainMenuIntro.wav"];
-                intro.play();
-                intro.addEventListener("ended", function(e){
-                    app.cache["asset/MainMenuLoop.wav"].play();
-                });
+                switchMusicToMenu();
                 
                 var x = new PlasmaShip(-5, 0);
                 //app.camera.MetersPerPixel = 1/36;
