@@ -1,5 +1,5 @@
 function main_iOS() {
-    if (inMenu)
+    if (app.inMenu)
     {
         
     }
@@ -11,8 +11,9 @@ function main_iOS() {
 }
 
 function main() {
-    if (inMenu) // in menu
+    if (app.inMenu) // in menu
     {
+        drawMainMenu();
         window.requestAnimationFunc(main);
     }
     else // in game

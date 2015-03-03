@@ -150,7 +150,7 @@ function InitGame() {
         Object.defineProperty(this, "inMenu", {
             value: true,
             enumerable: true,
-            writable: false,
+            writable: true,
             configurable: false
         });
 
