@@ -70,7 +70,7 @@ function initShipPrototypes() {
         topSpeed: 12,
         bulletFactory: function(origin) {
             new PlasmaShot(origin);
-            
+            app.cache["asset/PlasmaShot.wav"].play();
         }
     });
     PowerShip.prototype = new ShipPrototype({
