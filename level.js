@@ -3,21 +3,45 @@ function Level() {
     this.ships = [];
     
     function _createNewLevel() {
-        var power_ship_img = new Image();
-        var plasma_ship_img = new Image();
-        var spread_ship_img = new Image();
-        var wave_ship_img = new Image();
+//        var power_ship_img = new Image();
+//        var plasma_ship_img = new Image();
+//        var spread_ship_img = new Image();
+//        var wave_ship_img = new Image();
         var power_count = 10;
         var plasma_count = 3;
         var spread_count = 4;
         var wave_count = 5;
+//
+//      
+        
+        for (var i = 0; i < spread_count; i++)
+            {
 
+               // var pow = new PowerShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+//               
+                
+                var pla = new PlasmaShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+               // var spr = new SpreadShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
 
+                //var pow = new PowerShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+//               
+                
+           
+                //var spr = new SpreadShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
 
-
-
-        power_ship_img.src = "asset/PowerShip.png";
-        wave_ship_img.src = "asset/WaveShip.png";
+                //var wav = new WaveShip(Math.floor((Math.random() * 20) + 1), Math.floor((Math.random() * 20) + 1));
+                
+                
+                
+                //spread_ships[i].initAnimatedImage(spread_ship_img, 6, 10);
+//                spread_ships[i].x = Math.floor((Math.random() * 300) + 1);
+//                spread_ships[i].y = Math.floor((Math.random() * 300) + 1);
+            }
+//
+//
+//
+//        power_ship_img.src = "asset/PowerShip.png";
+//        wave_ship_img.src = "asset/WaveShip.png";
 
 
         /*

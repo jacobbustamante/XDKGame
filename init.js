@@ -7,6 +7,7 @@ function InitGame() {
     var _numUnloaded = 0;
     
     function App() {
+        this.score = 0;
         Object.defineProperty(this, "CANVAS_ID", {
             value: "game-canvas",
             writable: false,
@@ -138,12 +139,6 @@ function InitGame() {
             configurable: false
         });
         
-        Object.defineProperty(this, "loadAudio", {
-            value: loadAudioAsset,
-            enumerable: true,
-            writable: false,
-            configurable: false
-        });
         
         Object.defineProperty(this, "loadAudio", {
             value: loadAudioAsset,
@@ -151,6 +146,14 @@ function InitGame() {
             writable: false,
             configurable: false
         });
+        
+        Object.defineProperty(this, "inMenu", {
+            value: true,
+            enumerable: true,
+            writable: true,
+            configurable: false
+        });
+
     }
     
     function timeNow() {
@@ -335,5 +338,17 @@ function loadAssets() {
 function afterAssetsLoad() {
     initShipPrototypes();
     setupInput();
+    showMainMenu();
     start();
 }
+
+function drawScore() {
+            app.ctx.save();
+                app.ctx.fillStyle = "White";
+                app.ctx.scale(3, 3);
+                var scoreText = "" + app.score;
+                //console.log(scoreText);
+                app.ctx.fillText(scoreText,5, 20);
+            app.ctx.restore();
+}
+

@@ -16,6 +16,7 @@ function setupInput(){
     var _plasmaChange = makeCharCodeArray("i");
     var _spreadChange = makeCharCodeArray("k");
     var _waveChange = makeCharCodeArray("l");
+    var _getPointsSon = makeCharCodeArray("t");
 
     var _lastChangeTime = 0;
     var _changeDelay = 2000;
@@ -100,6 +101,11 @@ function setupInput(){
                     changePlayer("Wave");
                     this.update = function(){};
                 }
+            }
+        
+            if (isKeyDown(_getPointsSon)) {
+                app.score++; 
+                console.log(app.score);
             }
                 
             
