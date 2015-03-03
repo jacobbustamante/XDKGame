@@ -29,6 +29,7 @@ function closeMenu(e)
     }
     else
     {
+        app.curMenu = 1;
         app.inMenu = false;
         window.removeEventListener("mousedown", closeMenu, true);
         switchMusicToGame();
@@ -61,6 +62,11 @@ function switchMusicToMenu()
     app.cache["asset/MainMenuIntro.wav"].addEventListener("ended", function(e){
         app.cache["asset/MainMenuLoop.wav"].play();
     });
+}
+
+function onPlayerDeath()
+{
+    showMenu();
 }
 
 function _drawMainMenu()
