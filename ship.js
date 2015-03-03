@@ -150,10 +150,14 @@ function Ship(hp, bulletFactory) {
             this.onDeath();
         }
     }
+    var _isDead = false;
     function _explode() {
-        AnimatedImage.call(this, app.cache["asset/explosion.png"], 8, 10);
-        this.updateCurrentFrame = showFramesThenKill.bind(this);
-        this.update = function() {};   
+        if (!_isDead) {
+            AnimatedImage.call(this, app.cache["asset/explosion.png"], 8, 10);
+            this.updateCurrentFrame = showFramesThenKill.bind(this);
+            this.update = function() {};
+            _isDead = true;
+        }
     }
     
     Object.defineProperty(this, "health", {
