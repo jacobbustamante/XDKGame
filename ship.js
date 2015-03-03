@@ -154,7 +154,7 @@ function Ship(hp, bulletFactory) {
     var _isDead = false;
     function _explode() {
         if (!_isDead) {
-            AnimatedImage.call(this, app.cache["asset/explosion.png"], 8, 10);
+            AnimatedImage.call(this, app.cache["asset/Explosion.png"], 8, 10);
             this.updateCurrentFrame = showFramesThenKill.bind(this);
             this.update = function() {};
             _isDead = true;

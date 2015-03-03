@@ -62,12 +62,14 @@ function drawBackgroundImage() {
     app.ctx.save();
         app.ctx.fillStyle = 'black';
         app.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
+        /*
         app.ctx.drawImage(app.cache["asset/bg.png"], 0, 0);
         app.ctx.drawImage(app.cache["asset/bg.png"], 800, 0);
         app.ctx.drawImage(app.cache["asset/bg.png"], 0, 800);
         app.ctx.drawImage(app.cache["asset/bg.png"], 800, 800);
         app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 0);
         app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 800);
+        */
         app.ctx.drawImage(app.cache["asset/moon.png"],0,0);
         app.ctx.drawImage(app.cache["asset/moon.png"],300,200);
         app.ctx.drawImage(app.cache["asset/moon.png"],500,100);

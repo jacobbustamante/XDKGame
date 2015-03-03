@@ -216,6 +216,9 @@ function InitGame() {
                         if (_actors[i].body) {
                             app.world.DestroyBody(_actors[i].body);
                         }
+                        if (_actors[i] === app.player) {
+                           onPlayerDeath();
+                        }
                         _actors[i] = null;
                     }
                 }
@@ -336,7 +339,7 @@ function loadAssets() {
     app.loadImage("asset/SpreadShot.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
-    app.loadImage("asset/Eplosion.png")
+    app.loadImage("asset/Explosion.png")
    
     app.loadAudio("asset/BaseShotSound.wav", false);
     app.loadAudio("asset/PlasmaShotSound.wav", false);
@@ -356,7 +359,7 @@ function loadAssets() {
 function afterAssetsLoad() {
     initShipPrototypes();
     setupInput();
-    //showMenu();
+    showMenu();
     start();
 }
 
