@@ -24,6 +24,9 @@ function closeMenu(e)
             switchMusicToGame();
             //_destroyCurrentGame();
             //app.level = new Level(100, 100);
+            app.score = 0;
+            app.player = new PlasmaShip(0,0);
+            app.player.update = updatePlayerShip;
         }
     }
     // credits
@@ -43,12 +46,12 @@ function closeMenu(e)
 
 function _destroyCurrentGame()
 {
-    /*
-    for (var i = 0; i < _actors.length; i++)
+    
+    for (var i = 0; i < app.actors.length; i++)
     {
-        app.kill(_actors[i]);   
+        app.kill(app.actors[i]);   
     }
-    */
+    
     //app.killAll();
     //app.removeKilled();
 }
