@@ -22,13 +22,12 @@ function WaveShot(origin) {
     Bullet.call(this, origin);
 }
 
-function Bullet(origin) {
-    app.bullets.push(this);
+function Bullet() {
     var bodyDef = new b2BodyDef();
-    bodyDef.set_type(b2_dynamicBody);
+    bodyDef.set_type(b2_kinematicBody);
     bodyDef.set_bullet(false);
-    bodyDef.set_position(new b2Vec2(origin.x, origin.y));
-    SpaceObject.call(this, origin.x, origin.y);
+    bodyDef.set_position(new b2Vec2(0, 0));
+    SpaceObject.call(this, bodyDef);
     var fixtureDef = new b2FixtureDef();
     var tmpW = this.width/2;
     var tmpH = this.height/2;
@@ -37,17 +36,42 @@ function Bullet(origin) {
     fixtureDef.set_friction(0);
     fixtureDef.set_isSensor(true);
     this.body.CreateFixture(fixtureDef);
+    this.body.SetActive(false);
     this.topSpeed = 40;
-    this.angle = origin.angle;
-    var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
-    vec.Normalize();
-    vec.op_mul(this.topSpeed);
-    this.vx = vec.get_x();
-    this.vy = vec.get_y();
+    
+    var _spawntime = null;
+    this.isRendered = false;
+    this.fire = (function(origin) {
+        app.bullets.push(this);
+        this.ORIGIN = origin;
+        this.x = origin.x;
+        this.y = origin.y;
+        this.body.SetActive(true);
+        _spawntime = app.now();
+        this.isRendered = true;
+        this.angle = origin.angle;
+        var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
+        vec.Normalize();
+        vec.op_mul(this.topSpeed);
+        this.body.SetLinearVelocity(vec);
+        //this.vx = vec.get_x();
+        //this.vy = vec.get_y();
+    }).bind(this);
+    
+    this.remove = (function() {
+        var pos = app.level.randomPos()
+        this.x = pos.x;
+        this.y = pos.y;
+        this.isRendered = false;
+        this.body.SetLinearVelocity(new b2Vec2(0,0));
+        this.body.SetAngularVelocity(new b2Vec2(0,0));
+        this.body.SetActive(false);
+    }).bind(this);
+    
     
     Object.defineProperty(this, "ORIGIN", {
-        value: origin,
-        writable: false,
+        value: null,
+        writable: true,
         enumerable: true,
         configurable: false
     });
@@ -60,8 +84,7 @@ function Bullet(origin) {
     });
     
     Object.defineProperty(this, "CREATED_TIMESTAMP", {
-        value: app.now(),
-        writable: false,
+        get: function() { return _spawntime; },
         enumerable: true,
         configurable: false
     });
@@ -79,6 +102,7 @@ function Bullet(origin) {
             return;
         }
         // hit other ships or objects except ships of same type
+        /*
         var list = this.body.GetContactList();
         while (list.e !== 0) {
             var contact = list.get_contact();
@@ -88,9 +112,14 @@ function Bullet(origin) {
             }
             list = list.get_next();
         }
+        */
         
     };
     this.update = _updateFunc.bind(this);
+    
+    this.contactCallback = (function(otherActor) {
+            _handleSensorContact(otherActor, this);
+    }).bind(this);
     
     function _handleSensorContact(gameObj, bullet) {
         if (gameObj === bullet) {

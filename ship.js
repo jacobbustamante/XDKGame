@@ -62,34 +62,30 @@ function initShipPrototypes() {
         typeName: "PLASMA_SHIP",
         hp: 50,
         bulletDamage: 20,
-        fireRate: 100,
+        fireRate: 200,
         bullet: PlasmaShot,
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
         topSpeed: 12,
+        bulletSound: app.cache["asset/PlasmaShotSound.wav"],
         bulletFactory: function(origin) {
-            new PlasmaShot(origin);
-            if (app.player === origin) {
-                app.cache["asset/PlasmaShotSound.wav"].play();
-            }
+            return new PlasmaShot(origin);
         }
     });
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
         hp: 100,
         bulletDamage: 5,
-        fireRate: 30,
+        fireRate: 150,
         bullet: PowerShot,
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
         topSpeed: 12,
+        bulletSound: app.cache["asset/BaseShotSound.wav"],
         bulletFactory: function(origin) {
-            new PowerShot(origin);
-            if (app.player === origin) {
-                app.cache["asset/BaseShotSound.wav"].play();
-            }
+            return new PowerShot(origin);
         }
     });
     SpreadShip.prototype = new ShipPrototype({
@@ -102,11 +98,9 @@ function initShipPrototypes() {
         frameCount: 6,
         framesPerSecond: 10,
         topSpeed: 12,
+        bulletSound: app.cache["asset/TripleShotSound.wav"],
         bulletFactory: function(origin) {
-            new SpreadShot(origin);
-            if (app.player === origin) {
-                app.cache["asset/TripleShotSound.wav"].play();
-            }
+            return new SpreadShot(origin);
         }
     });
     WaveShip.prototype = new ShipPrototype({
@@ -119,11 +113,9 @@ function initShipPrototypes() {
         frameCount: 8,
         framesPerSecond: 10,
         topSpeed: 12,
-        bulletFactory: function(origin) {
-            new WaveShot(origin);
-            if (app.player === origin) {
-                app.cache["asset/WaveShotSound.wav"].play();
-            }
+        bulletSound: app.cache["asset/WaveShotSound.wav"],
+        bulletFactory: function() {
+            return new WaveShot();
         }
     });
 
@@ -136,11 +128,20 @@ function updateAiShip() {
 
 
 function Ship(hp, bulletFactory) {
+    this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
     var _health = hp;
+    if (!app[this.TYPE + "_BULLET_CACHE"]) {
+        app[this.TYPE + "_BULLET_CACHE"] = new BulletCache(bulletFactory, this.fireRate);
+    }
+    var _bullets = app[this.TYPE + "_BULLET_CACHE"].getBullets();
+    var _nextBulletIndex = 0;
     function _fireWeapon(){
         if (!this.lastShotTime || app.now() - this.lastShotTime > this.fireRate) {
-            this.BULLET_FACTORY(this);
+            _bullets[_nextBulletIndex++ % _bullets.length].fire(this);
             this.lastShotTime = app.now();
+            if (app.player === this) {
+                this.props.bulletSound.play();
+            }
         }
     }
     this.damage = function (object) {
@@ -187,7 +188,6 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
     this.update = updateAiShip.bind(this);
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
@@ -236,3 +236,25 @@ Object.defineProperty(ShipPrototype.prototype, "DEFAULT_DENSITY", {
     enumerable: true,
     configurable: false
 });
+
+function BulletCache(bulletFactory, fireRate) {
+    var _bulletFactory = bulletFactory;
+    var _fireRate = bulletFactory;
+    var _bulletSets = [];
+    var _size = Math.round(2000/fireRate) + 2;
+    console.log(_size);
+    this.getBullets = function() {
+        var bullets = _bulletSets.length !== 0 ? _bulletSets.pop() :
+            new Array(_size);
+        if (!bullets[0]) {
+            for (var i=0; i < bullets.length; ++i) {
+                bullets[i] = bulletFactory(this);
+            }
+        }
+        return bullets;
+    }
+    
+    this.freeBullets = function(bullets) {
+        _bulletSets.push(bullets);
+    }
+}
