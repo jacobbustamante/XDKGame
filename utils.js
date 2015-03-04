@@ -80,6 +80,7 @@ function SpaceObject() {
             configurable: true
         });
     }
+    
     this.body.actor = this;
     var _body = this.body;
     
