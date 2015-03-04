@@ -17,10 +17,12 @@ function setupInput(){
     var _spreadChange = makeCharCodeArray("k");
     var _waveChange = makeCharCodeArray("l");
     var _getPointsSon = makeCharCodeArray("t");
+    var _toggleAutoFire = makeCharCodeArray("q");
 
     var _lastChangeTime = 0;
     var _changeDelay = 2000;
     
+    var _autoFire = false;
     
     window.changePlayer = function(type) {
         app.cache["asset/ControlNewShip.wav"].play();
@@ -48,6 +50,12 @@ function setupInput(){
                 this.fireWeapon();
                 
             }
+            if (_autoFire)
+                this.fireWeapon();
+
+            if (isKeyDown(_toggleAutoFire))
+                _autoFire = !_autoFire;
+
             // w
             if (isKeyDown(_moveUp) && !_mouseButtons[3]) {
                 velY += 1;

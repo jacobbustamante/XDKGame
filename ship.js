@@ -202,12 +202,12 @@ function updateAiShip() {
         this.body.SetAngularVelocity(idealAngularVel*(1 - Math.random()*0.15));
         if (this.TYPE != app.player.TYPE)
         {
-            if (Math.floor(Math.random()*4)%4==0)
+            if (Math.floor(Math.random()*20)%20==0)
                 this.fireWeapon();
         }
         else
         {
-            if (Math.floor(Math.random()*3)%3==0)
+            if (Math.floor(Math.random()*10)%10==0)
                 this.fireWeapon();
         }
     }
