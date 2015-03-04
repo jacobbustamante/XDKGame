@@ -1,29 +1,25 @@
 function PlasmaChange(x, y) {
     GameType.call(this, "PLASMA_CHANGE");
-    //SpaceObject.call(this, x, y);
-    Change.call(this, x, y);
     AnimatedImage.call(this, app.cache["asset/PlasmaChange.png"], 10, 10);
+    Change.call(this, x, y);
 }
 
 function PowerChange(x, y) {
     GameType.call(this, "POWER_CHANGE");
-    //SpaceObject.call(this, x, y);
-    Change.call(this, x, y);
     AnimatedImage.call(this, app.cache["asset/PowerChange.png"], 10, 10);
+    Change.call(this, x, y);
 }
 
 function SpreadChange(x, y) {
     GameType.call(this, "SPREAD_CHANGE");
-    //SpaceObject.call(this, x, y);
-    Change.call(this, x, y);
     AnimatedImage.call(this, app.cache["asset/SpreadChange.png"], 10, 10);
+    Change.call(this, x, y);
 }
 
 function WaveChange(x, y) {
     GameType.call(this, "WAVE_CHANGE");
-    //SpaceObject.call(this, x, y);
-    Change.call(this, x, y);
     AnimatedImage.call(this, app.cache["asset/WaveChange.png"], 10, 10);
+    Change.call(this, x, y);
 }
 
 function Change(x, y) {
@@ -106,7 +102,11 @@ function Change(x, y) {
             //player._health = 0;
             //player.damage();
             //app.player = new PowerShip(app.player.x, app.player.y);
+            
             //window.changePlayer("Plasma");
+            //app.player = new WaveShip(0, 0);
+            //app.player.update = updatePlayerShip;
+            //_lastPlayer.update = function(){};
         }
         if (_isGameObjectHitable(gameObj, changeOrb)) {
             //if (gameObj.damage) {

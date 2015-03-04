@@ -26,7 +26,7 @@ function Level(_width, _height) {
 
     
     Walls(0, 0, this.width, this.height);
-    this.spawn(Debris, 100*100*.005);
+    this.spawn(Debris, 100*100*.005*4);
     this.spawn(Meteor, 100*100*.005);
     
     
@@ -35,10 +35,10 @@ function Level(_width, _height) {
     app.camera.followPlayer = true;
     
     this.shipFactories = [
-        new SpawnPointFactory(PlasmaShip, 20),
-        new SpawnPointFactory(PowerShip, 14),
-        new SpawnPointFactory(SpreadShip, 12),
-        new SpawnPointFactory(WaveShip)
+        new SpawnPointFactory(PlasmaShip, 8),
+        new SpawnPointFactory(PowerShip, 8),
+        new SpawnPointFactory(SpreadShip, 8),
+        new SpawnPointFactory(WaveShip, 8)
     ];
     var _this = this;
     this.shipFactories.forEach(function(e){

@@ -24,7 +24,8 @@ function WaveShot(origin) {
 
 function Bullet() {
     var bodyDef = new b2BodyDef();
-    bodyDef.set_type(b2_kinematicBody);
+    //bodyDef.set_type(b2_kinematicBody);
+    bodyDef.set_type(b2_dynamicBody);
     bodyDef.set_bullet(false);
     bodyDef.set_position(new b2Vec2(0, 0));
     SpaceObject.call(this, bodyDef);

@@ -8,7 +8,7 @@ function Camera() {
     
     var _body = this.body;
     var _fixture = null;
-    var _PTM = app.defaultPixelsPerMeter;
+    var _PTM = app.defaultPixelsPerMeter*.75;
     var _centerCanvas = null;
     var _fieldOfView = null;
     
@@ -71,7 +71,6 @@ function Camera() {
         resetCanvasCenterPoint();
         resetFOV();
         resetFixture();
-        _move(pos.get_x(), pos.get_y());
     }).bind(this);
     _resizeCanvas();
     
@@ -91,9 +90,12 @@ function Camera() {
         configurable: false,
         enumerable: true
     });
-    /*
+    
     Object.defineProperty(this, "x", {
         get: function() {
+            if (_followPlayer) {
+                return app.player.body.GetPosition().get_x();
+            }
             return _body.GetPosition().get_x();
         },
         set: function(newX) {
@@ -105,6 +107,9 @@ function Camera() {
     
     Object.defineProperty(this, "y", {
         get: function() {
+            if (_followPlayer) {
+                app.player.body.GetPosition().get_y();
+            }
             return _body.GetPosition().get_y();
         },
         set: function(newY) {
@@ -113,6 +118,7 @@ function Camera() {
         enumerable: true,
         configurable: true
     });
+    /*
     
     Object.defineProperty(this, "vx", {
         get: function() {
