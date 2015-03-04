@@ -105,7 +105,7 @@ function Change(x, y) {
         }
     };
     
-    this.contactCallback = (function(otherActor) {
+    this.endSensorCallback = (function(otherActor) {
             _handleSensorContact(otherActor, this);
     }).bind(this);
     
