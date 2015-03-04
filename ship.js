@@ -151,6 +151,8 @@ function Ship(hp, bulletFactory) {
     this.damage = function (object) {
         _health -= object.bulletDamage;
         if (_health <= 0) {
+            if (object == app.player)
+                app.score += this.__proto__.SPAWN_HEALTH / 10;
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
