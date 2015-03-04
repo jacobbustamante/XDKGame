@@ -64,6 +64,7 @@ function initShipPrototypes() {
         bulletDamage: 20,
         fireRate: 200,
         bullet: PlasmaShot,
+        change: function(x,y){return new PlasmaChange(x,y);},
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
@@ -79,6 +80,7 @@ function initShipPrototypes() {
         bulletDamage: 5,
         fireRate: 150,
         bullet: PowerShot,
+        change: function(x,y){return new PowerChange(x,y);},
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
@@ -94,6 +96,7 @@ function initShipPrototypes() {
         bulletDamage: 15,
         fireRate: 200,
         bullet: SpreadShot,
+        change: function(x,y){return new SpreadChange(x,y);},
         sprite: app.cache["asset/SpreadShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
@@ -109,6 +112,7 @@ function initShipPrototypes() {
         bulletDamage: 30,
         fireRate: 350,
         bullet: WaveShot,
+        change: function(x,y){return new WaveChange(x,y);},
         sprite: app.cache["asset/WaveShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
@@ -148,6 +152,8 @@ function Ship(hp, bulletFactory) {
     this.damage = function (object) {
         _health -= object.bulletDamage;
         if (_health <= 0) {
+            if (object == app.player)
+                app.score += this.__proto__.SPAWN_HEALTH / 10;
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
         }
@@ -165,7 +171,13 @@ function Ship(hp, bulletFactory) {
         if (!_isDead) {
             AnimatedImage.call(this, app.cache["asset/Explosion.png"], 8, 10);
             this.updateCurrentFrame = showFramesThenKill.bind(this);
-            this.update = function() {};
+            if (this != app.player)
+                this.update = (function() {
+                    this.change(this.x, this.y);
+                    this.update = function(){};
+                }).bind(this);
+            else
+                this.update = function(){};
             _isDead = true;
         }
     }
@@ -219,6 +231,13 @@ function ShipPrototype(props) {
     Object.defineProperty(this, "BULLET_FACTORY", {
         value: props.bulletFactory,
         writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "change", {
+        value: props.change,
+        writable: true,
         enumerable: true,
         configurable: false
     });

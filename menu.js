@@ -9,6 +9,7 @@ function showMenu()
 
 function closeMenu(e)
 {    
+    // end screen
     if (app.curMenu == 1)
     {
         if (Math.abs((app.canvas.height * 3/4) - e.clientY - (app.canvas.width/40)*(1/3)) < (app.canvas.width/40)*(3/4) &&
@@ -21,12 +22,16 @@ function closeMenu(e)
             app.inMenu = false;
             window.removeEventListener("mousedown", closeMenu, true);
             switchMusicToGame();
+            //_destroyCurrentGame();
+            //app.level = new Level(100, 100);
         }
     }
+    // credits
     else if (app.curMenu == 2)
     {
         app.curMenu = 1;
     }
+    // main
     else
     {
         app.curMenu = 1;
@@ -34,6 +39,18 @@ function closeMenu(e)
         window.removeEventListener("mousedown", closeMenu, true);
         switchMusicToGame();
     }
+}
+
+function _destroyCurrentGame()
+{
+    /*
+    for (var i = 0; i < _actors.length; i++)
+    {
+        app.kill(_actors[i]);   
+    }
+    */
+    //app.killAll();
+    //app.removeKilled();
 }
 
 function drawCurrentMenu()
@@ -50,17 +67,17 @@ function drawCurrentMenu()
 
 function switchMusicToGame()
 {
-    app.cache["asset/MainMenuIntro.wav"].pause();
-    app.cache["asset/MainMenuLoop.wav"].pause();
-    app.cache["asset/FirstShipLoop.wav"].play();
+    app.cache["asset/MainMenuIntro_small.wav"].pause();
+    app.cache["asset/MainMenuLoop_small.wav"].pause();
+    app.cache["asset/FirstShipLoop_small.wav"].play();
 }
 
 function switchMusicToMenu()
 {
-    app.cache["asset/FirstShipLoop.wav"].pause();
-    app.cache["asset/MainMenuIntro.wav"].play();
-    app.cache["asset/MainMenuIntro.wav"].addEventListener("ended", function(e){
-        app.cache["asset/MainMenuLoop.wav"].play();
+    app.cache["asset/FirstShipLoop_small.wav"].pause();
+    app.cache["asset/MainMenuIntro_small.wav"].play();
+    app.cache["asset/MainMenuIntro_small.wav"].addEventListener("ended", function(e){
+        app.cache["asset/MainMenuLoop_small.wav"].play();
     });
 }
 

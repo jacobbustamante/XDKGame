@@ -338,12 +338,16 @@ function loadAssets() {
     app.loadImage("asset/obstacle3.png");
     app.loadImage("asset/PlasmaShip.png");
     app.loadImage("asset/PlasmaShot.png");
+    app.loadImage("asset/PlasmaChange.png");
     app.loadImage("asset/PowerShip.png");
     app.loadImage("asset/PowerShot.png");
+    app.loadImage("asset/PowerChange.png");
     app.loadImage("asset/SpreadShip.png");
     app.loadImage("asset/SpreadShot.png");
+    app.loadImage("asset/SpreadChange.png");
     app.loadImage("asset/WaveShip.png");
     app.loadImage("asset/WaveShot.png");
+    app.loadImage("asset/WaveChange.png");
     app.loadImage("asset/Explosion.png")
    
     app.loadAudio("asset/BaseShotSound.wav", false);
@@ -355,9 +359,9 @@ function loadAssets() {
     app.loadAudio("asset/DestroyShip.wav", false);
     app.loadAudio("asset/StunBomb.wav", false);
     
-    app.loadAudio("asset/MainMenuIntro.wav", false);
-    app.loadAudio("asset/MainMenuLoop.wav", true);
-    app.loadAudio("asset/FirstShipLoop.wav", true);
+    app.loadAudio("asset/MainMenuIntro_small.wav", false);
+    app.loadAudio("asset/MainMenuLoop_small.wav", true);
+    app.loadAudio("asset/FirstShipLoop_small.wav", true);
     
 }
 
