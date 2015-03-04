@@ -194,10 +194,12 @@ function _drawTutorialScreen()
             app.ctx.textAlign="center";
         
             app.ctx.font=app.canvas.width/20+"px Arial"; 
-            app.ctx.fillText("space bar or left click to attack", app.canvas.width / 2, app.canvas.height / 4);
+            app.ctx.fillText("Space bar or left click to attack", app.canvas.width / 2, app.canvas.height / 8);
+            app.ctx.font=app.canvas.width/30+"px Arial"; 
+            app.ctx.fillText("Press R to toggle autofire", app.canvas.width / 2, app.canvas.height / 4);
         
             app.ctx.font=app.canvas.width/30+"px Arial"; 
-            app.ctx.fillText("same ships do not hurt each other,", app.canvas.width / 2, app.canvas.height * 4/ 8);
+            app.ctx.fillText("Same ships do not hurt each other,", app.canvas.width / 2, app.canvas.height * 4/ 8);
             app.ctx.fillText("use this to your advantage!", app.canvas.width / 2, app.canvas.height * 5/ 8);
 
             app.ctx.font=app.canvas.width/40+"px Arial"; 
