@@ -68,6 +68,19 @@ function SpaceObject() {
             configurable: true
         });
     }
+    else if (arguments.length == 3) {
+        bodyDef = new b2BodyDef();
+        var x = guaranteeNumber(arguments[0], 0);
+        var y = guaranteeNumber(arguments[1], 0);
+        bodyDef.set_type(b2_staticBody);
+        bodyDef.set_position(new b2Vec2(x, y));
+        Object.defineProperty(this, "body", {
+            value: app.world.CreateBody(bodyDef),
+            writable: false,
+            enumerable: true,
+            configurable: true
+        });
+    }
     else {
         bodyDef = new b2BodyDef();
         bodyDef.set_type(b2_dynamicBody);

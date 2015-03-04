@@ -58,6 +58,7 @@ randomStuff[3] = moon;
 randomStuff[4] = debris;
 */
 
+
 function drawBackgroundImage() {
     app.ctx.save();
         app.ctx.fillStyle = 'black';
@@ -69,7 +70,7 @@ function drawBackgroundImage() {
         app.ctx.drawImage(app.cache["asset/bg.png"], 800, 800);
         app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 0);
         app.ctx.drawImage(app.cache["asset/bg.png"], 1600, 800);
-        */
+        
         app.ctx.drawImage(app.cache["asset/moon.png"],0,0);
         app.ctx.drawImage(app.cache["asset/moon.png"],300,200);
         app.ctx.drawImage(app.cache["asset/moon.png"],500,100);
@@ -86,6 +87,7 @@ function drawBackgroundImage() {
         app.ctx.drawImage(app.cache["asset/debris.png"],650,360);
         app.ctx.drawImage(app.cache["asset/debris.png"],720,200);
         app.ctx.drawImage(app.cache["asset/debris.png"],600,550);
+    */
     app.ctx.restore();
 }
 
@@ -121,6 +123,15 @@ function render() {
                     bullet.drawAnimatedImage();
                 app.ctx.restore();
             }
+        }
+    
+        for (i = 0; i < app.bgDebrisList.length; i++) {
+            var moon = app.cache["asset/moon.png"];
+            app.ctx.save();
+                app.ctx.translate(app.bgDebrisList[i].x, app.bgDebrisList[i].y);
+                app.ctx.scale(1, -1);
+                app.ctx.drawImage(moon, 0, 0, moon.width, moon.height, -moon.width/2, -moon.height/2, moon.width/app.defaultPixelsPerMeter, moon.height/app.defaultPixelsPerMeter);
+            app.ctx.restore();
         }
 
     app.ctx.restore();

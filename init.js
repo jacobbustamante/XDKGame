@@ -168,6 +168,14 @@ function InitGame() {
             configurable: false
         });
 
+        Object.defineProperty(this, "bgDebrisList", {
+            value: [],
+            enumerable: true,
+            writable: true,
+            configurable: false
+        });
+
+        
     }
     
     function timeNow() {
@@ -358,6 +366,7 @@ function loadAssets() {
 
 function afterAssetsLoad() {
     initShipPrototypes();
+    initObstaclePrototypes();
     setupInput();
     showMenu();
     start();
