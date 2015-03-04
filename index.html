@@ -56,6 +56,25 @@
 
 
             function start() {
+                listener = new JSContactListener();
+                listener.BeginContact = function (contactPtr) {
+                    var contact = Box2D.wrapPointer(contactPtr, b2Contact);
+                    if (contact.IsTouching()) {
+                        var a = contact.GetFixtureA().GetBody().actor;
+                        var b = contact.GetFixtureB().GetBody().actor;
+                        if(a.contactCallback) {
+                            a.contactCallback(b);
+                        }
+                        if(b.contactCallback) {
+                            b.contactCallback(a);
+                        }
+                    }
+                }
+                listener.EndContact = function() {};
+                listener.PreSolve = function() {};
+                listener.PostSolve = function() {};
+                app.world.SetContactListener(listener);
+                
                 app.level = new Level(100, 100);
                 new PlasmaChange(1, 1);
                 switchMusicToMenu();

@@ -237,9 +237,7 @@ function InitGame() {
             for (next = _removedBullets.pop(); next; next = _removedBullets.pop()) {
                 for (var i = 0; i < len; ++i) {
                     if (_bullets[i] === next) {
-                        if (_bullets[i].body) {
-                            app.world.DestroyBody(_bullets[i].body)
-                        }
+                        _bullets[i].remove();
                         _bullets[i] = null;
                     }
                 }
