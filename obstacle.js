@@ -34,6 +34,7 @@ function Wall(x, y, length, verticle) {
     fixtureDef.set_friction(0);
     fixtureDef.set_restitution(1);
     this.body.CreateFixture(fixtureDef);
+    this.isVerticle = verticle;
 }
 
 function Walls(origin_x, origin_y, width, height)
