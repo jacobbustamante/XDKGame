@@ -12,13 +12,13 @@ function PowerShot(origin) {
 
 function SpreadShot (origin) {
     GameType.call(this, "SPREAD_SHOT", false);
-    AnimatedImage.call(this, app.cache["asset/SpreadShot.png"], 3, 10);
+    AnimatedImage.call(this, app.cache["asset/SpreadShot.png"], 3, 20);
     Bullet.call(this, origin);
 }
 
 function WaveShot(origin) {
     GameType.call(this, "WAVE_SHOT", false);
-    AnimatedImage.call(this, app.cache["asset/WaveShot.png"], 3, 10);
+    AnimatedImage.call(this, app.cache["asset/WaveShot.png"], 3, 20);
     Bullet.call(this, origin);
 }
 
@@ -37,7 +37,7 @@ function Bullet() {
     fixtureDef.set_isSensor(true);
     this.body.CreateFixture(fixtureDef);
     this.body.SetActive(false);
-    this.topSpeed = 40;
+    this.topSpeed = 20;
     
     var _spawntime = null;
     this.isRendered = false;
@@ -65,7 +65,7 @@ function Bullet() {
         this.y = pos.y;
         this.isRendered = false;
         this.body.SetLinearVelocity(new b2Vec2(0,0));
-        this.body.SetAngularVelocity(new b2Vec2(0,0));
+        this.body.SetAngularVelocity(0);
         this.body.SetActive(false);
     }).bind(this);
     
