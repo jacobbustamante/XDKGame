@@ -12,6 +12,8 @@ function Meteor(x, y) {
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
+    this.body.SetLinearVelocity(new b2Vec2(Math.random()*8 - 4, Math.random()*8 - 4));
+    this.body.SetAngularVelocity(Math.random()*4 - 2);
 }
 
 function Wall(x, y, length, verticle) {

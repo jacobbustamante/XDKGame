@@ -167,15 +167,6 @@ function InitGame() {
             writable: true,
             configurable: false
         });
-
-        Object.defineProperty(this, "bgDebrisList", {
-            value: [],
-            enumerable: true,
-            writable: true,
-            configurable: false
-        });
-
-        
     }
     
     function timeNow() {

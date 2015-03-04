@@ -124,15 +124,5 @@ function render() {
                 app.ctx.restore();
             }
         }
-    
-        for (i = 0; i < app.bgDebrisList.length; i++) {
-            var moon = app.cache["asset/moon.png"];
-            app.ctx.save();
-                app.ctx.translate(app.bgDebrisList[i].x, app.bgDebrisList[i].y);
-                app.ctx.scale(1, -1);
-                app.ctx.drawImage(moon, 0, 0, moon.width, moon.height, -moon.width/2, -moon.height/2, moon.width/app.defaultPixelsPerMeter, moon.height/app.defaultPixelsPerMeter);
-            app.ctx.restore();
-        }
-
     app.ctx.restore();
 }
