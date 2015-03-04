@@ -29,7 +29,6 @@ function Level(_width, _height) {
     this.spawn(Debris, 100*100*.005*4);
     this.spawn(Meteor, 100*100*.005);
     
-    
     app.player = new PlasmaShip(0, 0);
     app.player.update =  updatePlayerShip;
     app.camera.followPlayer = true;

@@ -17,8 +17,8 @@
     <script src="level.js"></script>
     <script src="debris.js"></script>
     <script src="bullet.js"></script>
-    <script src="ship.js"></script>
     <script src="change.js"></script>
+    <script src="ship.js"></script>
     <script src="main.js"></script>
     <script src="menu.js"></script>
     <script src="enemy-spawn-point.js"></script>
@@ -76,7 +76,6 @@
                 app.world.SetContactListener(listener);
                 
                 app.level = new Level(150, 150);
-                new PlasmaChange(5, 5);
                 
                 switchMusicToMenu();
                 
