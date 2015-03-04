@@ -15,11 +15,13 @@
     <script src="animation.js"></script>
     <script src="obstacle.js"></script>
     <script src="level.js"></script>
+    <script src="debris.js"></script>
     <script src="bullet.js"></script>
     <script src="ship.js"></script>
     <script src="main.js"></script>
     <script src="menu.js"></script>
-    
+    <script src="enemy-spawn-point.js"></script>
+    <script src="level.js"></script>
     <script src="input2.js"></script>
 
 </head>
@@ -53,26 +55,10 @@
 
 
             function start() {
-                
-                Object.defineProperty(app, "camera", {
-                    value: new Camera(),
-                    enumerable: true,
-                    writable: true,
-                    configurable: false
-                });
-                var lev = new Level();
-                lev.createNewLevel();
-
-                app.player = new PlasmaShip(0, 0);
-
-
-                app.player.update =  updatePlayerShip;
+                app.level = new Level(100, 100);
                 
                 switchMusicToMenu();
                 
-                var x = new PlasmaShip(-5, 0);
-                //app.camera.MetersPerPixel = 1/36;
-
                 if (app.iOS) {
                     window.setInterval(main_iOS, 1000/60);
                 }
