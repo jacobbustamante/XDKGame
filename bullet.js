@@ -109,7 +109,7 @@ function Bullet() {
     };
     this.update = _updateFunc.bind(this);
     
-    this.beginContactCallback = (function(otherActor) {
+    this.contactCallback = (function(otherActor) {
             _handleSensorContact(otherActor, this);
     }).bind(this);
     

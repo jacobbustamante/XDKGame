@@ -63,6 +63,10 @@
                     if (contact.IsTouching()) {
                         var a = contact.GetFixtureA().GetBody().actor;
                         var b = contact.GetFixtureB().GetBody().actor;
+                        if (a.contactCallback)
+                            a.contactCallback(b);
+                        if (b.contactCallback)
+                            b.contactCallback(a);
                         if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
                             if (a.beginSensorCallback)
                                 a.beginSensorCallback(b);

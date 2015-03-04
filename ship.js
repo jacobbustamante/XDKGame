@@ -125,11 +125,93 @@ function initShipPrototypes() {
 
 }
 
-function updateAiShip() {
+
+function aimAndFireAtEnemy() {
+    /*if (!this.ENEMY_DETECTED) {
+        this.update = searchForEnemy.bind(this);
+        return;
+    }*/
+    
+    var ANGLE_THRESHOLD = 5*Math.PI/180; //5 degrees
+    var IDEAL_ANGLE_VELOCITY = 15*Math.PI/180; //15 degrees per second
+    var deltaAngle = otherShip.angle - this.angle;
+    var idealAngularVel = Math.sign(deltaAngle)*IDEAL_ANGLE_VELOCITY;
+    
+    if (deltaAngle < ANGLE_THRESHOLD) {
+        this.body.SetAngularVelocity(0.05*this.body.GetAngularVelocity());
+        this.fireWeapon();
+    }
+    else if (this.body.GetAngularVelocity() - idealAngularVel > ANGLE_THRESHOLD) {
+        this.body.SetAngularVelocity(idealAngularVel*(1 - Math.random()*0.15));
+    }
     this.fireWeapon();
 }
+function updateAiShip() {
+    //this.fireWeapon();
+    var otherShip = app.player;
 
-
+    var ANGLE_THRESHOLD = 5*Math.PI/180; //5 degrees
+    var IDEAL_ANGLE_VELOCITY = 15*Math.PI/180; //15 degrees per second
+    var deltaAngle = otherShip.angle - this.angle;
+    var idealAngularVel = Math.sign(deltaAngle)*IDEAL_ANGLE_VELOCITY;
+    
+    if (deltaAngle < ANGLE_THRESHOLD) {
+        this.body.SetAngularVelocity(0.05*this.body.GetAngularVelocity());
+        //this.fireWeapon();
+    }
+    else if (this.body.GetAngularVelocity() - idealAngularVel > ANGLE_THRESHOLD) {
+        this.body.SetAngularVelocity(idealAngularVel*(1 - Math.random()*0.15));
+    }
+    //this.body.SetAngularVelocity(idealAngularVel*(1 - Math.random()*0.15));
+    //this.angle = Math.atan2(this.x - app.player.x, app.player.y - this.y);
+    
+    if (Math.abs(this.x - app.player.x) > 20 ||
+        Math.abs(this.y - app.player.y) > 20)
+    {
+        if (Math.floor(Math.random()*100)%100==0)
+        this.angle += (Math.random()*6);
+        var velX = - Math.sin(this.angle);
+        var velY = Math.cos(this.angle);
+        var vec = new b2Vec2(velX, velY);
+        vec.Normalize();
+        vec.op_mul(this.topSpeed / 4);
+        this.vx = vec.get_x();
+        this.vy = vec.get_y();
+    }
+    else if (Math.abs(this.x - app.player.x) > 10 ||
+        Math.abs(this.y - app.player.y) > 10)
+    {
+        this.angle = Math.atan2(this.x - app.player.x, app.player.y - this.y);
+        var velX = - Math.sin(this.angle);
+        var velY = Math.cos(this.angle);
+        var vec = new b2Vec2(velX, velY);
+        vec.Normalize();
+        vec.op_mul(this.topSpeed / 2);
+        this.vx = vec.get_x();
+        this.vy = vec.get_y();
+    }
+    else if (Math.abs(this.x - app.player.x) > 5 ||
+        Math.abs(this.y - app.player.y) > 5)
+    {
+        this.angle = Math.atan2(this.x - app.player.x, app.player.y - this.y);
+        this.angle += Math.floor(Math.random())/3;
+        if (Math.abs(this.y - app.player.y) > Math.abs(this.x - app.player.x))
+            this.vx = app.player.x - this.x;
+        else
+            this.vy = app.player.y - this.y;
+        this.body.SetAngularVelocity(idealAngularVel*(1 - Math.random()*0.15));
+        if (this.TYPE != app.player.TYPE)
+        {
+            if (Math.floor(Math.random()*4)%4==0)
+                this.fireWeapon();
+        }
+        else
+        {
+            if (Math.floor(Math.random()*3)%3==0)
+                this.fireWeapon();
+        }
+    }
+}
 
 function Ship(hp, bulletFactory) {
     ShipAi.call(this);
@@ -202,7 +284,7 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.update = function(){};
+    this.update = updateAiShip.bind(this);
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
 }
