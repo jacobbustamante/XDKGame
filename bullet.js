@@ -38,7 +38,7 @@ function Bullet() {
     fixtureDef.set_isSensor(true);
     this.body.CreateFixture(fixtureDef);
     this.body.SetActive(false);
-    this.topSpeed = 20;
+    this.topSpeed = 40;
     this.isInGame = false;
     var _spawntime = null;
     this.isRendered = false;

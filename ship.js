@@ -65,7 +65,7 @@ function WaveShip(x, y) {
 function initShipPrototypes() {
     PlasmaShip.prototype = new ShipPrototype({
         typeName: "PLASMA_SHIP",
-        hp: 50,
+        hp: 6*50,
         bulletDamage: 20,
         fireRate: 200,
         bullet: PlasmaShot,
@@ -81,7 +81,7 @@ function initShipPrototypes() {
     });
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
-        hp: 100,
+        hp: 6*100,
         bulletDamage: 5,
         fireRate: 150,
         bullet: PowerShot,
@@ -97,7 +97,7 @@ function initShipPrototypes() {
     });
     SpreadShip.prototype = new ShipPrototype({
         typeName: "SPREAD_SHIP",
-        hp: 70,
+        hp: 6*70,
         bulletDamage: 15,
         fireRate: 200,
         bullet: SpreadShot,
@@ -113,7 +113,7 @@ function initShipPrototypes() {
     });
     WaveShip.prototype = new ShipPrototype({
         typeName: "WAVE_SHIP",
-        hp: 60,
+        hp: 6*60,
         bulletDamage: 30,
         fireRate: 350,
         bullet: WaveShot,

@@ -22,7 +22,7 @@ function Level(_width, _height) {
 
     
     Walls(0, 0, this.width, this.height);
-    this.spawn(Debris, 100*100*.005*4);
+    this.spawn(Debris, 100*100*.005);
     this.spawn(Meteor, 100*100*.005);
     
     app.player = new PlasmaShip(0, 0);
@@ -30,13 +30,13 @@ function Level(_width, _height) {
     app.camera.followPlayer = true;
     
     this.shipFactories = [
-        new SpawnPointFactory(PlasmaShip, 8),
-        new SpawnPointFactory(PowerShip, 8),
-        new SpawnPointFactory(SpreadShip, 8),
-        new SpawnPointFactory(WaveShip, 8)
+        new SpawnPointFactory(PlasmaShip, 4),
+        new SpawnPointFactory(PowerShip, 4),
+        new SpawnPointFactory(SpreadShip, 4),
+        new SpawnPointFactory(WaveShip, 4)
     ];
     var _this = this;
     this.shipFactories.forEach(function(e){
-        _this.spawn(e, Math.max(100*100*.00005/2, 3));
+        _this.spawn(e, 3);
     });
 }
