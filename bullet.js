@@ -38,10 +38,11 @@ function Bullet() {
     this.body.CreateFixture(fixtureDef);
     this.body.SetActive(false);
     this.topSpeed = 20;
-    
+    this.isInGame = false;
     var _spawntime = null;
     this.isRendered = false;
     this.fire = (function(origin) {
+        this.isInGame = true;
         this.currentFrame = 0;
         app.bullets.push(this);
         this.ORIGIN = origin;
@@ -60,6 +61,7 @@ function Bullet() {
     }).bind(this);
     
     this.remove = (function() {
+        this.isInGame = false;
         var pos = app.level.randomPos()
         this.x = pos.x;
         this.y = pos.y;
@@ -98,7 +100,7 @@ function Bullet() {
     });
     
     var _updateFunc = function() {
-        if (app.now() - this.CREATED_TIMESTAMP > this.TTL) {
+        if (this.isInGame && app.now() - this.CREATED_TIMESTAMP > this.TTL) {
             app.removeBullet(this);
             return;
         }

@@ -215,6 +215,11 @@ function InitGame() {
                         if (_actors[i].body) {
                             app.world.DestroyBody(_actors[i].body);
                         }
+                        if (_actors[i].isShip === true) {
+                            var toRemove = _actors[i];
+                            var index = toRemove.others.indexOf(toRemove);
+                            toRemove.others.splice(index, 1);
+                        }
                         if (_actors[i] === app.player) {
                            onPlayerDeath();
                         }
@@ -238,10 +243,12 @@ function InitGame() {
                 for (var i = 0; i < len; ++i) {
                     if (_bullets[i] === next) {
                         _bullets[i].remove();
-                        _bullets[i] = null;
+                        _bullets[i] = _bullets[0];
+                        _bullets.shift();
                     }
                 }
             }
+            /*
             var n = 0;
             var tmp = new Array(newLength);
             for (var i = 0; i < len; ++i) {
@@ -250,6 +257,7 @@ function InitGame() {
                 }
             }
             _bullets = tmp;
+            */
         }
     }
     
