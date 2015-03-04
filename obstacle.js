@@ -1,5 +1,5 @@
 function Meteor(x, y) {
-    GameType.call(this, this.props.typeName);
+    GameType.call(this, "METEOR");
     SpaceObject.call(this, x, y);
     Obstacle.call(this, this.props.hp);
     var _sprite_num = Math.floor(Math.random() * 3);
@@ -9,15 +9,16 @@ function Meteor(x, y) {
     var tmpW = this.width/2;
     var tmpH = this.height/2;
     fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
-    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_density(.1*this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
+    fixtureDef.set_restitution(1);
     this.body.CreateFixture(fixtureDef);
     this.body.SetLinearVelocity(new b2Vec2(Math.random()*8 - 4, Math.random()*8 - 4));
     this.body.SetAngularVelocity(Math.random()*4 - 2);
 }
 
 function Wall(x, y, length, verticle) {
-    GameType.call(this, this.props.typeName);
+    GameType.call(this, "WALL");
     SpaceObject.call(this, x, y, 0);
     Obstacle.call(this, this.props.hp, true);
     var _sprite = Math.floor(Math.random() * 2) == 0 ? app.cache["asset/debris.png"] : app.cache["asset/moon.png"]
@@ -31,6 +32,7 @@ function Wall(x, y, length, verticle) {
         fixtureDef.set_shape(makeBoxShape(length, 1, 0, 0, 0));
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
+    fixtureDef.set_restitution(1);
     this.body.CreateFixture(fixtureDef);
 }
 
