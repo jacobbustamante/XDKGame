@@ -20,8 +20,7 @@ function Wall(x, y, length, verticle) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y, 0);
     Obstacle.call(this, this.props.hp, true);
-    var _sprite_num = Math.floor(Math.random() * 3);
-    var _sprite = _sprite_num == 0 ? app.cache["asset/obstacle.png"] : _sprite_num == 1 ? app.cache["asset/obstacle2.png"] : app.cache["asset/obstacle3.png"]
+    var _sprite = Math.floor(Math.random() * 2) == 0 ? app.cache["asset/debris.png"] : app.cache["asset/moon.png"]
     AnimatedImage.call(this, _sprite, this.props.frameCount, this.props.framesPerSecond);
     var fixtureDef = new b2FixtureDef();
     var tmpW = this.width/2;
@@ -33,6 +32,18 @@ function Wall(x, y, length, verticle) {
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
+}
+
+function Walls(origin_x, origin_y, width, height)
+{
+    // top
+    new Wall(origin_x, origin_y + height / 2, width, false);
+    // bottom
+    new Wall(origin_x, origin_y - height / 2, width, false);
+    // left
+    new Wall(origin_x - width / 2, origin_y, height, true);
+    // right
+    new Wall(origin_x + width / 2, origin_y, height, true);
 }
 
 function initObstaclePrototypes() {

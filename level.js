@@ -25,7 +25,7 @@ function Level(_width, _height) {
 
 
     
-
+    Walls(0, 0, this.width, this.height);
     this.spawn(Debris, 100*100*.005);
     this.spawn(Meteor, 100*100*.005);
     
