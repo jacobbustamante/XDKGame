@@ -160,6 +160,7 @@ function Ship(hp, bulletFactory) {
         configurable: true
     });
     function _explode() {
+        app[this.TYPE + "_BULLET_CACHE"].freeBullets(_bullets);
         if (!_isDead) {
             AnimatedImage.call(this, app.cache["asset/Explosion.png"], 8, 10);
             this.updateCurrentFrame = showFramesThenKill.bind(this);

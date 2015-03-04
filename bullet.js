@@ -42,6 +42,7 @@ function Bullet() {
     var _spawntime = null;
     this.isRendered = false;
     this.fire = (function(origin) {
+        this.currentFrame = 0;
         app.bullets.push(this);
         this.ORIGIN = origin;
         this.x = origin.x;
