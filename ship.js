@@ -1,152 +1,299 @@
+function PlasmaShip(x, y) {
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+        ShipAi.call(this);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
 
-function Ship(hp, type) {
-
-    this.isShip=true;
-    var time = 0;
-
-    this.x = 50;
-    this.y = 50;
-    this.vx = 0;
-    this.vy = 0;
-
-    var z = 25;
-
-    this.isPlayer = false;
-
-    this.theta = 55;
-    this.speed = 0;
-    
-
-    this.health=hp;
-
-
-    this.timeBetweenShots = 40;
-    this.timeSinceLastShot = 40;
-
-    
-    var b_x = 0;
-    var b_y = 0;
-
-    var _tx = tx.bind(this);
-    
-    Object.defineProperty(this, "tx", {
-        value: _tx,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "img", {
-        value: new AnimatedImage(),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    Object.defineProperty(this, "bullet_img", {
-        value: new Image(),
-        writable: false,
-        enumerable: true,
-        configurable: false
-    });
-    
-    function _update() {
-        b_x = this.x;
-        b_y = this.y;
-
-        if(this.isPlayer){
-            this.getVelocity();
-
-            this.updatePosition(0);
-
-            this.timeSinceLastShot--;
-            if (this.timeSinceLastShot < 0)
-            {
-                this.timeSinceLastShot = this.timeBetweenShots;
-                //this.shoot();
-            }
-        }
-        else
-        {
-            this.getVelocity();
-            this.updatePosition(time++);
-
-            this.timeSinceLastShot--;
-            if (this.timeSinceLastShot < 0)
-            {
-                this.timeSinceLastShot = this.timeBetweenShots;
-                this.shoot();
-
-                this.x += z;
-                z *= -1;
-            }
-        }
-    }
-    
-    function _draw(){
-        //this.tx();
-        this.img.drawAnimatedImage(app.ctx, this.x, this.y);
-    }
-    
-    function _shoot(){
-        
-        var bullet = new Bullet();
-        var bullet_img = new Image();
-        if(type == 1)
-            bullet_img.src = "asset/PowerShot.png";
-        if(type == 2)
-            bullet_img.src = "asset/PlasmaShot.png";
-        if(type == 3)
-            bullet_img.src = "asset/SpreadShot.png";
-        if(type == 4)
-            bullet_img.src = "asset/WaveShot.png";
-        bullet_img.addEventListener("load", function(e) {
-            bullet.img.initAnimatedImage(bullet_img, 3, 60);
-            bullet.x = b_x;
-            bullet.y = b_y;
-            bullet.speed += 5;
-
-            if (this.isPlayer===true)
-            {
-                bullet.fromPlayer = true;
-            }
-
-            bullet.type = type;
-            window.app.actors.push(bullet);
-        });
-    }
-
-    function _getVelocity(){
-        
-        //this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
-        //this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
-              
-    }
-    
-    function _updatePosition(time){
-
-
-        if(time%50 == 1){
-            this.vx*=-1;
-        //this.x+=this.vx*2;
-       }
-        this.x+=this.vx;
-        this.y+=this.vy;
-        
-    }
-    
-    this.update = _update.bind(this);
-    this.render = _draw.bind(this);
-    this.shoot = _shoot.bind(this);
-    this.getVelocity = _getVelocity.bind(this);
-    this.updatePosition = _updatePosition.bind(this);
-    
 }
 
-function tx() {
-    var g = app.ctx;
-    g.setTransform(1, 0, 0, 1, this.x, this.y);
-    g.rotate((Math.PI/180)*this.theta);
-    //g.translate(this.x, this.y);
-    g.transform(1, 0, 0, 1, app.camera.x, app.camera.y);
+function PowerShip(x, y) {
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
+    ShipAi.call(this);
+}
+
+function SpreadShip(x, y) {
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
+    ShipAi.call(this);
+}
+function WaveShip(x, y) {
+    GameType.call(this, this.props.typeName);
+    SpaceObject.call(this, x, y);
+    Ship.call(this, this.props.hp, this.BULLET_FACTORY);
+    AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
+    this.others.push(this);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(this.DEFAULT_DENSITY);
+    fixtureDef.set_friction(0);
+    this.body.CreateFixture(fixtureDef);
+    ShipAi.call(this);
+}
+
+function initShipPrototypes() {
+    PlasmaShip.prototype = new ShipPrototype({
+        typeName: "PLASMA_SHIP",
+        hp: 6*50,
+        bulletDamage: 20,
+        fireRate: 200,
+        bullet: PlasmaShot,
+        change: function(x,y){return new PlasmaChange(x,y);},
+        sprite: app.cache["asset/PlasmaShip.png"],
+        frameCount: 8,
+        framesPerSecond: 10,
+        topSpeed: 12,
+        bulletSound: app.cache["asset/PlasmaShotSound.wav"],
+        bulletFactory: function(origin) {
+            return new PlasmaShot(origin);
+        }
+    });
+    PowerShip.prototype = new ShipPrototype({
+        typeName: "POWER_SHIP",
+        hp: 6*100,
+        bulletDamage: 5,
+        fireRate: 150,
+        bullet: PowerShot,
+        change: function(x,y){return new PowerChange(x,y);},
+        sprite: app.cache["asset/PowerShip.png"],
+        frameCount: 6,
+        framesPerSecond: 10,
+        topSpeed: 12,
+        bulletSound: app.cache["asset/BaseShotSound.wav"],
+        bulletFactory: function(origin) {
+            return new PowerShot(origin);
+        }
+    });
+    SpreadShip.prototype = new ShipPrototype({
+        typeName: "SPREAD_SHIP",
+        hp: 6*70,
+        bulletDamage: 15,
+        fireRate: 200,
+        bullet: SpreadShot,
+        change: function(x,y){return new SpreadChange(x,y);},
+        sprite: app.cache["asset/SpreadShip.png"],
+        frameCount: 6,
+        framesPerSecond: 10,
+        topSpeed: 12,
+        bulletSound: app.cache["asset/TripleShotSound.wav"],
+        bulletFactory: function(origin) {
+            return new SpreadShot(origin);
+        }
+    });
+    WaveShip.prototype = new ShipPrototype({
+        typeName: "WAVE_SHIP",
+        hp: 6*60,
+        bulletDamage: 30,
+        fireRate: 350,
+        bullet: WaveShot,
+        change: function(x,y){return new WaveChange(x,y);},
+        sprite: app.cache["asset/WaveShip.png"],
+        frameCount: 8,
+        framesPerSecond: 10,
+        topSpeed: 12,
+        bulletSound: app.cache["asset/WaveShotSound.wav"],
+        bulletFactory: function() {
+            return new WaveShot();
+        }
+    });
+
+}
+
+function updateAiShip() {
+    this.fireWeapon();
+}
+
+
+
+function Ship(hp, bulletFactory) {
+    
+    this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
+    var _health = hp;
+    if (!app[this.TYPE + "_BULLET_CACHE"]) {
+        app[this.TYPE + "_BULLET_CACHE"] = new BulletCache(bulletFactory, this.fireRate);
+    }
+    var _bullets = app[this.TYPE + "_BULLET_CACHE"].getBullets();
+    var _nextBulletIndex = 0;
+    function _fireWeapon(){
+        if (!this.lastShotTime || app.now() - this.lastShotTime > this.fireRate) {
+            _bullets[_nextBulletIndex++ % _bullets.length].fire(this);
+            this.lastShotTime = app.now();
+            if (app.player === this) {
+                this.props.bulletSound.play();
+            }
+        }
+
+        if (app.curMenu == 3 && tut_screen == 1 && this != app.player)
+        {
+            if (seen_bullets++ > 2000)
+                showMenu();
+        }
+    }
+    this.damage = function (object) {
+        if (app.curMenu == 3 && this == app.player)
+            return;
+        _health -= object.bulletDamage;
+        if (_health <= 0) {
+            if (object == app.player)
+                app.score += this.__proto__.SPAWN_HEALTH / 10;
+            app.cache["asset/DestroyShip.wav"].play();
+            this.onDeath();
+            if (app.curMenu == 3 && tut_screen == 2 && this != app.player)
+            {
+                if (seen_kills++ > 10)
+                    showMenu();
+            }
+        }
+    };
+    
+    var _isDead = false;
+    
+    Object.defineProperty(this, "isDead", {
+        get: function() { return _isDead; },
+        enumerable: true,
+        configurable: true
+    });
+    function _explode() {
+        app[this.TYPE + "_BULLET_CACHE"].freeBullets(_bullets);
+        if (!_isDead) {
+            AnimatedImage.call(this, app.cache["asset/Explosion.png"], 8, 10);
+            this.updateCurrentFrame = showFramesThenKill.bind(this);
+            if (this != app.player)
+                this.update = (function() {
+                    this.change(this.x, this.y);
+                    this.update = function(){};
+                }).bind(this);
+            else
+                this.update = function(){};
+            _isDead = true;
+        }
+    }
+    
+    Object.defineProperty(this, "health", {
+        get: function() { return _health; },
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "bulletDamage", {
+        value: this.props.bulletDamage,
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(this, "isShip", {
+        value: true,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    this.lastShotTime = null;
+    this.update = function(){};
+    this.fireWeapon = _fireWeapon.bind(this);
+    this.onDeath = _explode.bind(this);
+}
+
+function ShipPrototype(props) {
+    this.topSpeed = props.topSpeed ? props.topSpeed : 150;
+    this.props = props;
+    var _init = function(x, y) {
+
+    };
+    
+    Object.defineProperty(this, "init", {
+        value: _init,
+        writable: false,
+        enumerable: false,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "SPAWN_HEALTH", {
+        value: props.hp,
+        writable: true,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "BULLET_FACTORY", {
+        value: props.bulletFactory,
+        writable: false,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "change", {
+        value: props.change,
+        writable: true,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "others", {
+        get: function() {
+            return app.ships[this.TYPE];
+        },
+        enumerable: true,
+        configurable: false
+    });
+}
+
+Object.defineProperty(ShipPrototype.prototype, "DEFAULT_DENSITY", {
+    value: 5,
+    writable: true,
+    enumerable: true,
+    configurable: false
+});
+
+function BulletCache(bulletFactory, fireRate) {
+    var _bulletFactory = bulletFactory;
+    var _fireRate = bulletFactory;
+    var _bulletSets = [];
+    var _size = Math.round(2000/fireRate) + 2;
+    console.log(_size);
+    this.getBullets = function() {
+        var bullets = _bulletSets.length !== 0 ? _bulletSets.pop() :
+            new Array(_size);
+        if (!bullets[0]) {
+            for (var i=0; i < bullets.length; ++i) {
+                bullets[i] = bulletFactory(this);
+            }
+        }
+        return bullets;
+    }
+    
+    this.freeBullets = function(bullets) {
+        _bulletSets.push(bullets);
+    }
 }

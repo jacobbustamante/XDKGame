@@ -1,88 +1,142 @@
-function Bullet(type) {
+function PlasmaShot() {
+    GameType.call(this, "PLASMA_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/PlasmaShot.png"], 3, 10);
+    Bullet.call(this);
+}
 
-    this.isBullet=true;
-    this.fromPlayer=false;
-    
-    this.x = 0;
-    this.y = 0;
-    this.vx = 0;
-    this.vy = 0;
+function PowerShot() {
+    GameType.call(this, "POWER_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/PowerShot.png"], 3, 10);
+    Bullet.call(this);
+}
 
+function SpreadShot () {
+    GameType.call(this, "SPREAD_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/SpreadShot.png"], 3, 20);
+    Bullet.call(this);
+}
 
-    this.theta = 90;
-    this.speed = 0;
-    this.type = type;
-    var attack = 0;
-    if(type == 1) {
-         attack = 20;  
-    }
-    if(type == 2) {
-         attack = 5;  
-    }
-    if(type == 3) {
-         attack = 15;  
-    }
-    if(type == 4) {
-         attack = 30;  
-    }
-    this.attack = attack;
+function WaveShot() {
+    GameType.call(this, "WAVE_SHOT", false);
+    AnimatedImage.call(this, app.cache["asset/WaveShot.png"], 3, 20);
+    Bullet.call(this);
+}
+
+function Bullet() {
+    var bodyDef = new b2BodyDef();
+    //bodyDef.set_type(b2_kinematicBody);
+    bodyDef.set_type(b2_dynamicBody);
+    bodyDef.set_bullet(false);
+    bodyDef.set_position(new b2Vec2(0, 0));
+    SpaceObject.call(this, bodyDef);
+    var fixtureDef = new b2FixtureDef();
+    var tmpW = this.width/2;
+    var tmpH = this.height/2;
+    fixtureDef.set_shape(makeBoxShape(tmpW, tmpH, 0, 0, 0));
+    fixtureDef.set_density(0);
+    fixtureDef.set_friction(0);
+    fixtureDef.set_isSensor(true);
+    this.body.CreateFixture(fixtureDef);
+    this.body.SetActive(false);
+    this.topSpeed = 40;
+    this.isInGame = false;
+    var _spawntime = null;
+    this.isRendered = false;
+    this.fire = (function(origin) {
+        this.isInGame = true;
+        this.currentFrame = 0;
+        app.bullets.push(this);
+        this.ORIGIN = origin;
+        this.x = origin.x;
+        this.y = origin.y;
+        this.body.SetActive(true);
+        _spawntime = app.now();
+        this.isRendered = true;
+        this.angle = origin.angle;
+        var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
+        vec.Normalize();
+        vec.op_mul(this.topSpeed);
+        this.body.SetLinearVelocity(vec);
+        //this.vx = vec.get_x();
+        //this.vy = vec.get_y();
+    }).bind(this);
     
-    var _tx = tx.bind(this);
+    this.remove = (function() {
+        this.isInGame = false;
+        var pos = app.level.randomPos()
+        this.x = pos.x;
+        this.y = pos.y;
+        this.isRendered = false;
+        this.body.SetLinearVelocity(new b2Vec2(0,0));
+        this.body.SetAngularVelocity(0);
+        this.body.SetActive(false);
+    }).bind(this);
     
-    Object.defineProperty(this, "tx", {
-        value: _tx,
+    
+    Object.defineProperty(this, "ORIGIN", {
+        value: null,
+        writable: true,
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "TTL", {
+        value: 2000,
         writable: false,
         enumerable: true,
         configurable: false
     });
     
-    Object.defineProperty(this, "img", {
-        value: new AnimatedImage(),
+    Object.defineProperty(this, "CREATED_TIMESTAMP", {
+        get: function() { return _spawntime; },
+        enumerable: true,
+        configurable: false
+    });
+    
+    Object.defineProperty(this, "isBullet", {
+        value: true,
         writable: false,
         enumerable: true,
         configurable: false
     });
     
-    function _update() {
-        this.updatePosition(0);
-        this.getVelocity();
-    
-    }
-    
-    function _draw(){
-        //this.tx();
-        this.img.drawAnimatedImage(app.ctx, this.x, this.y);
-    }
-
-    function _getVelocity(){
+    var _updateFunc = function() {
+        if (this.isInGame && app.now() - this.CREATED_TIMESTAMP > this.TTL) {
+            app.removeBullet(this);
+            return;
+        }
         
-        this.vx=this.speed*Math.cos(this.theta*Math.PI/180);
-        this.vy=this.speed*Math.sin(this.theta*Math.PI/180);
-              
+    };
+    this.update = _updateFunc.bind(this);
+    
+    this.beginContactCallback = (function(otherActor) {
+            _handleSensorContact(otherActor, this);
+    }).bind(this);
+    
+    function _handleSensorContact(gameObj, bullet) {
+        if (gameObj === bullet) {
+            return;
+        }
+        if (_isGameObjectHitable(gameObj, bullet.ORIGIN)) {
+            if (gameObj.damage) {
+                gameObj.damage(bullet.ORIGIN);
+                app.removeBullet(bullet);
+            }
+        }
     }
     
-    function _updatePosition(time){
-        if(time == 0){
-        this.x+=this.vx*2;
-        this.y+=this.vy*2;
-        }
-        else{
-        this.x+=this.vx*time;
-        this.y+=this.vy*time;
-        }
-    }
-    
-    this.update = _update.bind(this);
-    this.render = _draw.bind(this);
-    this.getVelocity = _getVelocity.bind(this);
-    this.updatePosition = _updatePosition.bind(this);
-    
+    // hit other ships or objects except ships of same type
+    function _isGameObjectHitable(gameObj, originShip) {
+        return gameObj.TYPE !== originShip.TYPE && 
+            !gameObj.isBullet && gameObj.TYPE !== app.camera.TYPE && !(gameObj.isDead);
+    }   
 }
 
-function tx() {
-    var g = app.ctx;
-    g.setTransform(1, 0, 0, 1, this.x, this.y);
-    g.rotate((Math.PI/180)*this.theta);
-    //g.translate(this.x, this.y);
-    g.transform(1, 0, 0, 1, app.camera.x, app.camera.y);
-}
+function BulletPrototype(){}
+
+Object.defineProperty(BulletPrototype.prototype, "DEFAULT_DENSITY", {
+    value: 5,
+    writable: true,
+    enumerable: true,
+    configurable: false
+});

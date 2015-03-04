@@ -1,101 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cosmic ...</title>
+    <meta charset="UTF-8"> 
+    <title>Cosmic Rising</title>
     <link rel="stylesheet" type="text/css" href="main.css">
-
-    <script src="animatedImage.js"></script>
-
-    <script src="level.js"></script>
-    <script src="bullet.js"></script>
-    <script src="ship.js"></script>
     
-    <script src="main.js"></script>
+    <script src="box2d.min.js" type="text/jscript"></script>
+    <script src="box2d-helpers.js" type="text/javascript"></script>
+    
+    <script src="utils.js"></script>
     <script src="camera.js"></script>
     <script src="init.js"></script>
-    <script src="input.js"></script>
+    
+    <script src="animation.js"></script>
+    <script src="obstacle.js"></script>
+    <script src="level.js"></script>
+    <script src="debris.js"></script>
+    <script src="bullet.js"></script>
+    <script src="change.js"></script>
+    <script src="ship.js"></script>
+    <script src="main.js"></script>
+    <script src="menu.js"></script>
+    <script src="enemy-spawn-point.js"></script>
+    <script src="level.js"></script>
+    <script src="input2.js"></script>
+    <script src="game-ai.js"></script>
 
 </head>
     <body>
         
         <script>
+            window.requestAnimationFunc = (function(){
+                if (window.requestAnimationFrame) {
+                    return window.requestAnimationFrame;
+                }
+                if (window.webkitRequestAnimationFrame) {
+                    return window.webkitRequestAnimationFrame;
+                }
+                if (window.mozRequestAnimationFrame) {
+                    window.mozRequestAnimationFrame;
+                }
+                if (window.oRequestAnimationFrame) {
+                    window.oRequestAnimationFrame;
+                }
+                if (window.msRequestAnimationFrame) {
+                    window.msRequestAnimationFrame;
+                }
+                return function(callback){
+                    window.setTimeout(callback, 1000/60);
+                };      
+            })();
+            
+            InitGame();
+            loadAssets();
+            
 
-            initGame();
 
-            var player;
-
-            document.addEventListener("keydown", moveShip);
-            document.body.addEventListener("touchstart", onTap);
-            function moveShip(e) {
-//    var ctx = app.ctx;
-    
-    //paintGreen();
-    switch(e.which) {
-        case 87: // w
-            player.y -= 25;
-            break;
-        case 83: // s
-            player.y += 25;
-            break;
-        case 65: // a
-            player.x -= 25;
-            break;
-        case 68: // d
-            player.x += 25;
-            break;
-        case 74:
-            player.shoot();
-            break;
-        default:
-            break;
-    }
-}
-function onTap(e) {
-    e.preventDefault();
-    var g = app.ctx;
-    for(var i = 0, len = e.touches.length; i < len; ++i) {
-        var t = e.touches[i];
-        var x = t.clientX;
-        var y = t.clientY;
-        v//ar str = "(" + x + "," + y + ")";
-        //g.fillText(str, x, y);
-        if (e.x <=(app.canvas.width / 2))
-            player.x -= 25;
-        else
-            player.x += 25;
-    }
-}
-
-            function start() {       
-                var canvas = document.getElementById(app.CANVAS_ID);
-                var ctx = canvas.getContext("2d");
-
-                var lev = new Level();
-                lev.createNewLevel();
-                var sound = new Audio("asset/FirstShipLoop.wav");
-                sound.loop = true;
-                sound.volume = 0.25;
-                sound.load();
-                sound.play();
-                var tmp = new Image();
-                tmp.src = "asset/PowerShip.png";
-                tmp.onload = function(e) {
-                    player = new Ship(5, "Power");
-                    player.img.initAnimatedImage(tmp, 6, 30);
-                    player.isPlayer = true;
-                    player.x = 50;
-                    player.y = 900;
-                    player.health = 150;
-                    window.app.actors.push(player);
-                    //main();
-                    window.setInterval(main, 1000/30);
+            function start() {
+                listener = new JSContactListener();
+                listener.BeginContact = function (contactPtr) {
+                    var contact = Box2D.wrapPointer(contactPtr, b2Contact);
+                    if (contact.IsTouching()) {
+                        var a = contact.GetFixtureA().GetBody().actor;
+                        var b = contact.GetFixtureB().GetBody().actor;
+                        if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                            if (a.beginSensorCallback)
+                                a.beginSensorCallback(b);
+                            if (a.beginContactCallback)
+                                a.beginContactCallback(b);
+                        }
+                        else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
+                            if (b.beginSensorCallback)
+                                b.beginSensorCallback(a);
+                            if(b.beginContactCallback)
+                                b.beginContactCallback(a);
+                        }
+                        else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                            if (a.beginContactCallback) {
+                                a.beginContactCallback(b);
+                            }
+                            if (b.beginContactCallback) {
+                                b.beginContactCallback(a);
+                            }
+                        }
+                    }
+                }
+                listener.EndContact = function(contactPtr) {
+                    var contact = Box2D.wrapPointer(contactPtr, b2Contact);
+                    var a = contact.GetFixtureA().GetBody().actor;
+                    var b = contact.GetFixtureB().GetBody().actor;
+                    if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                        if (a.endSensorCallback)
+                            a.endSensorCallback(b);
+                        if (a.endSensorCallback)
+                            a.endSensorCallback(b);
+                    }
+                    else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
+                        if (b.endSensorCallback)
+                            b.endSensorCallback(a);
+                        if(b.endSensorCallback)
+                            b.endSensorCallback(a);
+                    }
+                    else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                        if (a.endSensorCallback) {
+                            a.endSensorCallback(b);
+                        }
+                        if (b.endSensorCallback) {
+                            b.endSensorCallback(a);
+                        }
+                    }
                 };
+                listener.PreSolve = function() {};
+                listener.PostSolve = function() {};
+                app.world.SetContactListener(listener);
+                
+                app.level = new Level(100, 100);
+                
+                switchMusicToMenu();
+                
+                if (app.iOS) {
+                    window.setInterval(main_iOS, 1000/60);
+                }
+                else{
+                    window.requestAnimationFunc(main);
+                }
                 
             }
-            start();
-            setupInput();
-            //window.addEventListener("load", start);
-            
         </script>
 
     </body>
