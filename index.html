@@ -24,6 +24,7 @@
     <script src="enemy-spawn-point.js"></script>
     <script src="level.js"></script>
     <script src="input2.js"></script>
+    <script src="game-ai.js"></script>
 
 </head>
     <body>
@@ -62,15 +63,47 @@
                     if (contact.IsTouching()) {
                         var a = contact.GetFixtureA().GetBody().actor;
                         var b = contact.GetFixtureB().GetBody().actor;
-                        if(a.contactCallback) {
-                            a.contactCallback(b);
+                        if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                            if (a.beginSensorCallback)
+                                a.beginSensorCallback(b);
                         }
-                        if(b.contactCallback) {
-                            b.contactCallback(a);
+                        else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
+                            if (b.beginSensorCallback)
+                                b.beginSensorCallback(b);
+                        }
+                        else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                            if(a.beginContactCallback) {
+                                a.beginContactCallback(b);
+                            }
+                            if(b.beginContactCallback) {
+                                b.beginContactCallback(a);
+                            }
                         }
                     }
                 }
-                listener.EndContact = function() {};
+                listener.EndContact = function(contactPtr) {
+                    var contact = Box2D.wrapPointer(contactPtr, b2Contact);
+                    if (contact.IsTouching()) {
+                        var a = contact.GetFixtureA().GetBody().actor;
+                        var b = contact.GetFixtureB().GetBody().actor;
+                        if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                            if (a.endSensorCallback)
+                                a.endSensorCallback(b);
+                        }
+                        else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
+                            if (b.endSensorCallback)
+                                b.endSensorCallback(b);
+                        }
+                        else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                            if(a.endContactCallback) {
+                                a.endContactCallback(b);
+                            }
+                            if(b.beginContactCallback) {
+                                b.endContactCallback(a);
+                            }
+                        }
+                    }
+                };
                 listener.PreSolve = function() {};
                 listener.PostSolve = function() {};
                 app.world.SetContactListener(listener);

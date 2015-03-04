@@ -132,6 +132,7 @@ function updateAiShip() {
 
 
 function Ship(hp, bulletFactory) {
+    ShipAi.call(this);
     this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
     var _health = hp;
     if (!app[this.TYPE + "_BULLET_CACHE"]) {
@@ -201,7 +202,7 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
-    this.update = updateAiShip.bind(this);
+    this.update = function(){};
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
 }

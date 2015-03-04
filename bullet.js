@@ -105,23 +105,11 @@ function Bullet() {
             app.removeBullet(this);
             return;
         }
-        // hit other ships or objects except ships of same type
-        /*
-        var list = this.body.GetContactList();
-        while (list.e !== 0) {
-            var contact = list.get_contact();
-            if(contact.IsTouching()) {
-                _handleSensorContact(contact.GetFixtureA().GetBody().actor, this);
-                _handleSensorContact(contact.GetFixtureB().GetBody().actor, this);
-            }
-            list = list.get_next();
-        }
-        */
         
     };
     this.update = _updateFunc.bind(this);
     
-    this.contactCallback = (function(otherActor) {
+    this.beginContactCallback = (function(otherActor) {
             _handleSensorContact(otherActor, this);
     }).bind(this);
     
@@ -137,6 +125,7 @@ function Bullet() {
         }
     }
     
+    // hit other ships or objects except ships of same type
     function _isGameObjectHitable(gameObj, originShip) {
         return gameObj.TYPE !== originShip.TYPE && 
             !gameObj.isBullet && gameObj.TYPE !== app.camera.TYPE && !(gameObj.isDead);
