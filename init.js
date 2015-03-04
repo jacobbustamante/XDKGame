@@ -364,6 +364,7 @@ function loadAssets() {
 function afterAssetsLoad() {
     initShipPrototypes();
     initObstaclePrototypes();
+    initAi();
     setupInput();
     showMenu();
     start();
