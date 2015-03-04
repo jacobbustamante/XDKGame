@@ -66,16 +66,20 @@
                         if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
                             if (a.beginSensorCallback)
                                 a.beginSensorCallback(b);
+                            if (a.beginContactCallback)
+                                a.beginContactCallback(b);
                         }
                         else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
                             if (b.beginSensorCallback)
-                                b.beginSensorCallback(b);
+                                b.beginSensorCallback(a);
+                            if(b.beginContactCallback)
+                                b.beginContactCallback(a);
                         }
                         else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
-                            if(a.beginContactCallback) {
+                            if (a.beginContactCallback) {
                                 a.beginContactCallback(b);
                             }
-                            if(b.beginContactCallback) {
+                            if (b.beginContactCallback) {
                                 b.beginContactCallback(a);
                             }
                         }
@@ -83,24 +87,26 @@
                 }
                 listener.EndContact = function(contactPtr) {
                     var contact = Box2D.wrapPointer(contactPtr, b2Contact);
-                    if (contact.IsTouching()) {
-                        var a = contact.GetFixtureA().GetBody().actor;
-                        var b = contact.GetFixtureB().GetBody().actor;
-                        if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
-                            if (a.endSensorCallback)
-                                a.endSensorCallback(b);
+                    var a = contact.GetFixtureA().GetBody().actor;
+                    var b = contact.GetFixtureB().GetBody().actor;
+                    if (contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                        if (a.endSensorCallback)
+                            a.endSensorCallback(b);
+                        if (a.endSensorCallback)
+                            a.endSensorCallback(b);
+                    }
+                    else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
+                        if (b.endSensorCallback)
+                            b.endSensorCallback(a);
+                        if(b.endSensorCallback)
+                            b.endSensorCallback(a);
+                    }
+                    else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
+                        if (a.endSensorCallback) {
+                            a.endSensorCallback(b);
                         }
-                        else if (contact.GetFixtureB().IsSensor() && !contact.GetFixtureA().IsSensor()) {
-                            if (b.endSensorCallback)
-                                b.endSensorCallback(b);
-                        }
-                        else if (!contact.GetFixtureA().IsSensor() && !contact.GetFixtureB().IsSensor()) {
-                            if(a.endContactCallback) {
-                                a.endContactCallback(b);
-                            }
-                            if(b.beginContactCallback) {
-                                b.endContactCallback(a);
-                            }
+                        if (b.endSensorCallback) {
+                            b.endSensorCallback(a);
                         }
                     }
                 };

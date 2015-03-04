@@ -11,7 +11,9 @@ function SpawnPointFactory() {
         this.update = (function(){
             if (app.now() - _lastSpawn > _spawnRate && app.ships[_makeType].length < _max) {
                 var pos = app.level.randomPos()
-                new _constru(pos.x, pos.y);
+                var s = new _constru(pos.x, pos.y);
+                ShipAi.call(s);
+                s.update = s.updateAi;
             }
         }).bind(this);
         Object.defineProperty(this, "max", {

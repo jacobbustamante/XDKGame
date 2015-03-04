@@ -1,25 +1,25 @@
-function PlasmaShot(origin) {
+function PlasmaShot() {
     GameType.call(this, "PLASMA_SHOT", false);
     AnimatedImage.call(this, app.cache["asset/PlasmaShot.png"], 3, 10);
-    Bullet.call(this, origin);
+    Bullet.call(this);
 }
 
-function PowerShot(origin) {
+function PowerShot() {
     GameType.call(this, "POWER_SHOT", false);
     AnimatedImage.call(this, app.cache["asset/PowerShot.png"], 3, 10);
-    Bullet.call(this, origin);
+    Bullet.call(this);
 }
 
-function SpreadShot (origin) {
+function SpreadShot () {
     GameType.call(this, "SPREAD_SHOT", false);
     AnimatedImage.call(this, app.cache["asset/SpreadShot.png"], 3, 20);
-    Bullet.call(this, origin);
+    Bullet.call(this);
 }
 
-function WaveShot(origin) {
+function WaveShot() {
     GameType.call(this, "WAVE_SHOT", false);
     AnimatedImage.call(this, app.cache["asset/WaveShot.png"], 3, 20);
-    Bullet.call(this, origin);
+    Bullet.call(this);
 }
 
 function Bullet() {

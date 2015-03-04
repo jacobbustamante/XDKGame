@@ -1,6 +1,7 @@
 function PlasmaShip(x, y) {
     GameType.call(this, this.props.typeName);
     SpaceObject.call(this, x, y);
+        ShipAi.call(this);
     Ship.call(this, this.props.hp, this.BULLET_FACTORY);
     AnimatedImage.call(this, this.props.sprite, this.props.frameCount, this.props.framesPerSecond);
     this.others.push(this);
@@ -11,6 +12,7 @@ function PlasmaShip(x, y) {
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
+
 }
 
 function PowerShip(x, y) {
@@ -26,6 +28,7 @@ function PowerShip(x, y) {
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
+    ShipAi.call(this);
 }
 
 function SpreadShip(x, y) {
@@ -41,6 +44,7 @@ function SpreadShip(x, y) {
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
+    ShipAi.call(this);
 }
 function WaveShip(x, y) {
     GameType.call(this, this.props.typeName);
@@ -55,6 +59,7 @@ function WaveShip(x, y) {
     fixtureDef.set_density(this.DEFAULT_DENSITY);
     fixtureDef.set_friction(0);
     this.body.CreateFixture(fixtureDef);
+    ShipAi.call(this);
 }
 
 function initShipPrototypes() {
@@ -132,7 +137,7 @@ function updateAiShip() {
 
 
 function Ship(hp, bulletFactory) {
-    ShipAi.call(this);
+    
     this.fireRate = this.props.fireRate ? this.props.fireRate : 500;
     var _health = hp;
     if (!app[this.TYPE + "_BULLET_CACHE"]) {

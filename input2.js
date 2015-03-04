@@ -36,88 +36,89 @@ function setupInput(){
         _lastChangeTime = getTimeStamp();
     }
     
+    window.updatePlayerShip2 = function() {
+        if (isKeyDown(_fireWeaponKeys) || _mouseButtons[1]) {
+            this.fireWeapon();
+        }
+        this.aimTarget = app.camera.screenToWorld(_mousePos);
+        if (_mouseButtons[3]) {
+            this.navTarget = this.aimTarget;
+        }
+        this.aimAtTarget();
+        this.moveToNavTarget();
+        
+    }
+    
     window.updatePlayerShip = function() {
-            var velX = 0
-            var velY = 0;
-            //tested
-            var shipDir = app.camera.screenToWorld(_mousePos);
-            //console.log(shipDir);
-            app.player.angle = Math.atan2(app.player.x - shipDir.x, shipDir.y - app.player.y);
-            
-            if (isKeyDown(_fireWeaponKeys) || _mouseButtons[1]) {
-                this.fireWeapon();
-                
-            }
-            // w
-            if (isKeyDown(_moveUp) && !_mouseButtons[3]) {
-                velY += 1;
-            }
-            // a
-            if (isKeyDown(_moveLeft) && !_mouseButtons[3]) {
-                velX += -1;
-            }
-            // s
-            if (isKeyDown(_moveDown) && !_mouseButtons[3]) {
-                velY += -1;
-            }
-            // d
-            if (isKeyDown(_moveRight) && !_mouseButtons[3]) {
-                velX += 1;
-            }
+        var velX = 0
+        var velY = 0;
+        //tested
+        var shipDir = app.camera.screenToWorld(_mousePos);
+        app.player.angle = Math.atan2(app.player.x - shipDir.x, shipDir.y - app.player.y);
 
-            if (_mouseButtons[3]) {
-                if (_keys[16]) {
-                    velX -= Math.sin(this.angle);
-                    velY += Math.cos(this.angle);
-                }
-                else {
-                    velX -= Math.sin(this.angle);
-                    velY += Math.cos(this.angle);
-                }
-                
-            }
-            
-            if (isKeyDown(_powerChange)) {
-                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
-                    changePlayer("Power");
-                    this.update = function(){};
-                }
-            }
-            if (isKeyDown(_plasmaChange)) {
-                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
-                    changePlayer("Plasma");
-                    this.update = function(){};
-                }
-            }
-        
-            if (isKeyDown(_spreadChange)) {
-                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
-                    changePlayer("Spread");
-                    this.update = function(){};
-                }
-            }
-            if (isKeyDown(_waveChange)) {
-                if (getTimeStamp() > _lastChangeTime + _changeDelay) {
-                    changePlayer("Wave");
-                    this.update = function(){};
-                }
-            }
-        
-            if (isKeyDown(_getPointsSon)) {
-                app.score++; 
-                console.log(app.score);
-            }
-                
-            
-            var vec = new b2Vec2(velX, velY);
+        if (isKeyDown(_fireWeaponKeys) || _mouseButtons[1]) {
+            this.fireWeapon();
 
-            vec.Normalize();
-            vec.op_mul(this.topSpeed);
-            this.vx = vec.get_x();
-            this.vy = vec.get_y();
+        }
+        if (isKeyDown(_moveUp) && !_mouseButtons[3]) {
+            velY += 1;
+        }
+        if (isKeyDown(_moveLeft) && !_mouseButtons[3]) {
+            velX += -1;
+        }
+        if (isKeyDown(_moveDown) && !_mouseButtons[3]) {
+            velY += -1;
+        }
+        if (isKeyDown(_moveRight) && !_mouseButtons[3]) {
+            velX += 1;
+        }
 
-            _lastPlayer = this;
-            _lastUpdate = _lastEvent;
+        if (_mouseButtons[3]) {
+            velX -= Math.sin(this.angle);
+            velY += Math.cos(this.angle);
+        }
+
+        if (isKeyDown(_powerChange)) {
+            if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                changePlayer("Power");
+                this.update = function(){};
+            }
+        }
+        if (isKeyDown(_plasmaChange)) {
+            if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                changePlayer("Plasma");
+                this.update = function(){};
+            }
+        }
+
+        if (isKeyDown(_spreadChange)) {
+            if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                changePlayer("Spread");
+                this.update = function(){};
+            }
+        }
+        if (isKeyDown(_waveChange)) {
+            if (getTimeStamp() > _lastChangeTime + _changeDelay) {
+                changePlayer("Wave");
+                this.update = function(){};
+            }
+        }
+
+        if (isKeyDown(_getPointsSon)) {
+            app.score++; 
+            console.log(app.score);
+        }
+
+
+        var vec = new b2Vec2(velX, velY);
+
+        vec.Normalize();
+        vec.op_mul(this.topSpeed);
+        this.vx = vec.get_x();
+        this.vy = vec.get_y();
+
+        _lastPlayer = this;
+        _lastUpdate = _lastEvent;
     }
     
     document.addEventListener("mousewheel", zoomCamera, false);

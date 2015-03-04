@@ -29,6 +29,13 @@ function makeBoxShape(width, height, centerX, centerY, theta) {
     shape.SetAsBox(width, height, new b2Vec2(guaranteeNumber(centerX), guaranteeNumber(centerY)), guaranteeNumber(theta));
     return shape;
 }
+
+function removeFromArray(arr, obj) {
+    var i = arr.indexOf(obj);
+    if (i > -1)
+        arr.splice(i, 1);
+    return arr;
+}
     
 function makeCircleShape(r, x, y) {
     var shape = new b2CircleShape();
@@ -157,4 +164,9 @@ function SpaceObject() {
         configurable: true
     });
     
+    function genNum(min, max) {
+        var range = max - min;
+        return Math.round(100*(range*Math.random() + min))/100;   
+    }
+    app.genNum = genNum;
 }
