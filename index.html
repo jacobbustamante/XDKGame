@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8"> 
     <title>Cosmic Rising</title>
-    <link rel="stylesheet" type="text/css" href="main.css">
     
-    <script src="box2d.min.js" type="text/jscript"></script>
-    <script src="box2d-helpers.js" type="text/javascript"></script>
-    
-    <script src="utils.js"></script>
-    <script src="camera.js"></script>
-    <script src="init.js"></script>
-    
-    <script src="animation.js"></script>
-    <script src="obstacle.js"></script>
-    <script src="level.js"></script>
-    <script src="debris.js"></script>
-    <script src="bullet.js"></script>
-    <script src="change.js"></script>
-    <script src="ship.js"></script>
-    <script src="main.js"></script>
-    <script src="menu.js"></script>
-    <script src="enemy-spawn-point.js"></script>
-    <script src="level.js"></script>
-    <script src="input2.js"></script>
-    <script src="game-ai.js"></script>
+    <script src="js/lib/box2d.min.js" type="text/jscript"></script>
+    <script src="js/lib/box2d-helpers.js" type="text/javascript"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/camera.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/animation.js"></script>
+    <script src="js/obstacle.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/debris.js"></script>
+    <script src="js/bullet.js"></script>
+    <script src="js/change.js"></script>
+    <script src="js/ship.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/spawn-point.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/input2.js"></script>
+    <script src="js/game-ai.js"></script>
 
 </head>
     <body>
@@ -54,8 +51,6 @@
             InitGame();
             loadAssets();
             
-
-
             function start() {
                 listener = new JSContactListener();
                 listener.BeginContact = function (contactPtr) {
@@ -85,6 +80,7 @@
                         }
                     }
                 }
+
                 listener.EndContact = function(contactPtr) {
                     var contact = Box2D.wrapPointer(contactPtr, b2Contact);
                     var a = contact.GetFixtureA().GetBody().actor;
@@ -123,8 +119,7 @@
                 }
                 else{
                     window.requestAnimationFunc(main);
-                }
-                
+                }  
             }
         </script>
 

@@ -286,7 +286,6 @@ function BulletCache(bulletFactory, fireRate) {
     var _fireRate = bulletFactory;
     var _bulletSets = [];
     var _size = Math.round(2000/fireRate) + 2;
-    console.log(_size);
     this.getBullets = function() {
         var bullets = _bulletSets.length !== 0 ? _bulletSets.pop() :
             new Array(_size);

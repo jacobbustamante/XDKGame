@@ -163,12 +163,15 @@ function _drawCredits()
         app.ctx.fillText("Thanks for playing Cosmic Rising!", app.canvas.width / 2, app.canvas.height / 4);
     
         app.ctx.textAlign="center";
-        app.ctx.font=app.canvas.width/50+"px Arial"; 
-        app.ctx.fillText("Nathan Farnum - dlitedlite@hotmail.com", app.canvas.width / 2, app.canvas.height * 5 / 10);
-        app.ctx.fillText("Michael Murphy - murphym18@gmail.com", app.canvas.width / 2, app.canvas.height * 6 / 10);
-        app.ctx.fillText("Jacob Bustamante - jakebustamante@gmail.com", app.canvas.width / 2, app.canvas.height * 7 / 10);
-        app.ctx.fillText("Anand Mangal - anand.mangal94@gmail.com", app.canvas.width / 2, app.canvas.height * 8 / 10);
-        app.ctx.fillText("Zachary Crandall - zach.t.crandall@gmail.com", app.canvas.width / 2, app.canvas.height * 9 / 10);
+        app.ctx.font=app.canvas.width/50+"px Arial";
+        var atChar = "@";
+        var m = "mail";
+        var c = "."+"c" + "om";
+        app.ctx.fillText("Nathan Farnum - dlitedlite" + atChar + "hot" +  m + c, app.canvas.width / 2, app.canvas.height * 5 / 10);
+        app.ctx.fillText("Michael Murphy - murphym18" + atChar + "g" +  m + c, app.canvas.width / 2, app.canvas.height * 6 / 10);
+        app.ctx.fillText("Jacob Bustamante - jakebustamante" + atChar + "g" +  m + c, app.canvas.width / 2, app.canvas.height * 7 / 10);
+        app.ctx.fillText("Anand Mangal - anand.mangal94" + atChar + "g" +  m + c, app.canvas.width / 2, app.canvas.height * 8 / 10);
+        app.ctx.fillText("Zachary Crandall - zach.t.crandall" + atChar + "g" +  m + c, app.canvas.width / 2, app.canvas.height * 9 / 10);
     app.ctx.restore();
 }
 
