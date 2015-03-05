@@ -1,3 +1,15 @@
+intelxdk.config.android.xml
+intelxdk.config.chromeos.xml
+intelxdk.config.crosswalk.xml
+intelxdk.config.facebook.xml
+intelxdk.config.firefoxos.xml
+intelxdk.config.ios.xml
+intelxdk.config.webapp.xml
+intelxdk.config.windows8.xml
+
+*.xdk
+*.xdke
+
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -24,4 +36,23 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-intelxdk.config.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
