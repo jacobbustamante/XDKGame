@@ -377,10 +377,19 @@ function afterAssetsLoad() {
 function drawScore() {
             app.ctx.save();
                 app.ctx.fillStyle = "White";
-                app.ctx.scale(3, 3);
-                var scoreText = "" + app.score;
+                app.ctx.font=app.canvas.width/35+"px Arial"; 
+                var scoreText = "Score: " + app.score;
                 //console.log(scoreText);
-                app.ctx.fillText(scoreText,5, 20);
+                app.ctx.fillText(scoreText,app.canvas.width * 8/10, app.canvas.height /12);
+            app.ctx.restore();
+
+            app.ctx.save();
+                app.ctx.fillStyle = "White";
+                app.ctx.font=app.canvas.width/35+"px Arial"; 
+                //app.ctx.scale(3, 3);
+                var healthText = "HP: " + app.player.health;
+                //console.log(scoreText);
+                app.ctx.fillText(healthText,app.canvas.width * 1/10, app.canvas.height /12);
             app.ctx.restore();
 }
 

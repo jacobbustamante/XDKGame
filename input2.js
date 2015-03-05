@@ -17,9 +17,12 @@ function setupInput(){
     var _spreadChange = makeCharCodeArray("k");
     var _waveChange = makeCharCodeArray("l");
     var _getPointsSon = makeCharCodeArray("t");
+    var _toggleAutoFire = makeCharCodeArray("r");
 
     var _lastChangeTime = 0;
     var _changeDelay = 2000;
+    var _autoFireOn = false;
+    var _lastAutoFireChangeTime = 0;
     
     
     window.changePlayer = function(type) {
@@ -78,6 +81,18 @@ function setupInput(){
             velY += Math.cos(this.angle);
         }
 
+        if (isKeyDown(_toggleAutoFire)) {
+            if (getTimeStamp() > _lastAutoFireChangeTime + 500) {
+                _lastAutoFireChangeTime = getTimeStamp();
+                _autoFireOn = !_autoFireOn;
+            }
+        }
+        if (_autoFireOn)
+        {
+            this.fireWeapon();
+        }
+
+        /*
         if (isKeyDown(_powerChange)) {
             if (getTimeStamp() > _lastChangeTime + _changeDelay) {
                 changePlayer("Power");
@@ -108,7 +123,7 @@ function setupInput(){
             app.score++; 
             console.log(app.score);
         }
-
+        */
 
         var vec = new b2Vec2(velX, velY);
 

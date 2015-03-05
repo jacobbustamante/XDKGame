@@ -153,14 +153,27 @@ function Ship(hp, bulletFactory) {
                 this.props.bulletSound.play();
             }
         }
+
+        if (app.curMenu == 3 && tut_screen == 1 && this != app.player)
+        {
+            if (seen_bullets++ > 2000)
+                showMenu();
+        }
     }
     this.damage = function (object) {
+        if (app.curMenu == 3 && this == app.player)
+            return;
         _health -= object.bulletDamage;
         if (_health <= 0) {
             if (object == app.player)
                 app.score += this.__proto__.SPAWN_HEALTH / 10;
             app.cache["asset/DestroyShip.wav"].play();
             this.onDeath();
+            if (app.curMenu == 3 && tut_screen == 2 && this != app.player)
+            {
+                if (seen_kills++ > 10)
+                    showMenu();
+            }
         }
     };
     
