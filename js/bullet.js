@@ -51,7 +51,7 @@ function Bullet() {
         this.y = origin.y;
         this.body.SetActive(true);
         _spawntime = app.now();
-        this.isRendered = true;
+        this.isRendered = true; 
         this.angle = origin.angle;
         var vec = new b2Vec2(-Math.sin(this.angle), Math.cos(this.angle));
         vec.Normalize();

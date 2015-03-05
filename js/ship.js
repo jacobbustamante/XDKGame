@@ -65,15 +65,15 @@ function WaveShip(x, y) {
 function initShipPrototypes() {
     PlasmaShip.prototype = new ShipPrototype({
         typeName: "PLASMA_SHIP",
-        hp: 6*50,
+        hp: 6*70,
         bulletDamage: 20,
-        fireRate: 200,
+        fireRate: 170,
         bullet: PlasmaShot,
         change: function(x,y){return new PlasmaChange(x,y);},
         sprite: app.cache["asset/PlasmaShip.png"],
         frameCount: 8,
         framesPerSecond: 10,
-        topSpeed: 12,
+        topSpeed: 10,
         bulletSound: app.cache["asset/PlasmaShotSound.wav"],
         bulletFactory: function(origin) {
             return new PlasmaShot(origin);
@@ -82,14 +82,14 @@ function initShipPrototypes() {
     PowerShip.prototype = new ShipPrototype({
         typeName: "POWER_SHIP",
         hp: 6*100,
-        bulletDamage: 5,
+        bulletDamage: 15,
         fireRate: 150,
         bullet: PowerShot,
         change: function(x,y){return new PowerChange(x,y);},
         sprite: app.cache["asset/PowerShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
-        topSpeed: 12,
+        topSpeed:8,
         bulletSound: app.cache["asset/BaseShotSound.wav"],
         bulletFactory: function(origin) {
             return new PowerShot(origin);
@@ -97,15 +97,15 @@ function initShipPrototypes() {
     });
     SpreadShip.prototype = new ShipPrototype({
         typeName: "SPREAD_SHIP",
-        hp: 6*70,
-        bulletDamage: 15,
-        fireRate: 200,
+        hp: 6*90,
+        bulletDamage: 10,
+        fireRate: 300,
         bullet: SpreadShot,
         change: function(x,y){return new SpreadChange(x,y);},
         sprite: app.cache["asset/SpreadShip.png"],
         frameCount: 6,
         framesPerSecond: 10,
-        topSpeed: 12,
+        topSpeed: 8,
         bulletSound: app.cache["asset/TripleShotSound.wav"],
         bulletFactory: function(origin) {
             return new SpreadShot(origin);
@@ -113,9 +113,9 @@ function initShipPrototypes() {
     });
     WaveShip.prototype = new ShipPrototype({
         typeName: "WAVE_SHIP",
-        hp: 6*60,
-        bulletDamage: 30,
-        fireRate: 350,
+        hp: 6*40,
+        bulletDamage: 15,
+        fireRate: 100,
         bullet: WaveShot,
         change: function(x,y){return new WaveChange(x,y);},
         sprite: app.cache["asset/WaveShip.png"],
@@ -163,16 +163,19 @@ function Ship(hp, bulletFactory) {
     this.damage = function (object) {
         if (app.curMenu == 3 && this == app.player)
             return;
-        _health -= object.bulletDamage;
-        if (_health <= 0) {
-            if (object == app.player)
-                app.score += this.__proto__.SPAWN_HEALTH / 10;
-            app.cache["asset/DestroyShip.wav"].play();
-            this.onDeath();
-            if (app.curMenu == 3 && tut_screen == 2 && this != app.player)
-            {
-                if (seen_kills++ > 10)
-                    showMenu();
+        if (!this.lastHitTime || app.now() - this.lastHitTime > this.hitRate) {
+            _health -= object.bulletDamage;
+            this.lastHitTime = app.now();
+            if (_health <= 0) {
+                if (object == app.player)
+                    app.score += this.__proto__.SPAWN_HEALTH / 10;
+                app.cache["asset/DestroyShip.wav"].play();
+                this.onDeath();
+                if (app.curMenu == 3 && tut_screen == 2 && this != app.player)
+                {
+                    if (seen_kills++ > 10)
+                        showMenu();
+                }
             }
         }
     };
@@ -225,6 +228,8 @@ function Ship(hp, bulletFactory) {
     });
     
     this.lastShotTime = null;
+    this.lastHitTime = null;
+    this.hitRate = 200;
     this.update = function(){};
     this.fireWeapon = _fireWeapon.bind(this);
     this.onDeath = _explode.bind(this);
