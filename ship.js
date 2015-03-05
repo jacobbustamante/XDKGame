@@ -169,7 +169,12 @@ function Ship(hp, bulletFactory) {
     Object.defineProperty(this, "isDead", {
         get: function() { return _isDead; },
         enumerable: true,
-        configurable: true
+        configurable: false
+    });
+    Object.defineProperty(this, "isAlive", {
+        get: function() { return !_isDead; },
+        enumerable: true,
+        configurable: false
     });
     function _explode() {
         app[this.TYPE + "_BULLET_CACHE"].freeBullets(_bullets);

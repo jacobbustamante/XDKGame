@@ -4,10 +4,14 @@ function Level(_width, _height) {
     var _xmax = _width/2;
     var _ymax = _height/2;
     
+    function _genNum() {
+        
+    }
+    
     function _randomPlace() {
         return {
-            x: app.genNum(-_xmax, _xmax),
-            y: app.genNum(-_ymax, _ymax)
+            x: app.genNum(-_xmax, _xmax)*.95,
+            y: app.genNum(-_ymax, _ymax)*.95
         };
     }
     this.randomPos = _randomPlace.bind(this);

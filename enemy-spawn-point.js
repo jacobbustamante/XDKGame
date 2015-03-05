@@ -12,7 +12,6 @@ function SpawnPointFactory() {
             if (app.now() - _lastSpawn > _spawnRate && app.ships[_makeType].length < _max) {
                 var pos = app.level.randomPos()
                 var s = new _constru(pos.x, pos.y);
-                ShipAi.call(s);
                 s.update = s.updateAi;
             }
         }).bind(this);
